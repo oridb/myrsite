@@ -1,0 +1,114 @@
+{
+    title       : Tutorial: Hello World
+    description : Myrddin Tutorial: Hello World
+}
+
+
+
+Hello, World
+------------
+
+The way to learn a language is to write programs in it, and following
+the time worn traditions of the greats, our first program to write
+is one that will print the following words: `"Hello, world".
+
+Once we have accomplished that, we've got a good starting point: The
+system is set up, and everything is working. So, type in the text below,
+or run it online if you so desire:
+
+```{runmyr helloworld}
+use std
+
+const main = {
+        std.put("Hello World\n")
+} 
+```
+
+Type it into a file. The name doesn't matter, as long as it ends with
+the `.myr` suffix. I'm going to put mine into `hello.myr`.
+
+To compile it, the `mbld` program that ships with Myrddin can be run like so,
+from within the directory that contains your `hello.myr` file:
+
+	mbld -b hello hello.myr
+
+
+Something that resmebles following output should show up on your screen:
+
+	hello...
+		6m	hello.myr 
+		ld	-o hello hello.o -L/home/ori/bin/lib/myr -lstd -lsys 
+
+The details of the output may vary by system, but at the end of the process,
+and an output binary will be created in the directory in which you ran `mbld`.
+When you run the binary, you should get the following output:
+
+	$ ./hello
+	Hello World
+
+The command `mbld` is the Myrddin build tool, and is responsible for invoking
+the appropirate compiler and linker commands in the correct order. It can be
+configured directly from the command line, or configured via a file. For simplicity,
+we will be using the command line configuration options.
+
+The `-b name` option tells mbld to produce a binary named `name`, and the
+remainder of the arguments are the inputs to combine into the binary. Any
+arbitrary name can be selected.
+
+Now that the code is working, an explanation is due. A Myrddin program
+consists of declarations, types, and statements. A function is a sequence of
+statements, enclosed by `{' and `}`, which are executed in order. In this
+example, there is one declaration -- the constant `main`, which is initialized
+with a simple function containing one statement. Normally, functions can be
+named anything, although the `main` function, when not in a namespace, is
+special, since every program begins executing at the beginning of `main`.
+
+The first line of the program,
+
+	use std
+
+brings a number of declarations into scope. These declarations include
+the function `put`, which is used to output data to the terminal. The
+constents of libstd are described in full [here](/myrddin/doc/libstd).
+
+The declaration of main is slightly interesting, because unlike most
+languages, there is no distinction in Myrddin between function declarations
+and variable declarations. A function decaration is simply a constant
+with a function assigned to it, and a function is always an unnamed
+list of statements within curly braces.
+
+	const main = {;...}
+
+In this example, the main function takes no parameters, as signified by the
+lack of parameter names listed before the first `;` in the function.
+
+The body of the main function
+
+        std.put("Hello World\n")
+
+contains a single statement. This statement is a function call, calling
+the function `put` defined within the library `std`, passing it a single
+parameter, the string `"Hello World\n"`.
+
+Within a function body, any number of statements can be placed. So,
+for example, if we had written
+
+```{runmyr helloworld}
+use std
+
+const main = {
+	/* we can also split up the lines */
+        std.put("Hello World\n")
+	std.put("Goodbye World\n")
+} 
+```
+
+the code would have executed both statements in the sequence denoted
+in the text.
+
+Another feature to note here is the text enclosed within `/*` and `*/`.
+This text is known as a comment, and is ignored by the compiler. It is
+used so that you, the programmer, can make notes to yourself.
+
+Statements will be covered in more depth [in the next section of the
+tutorial](statements)

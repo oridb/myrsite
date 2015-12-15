@@ -1,0 +1,24 @@
+{
+    title       : Mailing Lists
+    description : Subscribe to Myrddin-dev
+}
+
+Subscribe: myrddin-dev@eigenstate.org
+-------------------------------------
+
+<form action="http://eigenstate.org/lists/subscribe-cgi" method="post">
+<input name="mailinglist" type="hidden" value="myrddin-dev@eigenstate.org">
+<input name="operation" type="hidden" value="subscribe">
+<input name="email" value="your-email@example.org" type="text" size="30" maxlength="254"><br>
+<input type="submit" value="Subscribe">
+</form>
+
+Unubscribe: myrddin-dev@eigenstate.org
+-------------------------------------
+
+<form action="http://eigenstate.org/lists/subscribe-cgi" method="post">
+<input name="mailinglist" type="hidden" value="myrddin-dev@eigenstate.org">
+<input name="operation" type="hidden" value="unsubscribe">
+<input name="email" value="your-email@example.org" type="text" size="30" maxlength="254"><br>
+<input type="submit" value="Unsubscribe">
+</form>

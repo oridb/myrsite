@@ -1,0 +1,527 @@
+{
+    title       : Myrddin
+    description : An Introduction to the Myrddin Language
+}
+
+A Toy That Became Useful
+------------------------
+
+```{runmyr introloop}
+use std
+const main = {
+        for var i = 0; i < 10; i++
+                std.put("You're still reading?!?\n")
+        ;;
+        for x in [(1,2), (666, 888)]
+                std.put("I can loop through more stuff! {}\n", x)
+        ;;
+}
+```
+
+Myrddin is a language that I put together for fun, but which has actually
+become useful to me, and has even got some modest external contributions.
+
+It is designed to be a simple programming language that runs close to the
+metal, giving the programmer predictable and transparent behavior and mental
+model. It also does strong type checking, generics, type inference, closures,
+and traits.
+
+Myrddin is not a language designed to explore the forefront of type theory or
+compiler technology. It is not a language that is focused on guaranteeing
+perfect safety. It is satisfied to be a practical, small, fairly well defined,
+and easy to understand language for code that needs to be close to the
+hardware.
+
+Supported Platforms.
+--------------------
+
+Myrddin currently compiles for x86-64. It runs on four OSes at the moment:
+Linux, OSX, Plan 9 (9front, although I have reports that it works on
+9atom), and FreeBSD. It has proved relatively easy to port between these
+systems, needing only a few system calls, and a couple of hundred lines of
+glue code to get the bootstrap working.
+
+Why Myrddin?
+------------
+
+Are you tired of your compiler Just Working? Are you tired of having your
+standard library having the basic functionality you need? Do you long for the
+days when men were men, and debuggers operated on the assembly level? If so,
+Myrddin is for you.
+
+![Solid Engineering](tacoma-narrows.jpg "Solid Engineering")
+
+More seriously, Myrddin has the goal of replacing C in its niche of OS and
+embedded development, but making it harder to shoot yourself in the foot. It's
+a language that matches the author's taste in design, and if other people want
+to use it, so much the better.
+
+Major Features
+--------------
+
+- Type inference. Types are inferred across the whole program.
+- Algebraic data types.
+- And their friend, pattern matching.
+- Generics.
+- A package system.
+- Low level control.
+- (Almost) no runtime library.
+- Entirely self contained.
+- Simple and easy to understand implementation.
+
+Try It Online
+-------------
+
+If you want to try before you buy, there is an online playground that you can
+use to experiment with code. It's fairly restrictive, and prevents you from
+using the vast majority of system calls, but it's enough to get a feel for
+things.
+
+[So, give it a shot.](http://eigenstate.org/myrddin/playground)
+
+Installing The Compiler
+-----------------------
+
+First, make sure you have the dependencies. To build you'll need Make, a C99
+compiler, an AT&T syntax assembler, and a Posix YACC implementation. To clone
+the repository you'll need git. On debian, you can run:
+
+    sudo apt-get install bison gcc git make
+
+Once you have the dependencies, you can clone the repo and build it. By
+default, it will install to '/usr/local', but it can be installed anywhere by
+running `./configure --prefix=/path/to/wherever`. Just be sure to remember to
+add the prefix to $PATH before trying to run any commands, or your shell will
+not be able to find them.
+
+    git clone git://git.eigenstate.org/git/ori/mc.git
+    cd mc               # the directory you cloned into
+    make                # build it
+    sudo make install   # defaults to /usr/local
+
+Compiling Hello World
+---------------------
+
+The next step after getting the compiler installed is using it. An example
+hello world program is below.
+
+```{runmyr helloworld}
+use std
+
+const main = {args : byte[:][:] /* a slice of byte slices */
+        std.put("Hello-世界\n")     /* prints to stdout */
+        for a in args
+                std.put("arg = {}\n", a)
+        ;;
+} 
+```
+
+To build it, put it in a file of your choice. I'll use hello.myr. Then, run
+
+    myrbuild -b hello hello.myr
+
+This will produce a binary called hello, which will print "Hello-世界", echo
+all of the args given, and exit with a status of 0.
+
+The myrbuild program wraps the entire build process for myrddin code. It
+determines the dependencies, the build order, and manages the set of libraries
+that need to be linked in to produce the final library or binary, assuming that
+the included libraries are installed to the conventional location
+($PREFIX/lib/myr).
+
+As a result, it should generally be sufficient to run `myrbuild -b $TARG`
+main.myr in order to build a binary. Because the sources in libraries might not
+have direct dependencies on each other, building a library might require you to
+run `myrbuild -l libname full.myr sources.myr list.myr`
+
+Deconstructing Hello World
+--------------------------
+
+        use std
+
+The statement 'use std' tells the Myrddin compiler to load the 'std' package
+and make the functions in it available to our code.
+
+        const main = {args : byte[:][:];...}
+
+This is declaration where the anonymous function `{args; ...}` is assigned
+the the constant value 'main'.. All function declarations in Myrddin are done
+by assigning an anonymous function to a variable, generic, or constant.
+
+The keyword `const` is one of the three ways of beginning a declaration. The
+other two are `generic` and `var`.
+
+Keyword   |  Meaning
+----------|-----------
+`generic` |  A generic value that the compiler will specialize  
+`const`   |  A constant value. Should not be assignable. Mutability propagation semantics are TBD
+`var`     |  A mutable, assignable value.
+
+The general form of anonymous functions is `{arg, list; body_statements()}`.
+Semicolons and newlines are interchangable through all Myrddin code.
+
+        std.put("Hello-世界\n")
+
+Invokes the function 'std.put', which came from the 'std' package, printing to
+standard output. The string is encoded in utf8.
+
+        for a in args
+                std.put("arg {} = {}\n", i, args[i])
+        ;;
+
+A bog standard for loop. This instance uses the `for pattern in sequence`
+syntax, which will iterate over type that is iterable, matching the values
+with the pattern and executing the loop body if there is a valid pattern
+match.
+
+The alternative syntax, `for init; bound; incr` syntax is also acceptaed. For
+this syntax, The initializer, test, and increment are all single expressions
+terminated with a newline or semicolon. The `init` clause may include a
+declaration.
+
+In both cases, the body is a block terminated by a ';;'.
+
+Beyond Hello World: Types
+-------------------------
+
+Myrddin supports a wide range of primitive types. Types are all
+strong, with no implicit conversions between them.
+
+   Type        |       Description
+---------------|----------------------------------
+   `void`      | A void type
+   `bool`      | A boolean type
+   `char`      | A single unicode codepoint
+   `int8`      | A 8 bit integer
+   `int16`     | A 16 bit integer
+   `int32`     | A 32 bit integer
+   `int64`     | A 64 bit integer
+   `int`       | A native integer, 32 bits or greater
+   `uint8`     | A 8 bit unsigned integer
+   `uint16`    | A 16 bit unsigned integer
+   `uint32`    | A 32 bit unsigned integer
+   `uint64`    | A 64 bit unsigned integer
+   `uint`      | A native unsigned integer, 32 bits or greater
+   `flt32`     | A single precision floating point
+   `flt64`     | A double precision floating point
+   `...`       | A variadic argument list
+
+In addition to primitive types, it has type paramters. Type
+parameters act as variables which may be substituted with any
+other type on invocation or use of a type.
+
+When traits are specified, all traits must be present on the
+substituted type in order for the substitution to proceed.
+
+Type               | Description
+-------------------|-------------------
+`@t`               | A type paramter
+`@t::trait`        | A type parameter with a trait
+`@t::(trait,list)` | A type parameter with a list of traits.
+
+
+Composite types are composed of primitive types, or other composite types.
+There are three of these, which can be applied to any type. In Myrddin, slices
+carry both the array data and the length, and may be taken off of pointers,
+arrays, and other slices. A pointer only points to one element, and does not
+support pointer arithmetic. And an array is of a fixed size, with the size
+considered as part of its type.
+
+Type>            | Description  
+-----------------|--------------------------------------
+`type#`          | A pointer to type 
+`type[:]`        | A slice of type 
+`type[SIZE]`     | A type array of size SIZE. 
+
+Functions are specified with parentheses. The argument names are mandatory
+in all tyle specifications, although the return type is optional. Tuples are
+specified with square brackets. A better, but still conflict free syntax would
+be welcome.
+
+
+    
+Type                            | Description
+--------------------------------|------------------
+`(arg : t1, list : t2 -> ret)`  | Function with 2 args and a return type
+`(-> ret)`                      |  Function with 0 args and a return type
+`(arg : t1)`                    |  Function with 1 arg and an implicit return
+`[t1, t2, t3]`                  |  Three element tuple
+
+
+Structs in Myrddin behave much like they do in C, and are actually binary
+compatible in layout with the SysV struct ABI. Members are accessed with dot
+notation, as `strct.memb`, and can be initialized as literals with the
+struct literal notation `[.memb=val, .other=val]`
+                             
+    struct                   
+           member : @t       
+    ;;                       
+                             
+Unions in Myrddin are closer to algebraic data types in ML than they are to C unions.
+The union knows the value that is currently being held in it, and is constructed
+and matched with a tag. To construct a union, the `\`Tag val` syntax is used
+
+    union
+           `Tag1 t1
+           `Tag2 t2
+    ;;
+
+Beyond Hello World: Packages
+----------------------------
+
+Myrddin has a simple package system, doing away with headers. Myrddin source
+files can define the functions they export by including a package section,
+which lists the exported symbols.
+
+To use a package installed into the compiler search path, add use package_name
+statement to your code. This will allow you to access 'package_name.symbol'.
+
+To import symbols from a file within the same directory as your source code,
+add use "filename.use". The package name that is brought in to your namespace
+is determined by the 'pkg' spec within the source file being imported.
+
+If two use statements load the same package (eg, two local files export symbols
+for the 'foo' package), then the packages will be merged.
+
+To create your own package, add a pkg block to it. While it's not necessarily,
+stylistically, the exported symbols should have their types fully specified.
+
+An example of a 3 source file program that uses a system import is given here.
+`main.myr` will be importing all of the source files, and consuming the exported
+symbols. It uses the system include `std`, as well as the two local usefiles that
+provide the demo package, `say-hello.use` and `say-goodbye.use`
+
+Unfortunately, since the runner that I have does not support multiple files,
+this code will not build or run online. Sorry.
+
+```{runmyr pkg1}
+/* This is in main.myr */
+use std
+use "say-hello.use"
+use "say-goodbye.use"
+
+const main = {
+        demo.sayhello()
+        std.put("yo!")
+        demo.saygoodbye()
+        -> 0
+}
+```
+
+`say-hello.myr` defines a package block that exports the function
+`sayhello`, into the package `demo`, as well as providing the definition
+
+```{runmyr pkg2}
+/* This code is in say-hello.myr */
+use std
+
+pkg demo  =
+        const sayhello : (-> void)
+;;
+
+const sayhello = {
+        std.put("Hello\n")
+}
+```
+
+`say-goodbye.myr` defines a package block that exports the function
+`saygoodbye`, into the package `demo`, as well as providing the definition
+
+```{runmyr pkg3}
+/* This code is in say-goodbye.myr */
+use std
+
+pkg demo  =
+        const saygoodbye : (-> void)
+;;
+
+const saygoodbye = {
+        std.put("Goodbye\n")
+}
+```
+
+The use files loaded by the use statement are generated by the 'muse' tool. This tool will be invoked automatically as needed by 'myrbuild'.
+
+Beyond Hello World: Pattern Matching
+------------------------------------
+
+I personally love the way that algebraic data types and pattern matching in
+functional languages allows you to express only valid combinations of values in
+your data structures. So, of course, Myrddin has that too.
+
+At the moment the number of pattern types that can be matched over is somewhat
+limited, but I hope to grow it to nearly anything that can be expressed as a
+literal as soon as possible.
+
+Simple primitive values are matchable
+
+```{runmyr matchint}
+use std
+
+const main = {
+        var v
+
+        v = 234
+        match v
+        | 123:    std.put("First branch\n")
+        | 234:    std.put("Second branch\n")
+        | x:      std.put("What? Got {}\n", x)
+        ;;
+}
+```
+
+As are unions, structs, and any nesting of similar complex types:
+
+```{runmyr complexmatch}
+use std
+
+type u = union
+        `Some int
+        `None
+;;
+
+type s = struct
+        a : int
+        b : u
+        c : (int, int)
+;;
+
+const main = {
+        var u
+        var v : s
+
+        /* initialize u to some value */
+        u = `Some 234
+        match u
+        | `Some 123:    std.put("First branch\n")
+        | `Some x:      std.put("Got some {}\n", x)
+        | `None:        std.put("Got nothing\n")
+        ;;
+
+        v = [.a = 123, .b=`Some 456, .c=(5, 10)]
+        match v
+        | [.a = 234]:              std.put("Should not be here\n")
+        | [.a = 123, .c=(x, y)]:   std.put("tuple is ({}, {})\n", x, y)
+        ;;
+}
+```
+
+Beyond Hello World: Closures
+----------------------------
+
+Myrddin also has support for closures, including environment capture. Closures
+capture all variables in their scope by value at creation time. The
+environment is stack allocated by default, but can be heapified on demand.
+
+```{runmyr closures}
+use std
+
+const main = {
+        var a, fn
+
+        a = 123
+        fn = {x
+            std.put("inside closure: {}\n", x + a)
+            a++ /* modify the captured copy of a */
+        }
+        fn(123) /* just call the function a few times */
+        fn(0) /* we increment a */
+        fn(0) /* for each call */
+        std.put("a = {}\n", a)      /* but it doesn't change in the env */
+}
+```
+
+
+Beyond Hello World: Generics
+----------------------------
+
+We often want algorithms to apply over many types, not just the ones that we
+happened to code with. The Myrddin language provides facilities for this.
+Unfortunately, parameterized types are not yet fully implemented, which
+severely limits the usefulness of generics, but they are still useful.
+
+A generic function is written exactly as a normal function would be, but the
+keyword 'generic' is used in its declaration, instead of 'const'. A type
+parameter is then given in the place of a concrete type, and you're off.
+
+For the trivial example, here's a generic sizeof function
+
+        generic gsizeof = {val : @a;
+                -> sizeof(@a)
+        }
+
+But that's not very useful, so here's a generic max function. Because we need
+to be able to use the > operator on the arguments of the function, we will need
+to use a trait on the generic parameter. The trait that provides the comparison
+operators is numeric
+
+        generic max = {x : @a::numeric, y : @a::numeric
+                if x > y
+                        -> x
+                else
+                        -> y
+                ;;
+        }
+
+Style
+-----
+
+Code should be short, simple, and direct, with little gratuitous layering of
+abstraction. Algorithms should be described in a linear, straightforward
+fashion, as a set of steps to perform.
+
+Variables, types, and functions should be named lowercase. Constants should
+begin with an Uppercase. Names should be short, evocative, and mnemonic, but
+above all, consistent. A single verb is an ideal function name
+
+        spawn(func)                            /* good */
+        create_new_thread_with_function(func) /* bad */
+
+Libraries
+----------------
+
+Myrddin ships with a number of useful libraries. The most common ones, and the
+ones that ship with the compiler, are libsys, libstd, libbio, libregex,
+libcryptohash, and libdate. Other libraries are in the works.
+
+[Libstd](/myrddin/doc/libstd) handles functionality that most programs written
+would find useful.  It's a bit of a grab bag, but it's useful.
+
+[Libbio](/myrddin/doc/libbio) handles buffered IO, allowing you to do fancy
+things with input and output, line reading linewise, or reading up to
+delimiters.
+
+[Libregex](/myrddin/doc/libregex) handles regexes. It implements a simple but powerful regex syntax,
+and has working unicode support.
+
+[Libcryptohash](/myrddin/doc/libcryptohash) provides cryptographic hashes. It
+implements many of the most common ones.
+
+[Libdate](/myrddin/doc/libdate) provides a fairly complete interface for
+manipulating dates, times, and timezones.
+
+C Binding
+---------
+
+It's possible on boxes that use the SysV ABI, but still has rough edges. The
+ABI is only identical for C and Myrddin when looking at atomic types such as
+pointers, integers, or floats.  There's some minor support in the build
+system, but automated binding generation has only been started on.
+
+Further Reading
+----------------
+
+- [Language Specification](http://git.eigenstate.org/ori/mc.git/tree/doc/lang.txt)`
+- [Library source](http://git.eigenstate.org/ori/mc.git/tree/lib/)`
+- [Standard library API docs](/myrddin/doc/libstd)`
+- [Compiler Internals Documentation](http://git.eigenstate.org/ori/mc.git/tree/doc/compiler.txt)`
+
+Mailing List
+------------
+
+[Subscribe to the Mailing List](/myrddin/list-subscribe)
+
+IRC: irc.wsyntax.com, in #project79068
+
+Or contact me directly, at 'ori@eigenstate.org'
+

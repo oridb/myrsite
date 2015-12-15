@@ -1,0 +1,688 @@
+{
+    title       : Tutorial: Statements
+    description : Myrddin Tutorial: Statements
+}
+
+Contents
+--------
+
+
+Getting a copy
+--------------
+
+Myrddin runs on amd64 versions of Linux, OSX, FreeBSD, and 9front, with more
+ports warmly welcomed.
+
+The easiest way to get an up to date copy of Myrddin is to install it from git.
+The language is still changing rapidly, and releases simply haven't made much
+sense to date (although it's actually getting there!)
+
+To start off, download the dependencies. If you're on a Debian derivative,
+this should be sufficient:
+
+	sudo apt-get install bison gcc git make
+	
+Then, get the compiler:
+
+	git clone git://git.eigenstate.org/git/ori/mc.git
+
+Building and installing it matches the traditional ./configure; make; make install
+dance:
+
+	cd mc               # the directory you cloned into
+
+You then run `./configure`, as usual. I generally configure with
+`--prefix=$HOME/bin`, instead of the default `/usr/local`. If you chose a
+nonstandard prefix, make sure that `$prefix/bin` is in `$PATH`, or the binaries
+will not be found when you try to run commands.
+
+	./configure	    # probe the OS
+	make                # build it
+
+At this point, it would be good to make sure that the build you have works:
+
+	make check
+
+This should succeed. Assuming that's the case, you can install.
+
+	make install
+
+Optional: Editor Support
+--------------
+
+Shipped with Myrddin, but not installed by default, is autoindent and syntax
+highlighting support for Myrddin for vim. To set this up, copy the files
+into your `~/.vim` directory. From within the git checkout:
+
+	mkdir ~/.vim	# if it doesn't already exist
+	cp -r support/vim/* ~/.vim
+
+If you happen to like Howl, Ryan Gonzalez has contributed support for it,
+and it's available here: [https://github.com/kirbyfan64/howl-myr](
+https://github.com/kirbyfan64/howl-myr). To install, follow the directions
+listed:
+
+	mkdir -p ~/.howl/bundles
+	cd ~/.howl/bundles
+	git clone https://github.com/kirbyfan64/howl-myr.git
+
+Optional: Ctags Support
+--------------
+
+There's also a patched version of exuberant-ctags which can be used for
+indexing Myrddin code, available here: [https://github.com/oridb/ctags-myr.git](
+https://github.com/oridb/ctags-myr.git). This code can be built and installed
+with the following sequence of commands:
+
+	sudo apt-get build-dep exuberant-ctags
+	git clone https://github.com/oridb/ctags-myr.git
+	cd ctags-myr/
+	aclocal
+	automake
+	autoreconf
+	./configure
+	make
+	sudo make install
+	
+Hello, World
+------------
+
+The way to learn a language is to write programs in it, and following
+the time worn traditions of the greats, our first program to write
+is one that will print the following words: `"Hello, world".
+
+Once we have accomplished that, we've got a good starting point: The
+system is set up, and everything is working. So, type in the text below,
+or run it online if you so desire:
+
+```{runmyr helloworld}
+use std
+
+const main = {
+        std.put("Hello World\n")
+} 
+```
+
+Type it into a file. The name doesn't matter, as long as it ends with
+the `.myr` suffix. I'm going to put mine into `hello.myr`.
+
+To compile it, the `mbld` program that ships with Myrddin can be run like so,
+from within the directory that contains your `hello.myr` file:
+
+	mbld -b hello hello.myr
+
+
+Something that resmebles following output should show up on your screen:
+
+	hello...
+		6m	hello.myr 
+		ld	-o hello hello.o -L/home/ori/bin/lib/myr -lstd -lsys 
+
+The details of the output may vary by system, but at the end of the process,
+and an output binary will be created in the directory in which you ran `mbld`.
+When you run the binary, you should get the following output:
+
+	$ ./hello
+	Hello World
+
+The command `mbld` is the Myrddin build tool, and is responsible for invoking
+the appropirate compiler and linker commands in the correct order. It can be
+configured directly from the command line, or configured via a file. For simplicity,
+we will be using the command line configuration options.
+
+The `-b name` option tells mbld to produce a binary named `name`, and the
+remainder of the arguments are the inputs to combine into the binary. Any
+arbitrary name can be selected.
+
+Now that the code is working, an explanation is due. A Myrddin program
+consists of declarations, types, and statements. A function is a sequence of
+statements, enclosed by `{' and `}`, which are executed in order. In this
+example, there is one declaration -- the constant `main`, which is initialized
+with a simple function containing one statement. Normally, functions can be
+named anything, although the `main` function, when not in a namespace, is
+special, since every program begins executing at the beginning of `main`.
+
+The first line of the program,
+
+	use std
+
+brings a number of declarations into scope. These declarations include
+the function `put`, which is used to output data to the terminal. The
+constents of libstd are described in full [here](/myrddin/doc/libstd).
+
+The declaration of main is slightly interesting, because unlike most
+languages, there is no distinction in Myrddin between function declarations
+and variable declarations. A function decaration is simply a constant
+with a function assigned to it, and a function is always an unnamed
+list of statements within curly braces.
+
+	const main = {;...}
+
+In this example, the main function takes no parameters, as signified by the
+lack of parameter names listed before the first `;` in the function.
+
+The body of the main function
+
+        std.put("Hello World\n")
+
+contains a single statement. This statement is a function call, calling
+the function `put` defined within the library `std`, passing it a single
+parameter, the string `"Hello World\n"`.
+
+Within a function body, any number of statements can be placed. So,
+for example, if we had written
+
+```{runmyr helloworld}
+use std
+
+const main = {
+	/* we can also split up the lines */
+        std.put("Hello World\n")
+	std.put("Goodbye World\n")
+} 
+```
+
+the code would have executed both statements in the sequence denoted
+in the text.
+
+Another feature to note here is the text enclosed within `/*` and `*/`.
+This text is known as a comment, and is ignored by the compiler. It is
+used so that you, the programmer, can make notes to yourself.
+
+More Complexity: Loops and Variables
+------------------------------------
+
+The next program that we will write is going to introduce the concepts of
+variables, arithmetic, conditionals, and loops. The problem at hand is to
+print the word "Fizz" if a number is divisible by three, "Buzz" if the number
+is divisible by 5, and "Fizzbuzz" if it is divisible by both 3 and 5. It
+should run over the list of all integers from 1 to 100. An example run of
+the program should produce the following output:
+
+	1
+	2
+	Fizz
+	4
+	Buzz
+	Fizz
+	7
+	8
+	Fizz
+	Buzz
+	11
+	Fizz
+	13
+	14
+	Fizzbuzz
+	16
+	...
+
+The program still consists of a single function named `main`, but the body
+of it is more complicated. The body uses a for loop to iterate over the values
+from 1 to 100, and several if statements to decide what to do with the number
+that it is currently considering.
+
+```{runmyr fizzbuzz}
+use std
+
+/* the well known fizzbuz program */
+const main = {
+	var i
+	var start, end
+
+	start = 1
+	end = 100
+	i = start
+	while i <= end
+		if i % 5 == 0 && i % 3 == 0
+			std.put("Fizzbuzz\n")
+		elif i % 3 == 0
+			std.put("Fizz\n")
+		elif i % 5 == 0
+			std.put("Buzz\n")
+		else
+			std.put("{}\n", i)
+		;;
+		i++
+	;;
+}
+```
+
+### Comments
+
+The first new feature we see reading this program is the text
+
+	/* the well known fizzbuz program */
+
+which is the syntax for a comment, ignored by the compiler. Comments in
+Myrddin may appear anywhere that whitespace may show up -- between
+declarations, at the end of lines, and so on. Comments may nest, allowing
+entire blocks of code to be commented out, even if they have comments
+in them already -- something quite useful for quickly disabling some
+code for testing.
+
+	/* a comment /* holding a comment */ inside */
+
+
+Following this are declarations. These were  glossed over them when putting
+together the hello world program. 
+
+	const main = {
+		var i
+		var start, end
+
+Declarations are the fundamental building block of programs. Declarations are
+used to attach a name to a value. This value may either be constant, or it may
+be mutable -- in other words, it may be possible to change the value. Both
+cases of declared name are referred to, perhaps slightly confusingly, as
+variables. All variables, and indeed, all values in a Myrddin program, have
+a type attached.
+
+To denote a value that may not be assigned to, the keyword `const` is used,
+as in `const main`. To denote a value that may be modified, the keyword `var`
+is used. Multiple variables may follow a single specifier, as we see on the
+third line of the sample:
+
+	var start, end
+
+Generally, the Myrddin compiler will be able to determine the types needed for
+a variable declaration without any help from the programmer, however some
+instances where there is insufficient information for the compiler to
+determine what type a variable must have. For example, if we wrote a function
+with a variable that was never assigned to, we would get a compilation error,
+complaining about an ambiguous type:
+
+```{runmyr missingtype}
+const main = {
+	var x
+}
+```
+
+In this case, the variable is useless and can safely be deleted. However,
+in some instances, we must annotate the variable with a type. This is done
+by adding a `:` after the name of the variable, followed by a type name. For
+example, we could decide that we want `x` in the above example to be a 64
+bit integer:
+
+
+```{runmyr annotatedtype}
+const main = {
+	var x : int64
+}
+```
+
+Myrddin comes with a number of builtin types, covering integers, floating
+point values, characters, strings, and booleans. It also comes with facilities
+for building more complex types.
+
+One quirk of Myrddin is that variables may be declared in any order, including
+after their use. The initialization for constants is done at compile time, and
+their values are fixed for the duratin of programs, however, variables are
+initialized at their first use. For example:
+
+```{runmyr annotatedtype}
+const main = {
+	x = 3
+	var x : int64
+}
+```
+
+This allows for functions to be mutually recursive, but can lead to confusing
+code otherwise. It is strongly recommended stylistically to declare variables
+before their use within a function.
+
+The next feature we see are a pair of assignments, An assignment statement
+consists of a value that can be assigned to on the left hand side, known as
+an `lvalue`, and an expression on the right hand side that computes something,
+known as an `rvalue`. Assignment statements will set or overwrite the value
+on their LHS to the value on the RHS.
+
+	start = 1
+	end = 100
+	i = start
+
+Every expression statement is terminated by either a line ending or a
+semicolon. Myrddin treats newlines and `;` as equivalent. Each expression
+is executed in sequence, one after the other.
+
+We want to make the same decision for every number between the start and
+end point of the range we're considering. In this instance, we use a
+while loop, although we will explore better options presently.
+
+	while i <= end
+		/* stuff */
+	;;
+
+A while loop continously repeats the code within the block, descriptively abridged
+as `/* stuff */` in the snippet, until the condition becomes false. The
+condition is a single expression which evaluates to a boolean `true` or
+`false`. In this case, the loop will exit when `i` becomes greater than `end`,
+making the test `i <= end` false.
+
+The body of a `while` loop, and begins on the line following the `while` keyword,
+and continues until the ';;' which denotes the end of the block. This pattern
+is a common syntactic construct in Myrddin.
+
+The body of the loop contains a single `if` statements. An `if` statement will
+execute its body if the condition is true. An `elif` statement will chain
+off of an `if` statement, executing only if the condition for the `if` was
+false and the condition for the `elif` was true. The final `else` condition
+acts as a catch-all statement, executing if none of the previous elements
+in the if-elif chain was present.
+
+	if i % 5 == 0 && i % 3 == 0
+		std.put("Fizzbuzz\n")
+	elif i % 3 == 0
+		std.put("Fizz\n")
+	elif i % 5 == 0
+		std.put("Buzz\n")
+	else
+		std.put("{}\n", i)
+	;;
+
+An if statmeent may be followed by zero or more `elif` clauses, and at most
+one `else` clause.
+
+In the final `else` clause, we also notice one more feature of the `std.put`
+function. The `{}` within the first argument to `std.put()` will act as a
+placeholder for any future arguments passed to the function. These arguments
+will be displayed in as sensible a way as Myrddin is capable of showing.
+
+The expression in the first if clause is also worth examining in more detail:
+
+	i % 5 == 0 && i % 3 == 0
+
+How does this expression work? In myrddin, all expressions are evaluated
+from right to left taking precedence into account. The operator with the
+lowest precedence in this expression is `&&`, which is a lazy logical `and`
+expression. It evaluates its left operand, `i % 5 == 0`, and only if it is
+true does it evaluate the right operand `i % 3 == 0`. If both its left hand
+side and right hand side evaluate to true, then the entire expression
+evaluates to true. Otherwise, it evaluates to false.
+
+The subexpression `i % 5 == 0` first evaluate `i % 5`. That is, it computes
+if the remainder of `i` divided by `5` using the modulus operator `%`. This
+result is then compared against the value of `0`, with the `==` operator
+returning true or false as needed.
+
+The final statement in the while loop, `i++`, is another slightly odd
+expression. It is a postincrement expression, which is equivalent to
+evaluating `i`, and then *after* the expression is evaluated, adding
+one to it. It could be rewritten with the equivalent code
+
+	i
+	i = i + 1
+
+Now, the program that we have written is not ideal. It would be better to
+modify it to use a for loop, and pattern match on the truth values:
+
+```{runmyr fizzbuzz}
+use std
+
+/* the well known fizzbuz program */
+const main = {
+	for var i = 1; i <= 100; i++
+		match (i % 5 == 0, i % 3 == 0)
+		| (true, true):		std.put("Fizzbuzz\n")
+		| (true, false):	std.put("Fizz\n")
+		| (false, true):	std.put("Buzz\n")
+		| (false, false): 	std.put("{}\n", i)
+		;;
+	;;
+}
+```
+
+This variant of the program accomplishes the same thing, but has a number of
+minor advantages and differences. The largest advantage being that it
+demonstrates some constructs that will show up elsewhere.
+
+The first change of note is that the while loop has been replaced with a
+for loop. For loops come in two different forms. The one in use here is
+closely related to a while loop, and has the general structure:
+
+	for setup; condition; step
+		/* body */
+	;;
+
+The expression in  setup is evaluated exactly once before the loop is run. The
+setup step can also contain an initialized declaration. Condition plays the
+same role in a for loop as it does in a while loop, and the step is performed
+once at the end of every iteration, after `body` has run. Therefore, this
+style of for loop can be easily transformed into a while loop like so:
+
+	setup
+	while condition
+		/* body */
+		step
+	;;
+
+We have also replaced the chain of if statements with a match statement
+and a set of patterns. The expression
+
+	(i % 5 == 0, i % 3 == 0)
+
+produces a sequence of values known as a "tuple". The first element of
+the tuple contains whether `i` is divisible by 5, and the second contains
+whether it is divisible by 3. The code then applies the following patterns
+and evaluates the first one that matches:
+
+	| (true, true):		std.put("Fizzbuzz\n")
+	| (true, false):	std.put("Fizz\n")
+	| (false, true):	std.put("Buzz\n")
+	| (false, false): 	std.put("{}\n", i)
+
+If both values in the tuple are true, then the first value matches. If the
+first value is true, and the second value is false, then the second case
+matches. And so on, through the list.
+
+Match statements are fairly picly, and will not allow cases to go unmatched.
+They will also not allow duplicate cases which hide others. This means that
+if by some accident we had either forgotten a case, or mistyped it so that
+another case would have matched before the one we expected, the compiler
+would kindly tell us that we had made a mistake.
+
+Pattern matches also allow us to extract values from data types. For example,
+we could put use the pattern:
+
+	| (true, divisible):	std.put("Fizz divisible={}\n", divisible)
+
+Once all of the conflicting cases were resolved, when the code was run
+the compiler would only inspect the first value to be matched, and then store
+the result of the second matched value into the variable `divisible`.
+
+### Types
+
+### Functions
+
+Functions in Myrddin are just values that support a `
+but beyond that they are simply constants that have values assigned to them.
+
+### Input and Output
+
+So far, all of our programs have been self contained. We ran them, and they
+gave some output. But in order to do something useful without forcing
+recompilation of the program for every instance of the problem, you will
+find that reading input and producing output is very useful.
+
+The next program will be similar to the unix program `cat`, however, instead
+of simply displaying the output, we will unescape characters.
+
+	const main = {args : byte[:][:]
+		for arg in args
+			catfile(arg)
+		;;
+	}
+
+	const catfile = {path
+		var buf	: byte[4096]	/* 4k buffer */
+		var fd
+
+		fd = std.try(std.open(path, std.Rdonly))
+		while true
+			match std.read(fd, buf[:])
+			| `std.Ok 0:	break
+			| `std.Ok n:	std.write(1, buf[:n])
+			| `std.Fail e:	std.fatal("failure reading {}: {}\n", path, e)
+			;;
+		;;
+		std.close(fd)
+	}
+
+
+This code has several notable differences. First is the signature of
+`main`:
+
+	const main = {args : byte[:][:]
+
+Here, main is given an argument named `args`, which is of type `byte[:][:]`.
+This `args` argument to main is how the command line arguments are passed to a
+Myrddin program.
+
+The notation `type[:]` denotes a slice of types. Applying the `[:]`  to the
+`byte` variable, we get a slice of a slice of bytes. A slice is a sequence of
+values, laid out in a contiguous sequence, with a length attached.  Slices are
+reference types, and may refer to subsections of other slices or of arrays.
+
+The next line, 
+
+	for arg in args
+
+demonstrates the second form a for loop may take. The general form of this
+type of for loop is as follows:
+
+	for PATTERN in ITERABLE
+	
+where pattern can be any pattern allowed by a match statement, and iterable
+is either a slice or an array. The most common pattern, however, is a "match
+all" pattern.
+
+This program is also the first that has defined a function other than `main`.
+`catfile` is not strictly required, but it is generally good practice to break
+a program into smaller functions. The catfile function takes a single argument
+named `path`, which contains the path to the file to be printed. It uses
+the standard library functon `std.open()` in order to open the file for
+reading.
+
+Two variables are declared at the opening of the function.
+
+		var buf	: byte[4096]	/* 4k buffer */
+		var fd
+
+The variables declared, `buf` and `fd`, represent the buffer that Myrddin
+code is read into, and the file descriptor that will be used for reading.
+
+The declaration of `buf` creates an array of 4096 bytes. This is where
+we will store the result of the read from the file. Arrays in Myrddin are of a
+fixed size, with the size kept as part of the type of the array. In other
+words, int[2] and int[4] are incompatible. This may sound restrictive, but in
+practice this interferes with litte, as slices are used pervasively.
+
+This code checks for a failure in opening the file by `std.try()`. This is a
+convenience function that does little more than take a value wrapped in a
+`std.result` wrapper, check if it was successful, and unwrap it. If the result
+is a failure, it exits the program with a message. For small programs, this is
+convenient, although for long running programs it is better to explicitly
+check the error, as we do when using `std.read` on the next line.
+
+Next, we have a loop that repeats infinitely, using the `while true`
+construct. Until the loop is exited with a `break` statement, the contents
+will be repeated.
+
+The bulk of the work is done in the match statement that is executed within
+the while loop.
+
+	match std.read(fd, buf[:])
+	| `std.Ok 0:	break
+	| `std.Ok n:	std.write(1, buf[:n])
+	| `std.Fail e:	std.fatal("failure reading {}: {}\n", path, e)
+	;;
+
+The first thing to notice is a new operator, the slice operator `[:]`, which
+is being appied to the buffer `buf`. The slice operator takes a slicable
+value on the left hand side, and an upper and lower bound on the right hand
+side. If these bounds are omitted, they are substituted for 0 for the lower
+bound, and 'lhs.len' for the upper bound. The lower bound is inclusive,
+and the upper bound is exclusive, for symmetry with arrays.
+
+The first use of this operator, therefore, takes a slice of the whole
+`buf` array, to pass to the read function. When passing it to the write
+function, however, we only want to write the bytes that were read, so we
+slice up to the length read.
+
+The next thing to look at is the match statement, and how it works.
+If you look at signature of the std.read function, as described in the manual,
+is:
+
+	const read : (fd : std.fd, buf : byte[:] -> result(std.size, std.errno))
+
+The parameters to this function are fairly clear. `fd` is a file descriptor,
+and `buf` is a buffer to read into, and is a thin wrapper around the functions
+provided by many common operating systems. The return value, however, is
+something we have not yet seen, and warrants elaboration.
+
+The return type, `std.result(std.size, std.errno)` is a parameterized type.
+It is defined as follows:
+
+	type result(@a, @b) = union
+		`Ok	@a
+		`Fail	@b
+	;;
+
+So, `std.result` is a parameterized union type, which is tagged. It can hold
+one of two values:
+
+	`Ok @a
+
+Or 
+
+	`Fail @b
+
+Where the type @a and @b are substituted in as parameters. The match statement
+we are examining knows the tag of the union, and is considering both the tag
+and the value contained in it. Knowing this, and combining the information
+with the documentation for the `std.read` function, we know that on end
+of file, it returns a `0` for the length of the read. Knowing this, the first
+case in the match,
+
+	| `std.Ok 0:	break
+
+will break out of the loop when we reach the end of the input file. The second
+case,
+
+	| `std.Ok n:	std.write(1, buf[:n])
+
+matches a `\`std.Ok` where the value is anything. It does this because the
+name `n` used in the pattern is not a constant or variable that is in scope,
+which means that it is interpreted as a wildcard that binds the value in the
+union. This means that the body of the pattern,
+
+	std.write(1, buf[:n])
+
+is exectued, the `n` used is the number of bytes that we have successfully
+read. And finally, if we encounter an error reading the file, then the last
+case has us covered.
+
+	| `std.Fail e:	std.fatal("failure reading {}: {}\n", path, e)
+
+will match an error read, using `e` as the wild card to bind the value. When
+the body of the statement is executed, the program will exit with a message
+describing what went wrong reading the file.
+
+Match statements require all cases to be covered, and the program will fail
+to compile if there is a value that could potentially matched against which
+will not be handled by at least one case. It is also an error to have multiple
+cases which will match the exact same values, because one of them will
+necessarily be redunant.
+
+If there is a reason to want to ignore a value, you can use a wildcard as the
+fallback case. the blackhole wild card (`_`) is traditionally used for this.
+So, for example, if it was desirable to ignore all errors, the match statement
+in the loop could be rewritten to look like:
+
+	match std.read(fd, buf[:])
+	| `std.Ok 0:	break
+	| `std.Ok n:	std.write(1, buf[:n])
+	| _:	/* ignore anything else */
+	;;
+
+

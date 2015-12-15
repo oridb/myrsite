@@ -1,0 +1,82 @@
+{
+    title       : Tutorial: Setup
+    description : Myrddin Tutorial: Setup
+}
+
+Getting a copy
+--------------
+
+Myrddin runs on amd64 versions of Linux, OSX, FreeBSD, and 9front, with more
+ports warmly welcomed.
+
+The easiest way to get an up to date copy of Myrddin is to install it from git.
+The language is still changing rapidly, and releases simply haven't made much
+sense to date (although it's actually getting there!)
+
+To start off, download the dependencies. If you're on a Debian derivative,
+this should be sufficient:
+
+	sudo apt-get install bison gcc git make
+	
+Then, get the compiler:
+
+	git clone git://git.eigenstate.org/git/ori/mc.git
+
+Building and installing it matches the traditional ./configure; make; make install
+dance:
+
+	cd mc               # the directory you cloned into
+
+You then run `./configure`, as usual. I generally configure with
+`--prefix=$HOME/bin`, instead of the default `/usr/local`. If you chose a
+nonstandard prefix, make sure that `$prefix/bin` is in `$PATH`, or the binaries
+will not be found when you try to run commands.
+
+	./configure	    # probe the OS
+	make                # build it
+
+At this point, it would be good to make sure that the build you have works:
+
+	make check
+
+This should succeed. Assuming that's the case, you can install.
+
+	make install
+
+Optional: Editor Support
+--------------
+
+Shipped with Myrddin, but not installed by default, is autoindent and syntax
+highlighting support for Myrddin for vim. To set this up, copy the files
+into your `~/.vim` directory. From within the git checkout:
+
+	mkdir ~/.vim	# if it doesn't already exist
+	cp -r support/vim/* ~/.vim
+
+If you happen to like Howl, Ryan Gonzalez has contributed support for it,
+and it's available here: [https://github.com/kirbyfan64/howl-myr](
+https://github.com/kirbyfan64/howl-myr). To install, follow the directions
+listed:
+
+	mkdir -p ~/.howl/bundles
+	cd ~/.howl/bundles
+	git clone https://github.com/kirbyfan64/howl-myr.git
+
+Optional: Ctags Support
+--------------
+
+There's also a patched version of exuberant-ctags which can be used for
+indexing Myrddin code, available here: [https://github.com/oridb/ctags-myr.git](
+https://github.com/oridb/ctags-myr.git). This code can be built and installed
+with the following sequence of commands:
+
+	sudo apt-get build-dep exuberant-ctags
+	git clone https://github.com/oridb/ctags-myr.git
+	cd ctags-myr/
+	aclocal
+	automake
+	autoreconf
+	./configure
+	make
+	sudo make install
+	

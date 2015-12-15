@@ -1,0 +1,462 @@
+{
+    title       : Tutorial: Statements
+    description : Myrddin Tutorial: Statements
+}
+
+Contents
+--------
+
+
+Getting a copy
+--------------
+
+Myrddin runs on amd64 versions of Linux, OSX, FreeBSD, and 9front, with more
+ports warmly welcomed.
+
+The easiest way to get an up to date copy of Myrddin is to install it from git.
+The language is still changing rapidly, and releases simply haven't made much
+sense to date (although it's actually getting there!)
+
+To start off, download the dependencies. If you're on a Debian derivative,
+this should be sufficient:
+
+	sudo apt-get install bison gcc git make
+	
+Then, get the compiler:
+
+	git clone git://git.eigenstate.org/git/ori/mc.git
+
+Building and installing it matches the traditional ./configure; make; make install
+dance:
+
+	cd mc               # the directory you cloned into
+
+You then run `./configure`, as usual. I generally configure with
+`--prefix=$HOME/bin`, instead of the default `/usr/local`. If you chose a
+nonstandard prefix, make sure that `$prefix/bin` is in `$PATH`, or the binaries
+will not be found when you try to run commands.
+
+	./configure	    # probe the OS
+	make                # build it
+
+At this point, it would be good to make sure that the build you have works:
+
+	make check
+
+This should succeed. Assuming that's the case, you can install.
+
+	make install
+
+Optional: Editor Support
+--------------
+
+Shipped with Myrddin, but not installed by default, is autoindent and syntax
+highlighting support for Myrddin for vim. To set this up, copy the files
+into your `~/.vim` directory. From within the git checkout:
+
+	mkdir ~/.vim	# if it doesn't already exist
+	cp -r support/vim/* ~/.vim
+
+If you happen to like Howl, Ryan Gonzalez has contributed support for it,
+and it's available here: [https://github.com/kirbyfan64/howl-myr](
+https://github.com/kirbyfan64/howl-myr). To install, follow the directions
+listed:
+
+	mkdir -p ~/.howl/bundles
+	cd ~/.howl/bundles
+	git clone https://github.com/kirbyfan64/howl-myr.git
+
+Optional: Ctags Support
+--------------
+
+There's also a patched version of exuberant-ctags which can be used for
+indexing Myrddin code, available here: [https://github.com/oridb/ctags-myr.git](
+https://github.com/oridb/ctags-myr.git). This code can be built and installed
+with the following sequence of commands:
+
+	sudo apt-get build-dep exuberant-ctags
+	git clone https://github.com/oridb/ctags-myr.git
+	cd ctags-myr/
+	aclocal
+	automake
+	autoreconf
+	./configure
+	make
+	sudo make install
+	
+Hello, World
+------------
+
+The way to learn a language is to write programs in it, and following
+the time worn traditions of the greats, our first program to write
+is one that will print the following words: `"Hello, world".
+
+Once we have accomplished that, we've got a good starting point: The
+system is set up, and everything is working. So, type in the text below,
+or run it online if you so desire:
+
+```{runmyr helloworld}
+use std
+
+const main = {
+        std.put("Hello World\n")
+} 
+```
+
+Type it into a file. The name doesn't matter, as long as it ends with
+the `.myr` suffix. I'm going to put mine into `hello.myr`.
+
+To compile it, the `mbld` program that ships with Myrddin can be run like so,
+from within the directory that contains your `hello.myr` file:
+
+	mbld -b hello hello.myr
+
+
+Something that resmebles following output should show up on your screen:
+
+	hello...
+		6m	hello.myr 
+		ld	-o hello hello.o -L/home/ori/bin/lib/myr -lstd -lsys 
+
+The details of the output may vary by system, but at the end of the process,
+and an output binary will be created in the directory in which you ran `mbld`.
+When you run the binary, you should get the following output:
+
+	$ ./hello
+	Hello World
+
+The command `mbld` is the Myrddin build tool, and is responsible for invoking
+the appropirate compiler and linker commands in the correct order. It can be
+configured directly from the command line, or configured via a file. For simplicity,
+we will be using the command line configuration options.
+
+The `-b name` option tells mbld to produce a binary named `name`, and the
+remainder of the arguments are the inputs to combine into the binary. Any
+arbitrary name can be selected.
+
+Now that the code is working, an explanation is due. A Myrddin program
+consists of declarations, types, and statements. A function is a sequence of
+statements, enclosed by `{' and `}`, which are executed in order. In this
+example, there is one declaration -- the constant `main`, which is initialized
+with a simple function containing one statement. Normally, functions can be
+named anything, although the `main` function, when not in a namespace, is
+special, since every program begins executing at the beginning of `main`.
+
+The first line of the program,
+
+	use std
+
+brings a number of declarations into scope. These declarations include
+the function `put`, which is used to output data to the terminal. The
+constents of libstd are described in full [here](/myrddin/doc/libstd).
+
+The declaration of main is slightly interesting, because unlike most
+languages, there is no distinction in Myrddin between function declarations
+and variable declarations. A function decaration is simply a constant
+with a function assigned to it, and a function is always an unnamed
+list of statements within curly braces.
+
+	const main = {;...}
+
+In this example, the main function takes no parameters, as signified by the
+lack of parameter names listed before the first `;` in the function.
+
+The body of the main function
+
+        std.put("Hello World\n")
+
+contains a single statement. This statement is a function call, calling
+the function `put` defined within the library `std`, passing it a single
+parameter, the string `"Hello World\n"`.
+
+Within a function body, any number of statements can be placed. So,
+for example, if we had written
+
+```{runmyr helloworld}
+use std
+
+const main = {
+	/* we can also split up the lines */
+        std.put("Hello World\n")
+	std.put("Goodbye World\n")
+} 
+```
+
+the code would have executed both statements in the sequence denoted
+in the text.
+
+Another feature to note here is the text enclosed within `/*` and `*/`.
+This text is known as a comment, and is ignored by the compiler. It is
+used so that you, the programmer, can make notes to yourself.
+
+Statements will be covered in more depth [in the next section of the
+tutorial](statements)
+Statements
+-----------
+
+When writing the Hello World function, within the main function, there was a
+single which performed the output. It was described as a statement, and 
+
+A statement is a single line of code that does something -- computes a value,
+declares a value, or makes a decision on which sequence of statements to
+compute, repeats a sequence of statements.
+
+Myrddin has a number of types of statements:
+
+<dl>
+	<dt>Declarations</dt>
+	<dd>
+	Declarations introduce a variable name.
+	</dd>
+	<dt>Expressions</dt>
+	<dd>
+	Expressions generally evaluate to values.
+	</dd>
+	<dt>Return statements</dt>
+	<dd>
+	Exiting functions with a value.
+	</dd>
+	<dt>For loops</dt>
+	<dd>
+	For loops repeat a block, ranging over lists or ranges of values
+	</dd>
+	<dt>While loops</dt>
+	<dd>
+	While loops repeat a block as long as a condition holds true.
+	</dd>
+	<dt>Break and Continue</dt>
+	<dd>
+	These are tied to loops, and short circuit iterations in two different
+	ways.
+	</dd>
+	<dt>If statements</dt>
+	<dd>
+	If statemnets select one of two different outcomes based on their
+	condition.
+	</dd>
+	<dt>Match statements</dt>
+	<dd>
+	Applies a pattern match to its arguments, selecting the first matching
+	pattern.
+	</dd>
+	<dt>Labels</dt>
+	<dd>
+	The target of goto expressions.
+	</dd>
+<dl>
+
+Declarations
+------------
+
+Declarations are the fundamental building block of programs. Declarations are
+used to attach a name to a value. This value may either be constant, or it may
+be mutable -- in other words, it may be possible to change the value. Both
+cases of declared name are referred to, perhaps slightly confusingly, as
+variables. All variables, and indeed, all values in a Myrddin program, have
+a type attached.
+
+We have already encountered a declaration in our first program, where we typed
+
+	const main = { ... }
+
+This line of code *declared* the variable `main` as a constant, and
+initialized it with a function value. The type was not specified manually, but
+the compiler inferred it, determining that `main` was of type `(->void)`.
+That is to say, the compiler realized that main must be a function that takes
+zero arguments and returns a void value.
+
+To declare a variable that can be modified, `var` would be used instead of
+`const`. Both variables and constants can be declared anywhere throughout the
+program that a statement is allowed. For example:
+
+```{runmyr vars}
+use std
+
+var x = 3
+const main = {
+	var y = 4
+        std.put("x={}, y={}\n", x, y)
+	x = 6
+	y = 8
+        std.put("x={}, y={}\n", x, y)
+} 
+```
+
+As an aside, the above example also shows another feature of the `std.put`
+function. The first argument to the function, known as the "format string",
+will interpret any `{}` within it as a placeholder value, and will substitute
+it with the actual value of the argument. The actual type of the argument is
+used by `std.put` to output a reasonable value.
+
+A variable will only be available within the same block of code that it was
+declared, meaning that `y`, in this instance, will not be accessible outside
+of the function `main`.
+
+Generally, Myrddin code will not need very many types declared, but there are
+some instances where there is insufficient information for the compiler to
+determine what a type must be. For example, if we wrote a function with a
+variable that was never assigned to, we would get a compilation error,
+complaining about an ambiguous type:
+
+```{runmyr missingtype}
+const main = {
+	var x
+}
+```
+
+In this case, the variable is useless and can safely be deleted. However,
+in some instances, we must annotate the variable with a type. This is done
+by adding a `:` after the name of the variable, followed by a type name. For
+example, we could decide that we want `x` in the above example to be a 64
+bit integer:
+
+
+```{runmyr annotatedtype}
+const main = {
+	var x : int64
+}
+```
+
+And now the code will compile. However, if we attempt to assign a value to
+this variable that is not an integer, we will see a compilation failure about
+mismatched types. Types restrict what a variable can hold. We will cover types
+in depth later.
+
+One quirk of Myrddin is that variables may be declared in any order, including
+after their use. The initialization for constants is done at compile time, and
+their values are fixed for the duratin of programs, however, variables are
+initialized at their first use. For example:
+
+```{runmyr annotatedtype}
+const main = {
+	x = 3
+	var x : int64
+}
+```
+
+This allows for functions to be mutually recursive, but can lead to confusing
+code otherwise. It is strongly recommended stylistically to declare variables
+before their use within a function.
+
+Declarations from other modules are imported through `use` statements, and are
+referred to using dotted notation. This notation has already been used for
+`std.put()`.
+
+Expressions
+-----------
+
+Expressions are the most commmon type of statement in Myrddin programs. They
+are of operations which result in a value being computed or stored.  After an
+expression is evaluated, the program moves on to the next step. An expression
+never changes what the next step is.
+
+You have already encountered expressions in the "hello world" program, in the
+previous section:
+
+        std.put("Hello World\n")
+
+The whole line above is a single function call expression statement, which is
+composed of smaller expressions, which can eventually be reduced to single
+terms operated on by zero or more operands. The function call itself is
+denoted by the `()`, and has a number of subexpressions. `std.put` is a term,
+as is `"Hello World\n"`.  The operator for the expression above is `()`, which
+when put after an expression, denotes that the expression on the left hand
+side of the parentheses should be called as a function. For this to compile,
+the left hand side of the function call expression must be a function which
+takes the arguments within the parentheses.
+
+When evaluated, all of these subexpressions work together to produce the
+output that we saw earlier.
+
+There are other expressions, which may be arbitrarily combined. Variables
+can stand in for actual values.
+
+```{runmyr exprs}
+use std
+
+const main = {
+	var y = 3.7
+        std.put("{}\n" 2 + 3 * 4 - 5 / 6)
+	std.put("{}\n" 2.0 / 3.0 + y)
+} 
+```
+
+These expressions can be combined to produce useful values,
+for example, converting from feet to meters.
+
+```{runmyr footcvt}
+use std
+
+const main = {
+	var feet = 10.9
+
+        std.put("{} feet => {} meters\n" feet, feet * 0.3048)
+} 
+```
+
+The full range of operators supported by Myrddin is listed below,
+ordered by precedence.
+
+| Operator      |  Explanation          | Precedence   |
+|---------------|---------------------------------------|-------|
+| **parenthesized**|					|	|
+| (e)	| evaluate at top precedence			| 14	|
+| **postfix**   |					|	|
+|  e#	| dereference a pointer				| 13	|
+|  e.name | access a member value			| 13	|
+|  e++	| load and increment later			| 13	|
+|  e--	| load and decrement later			| 13	|
+|  e()	| calls expression e as function		| 13	|
+|  e[idx]	| loads `idx`th element of e|		| 13	|
+|  e[idx1:idx2]	| slices `e` from idx1 to idx2		| 13	|
+| **prefix**	|					|	|
+|  ++e	| increment and then load 			| 12	|
+|  --e	| decrement and then load 			| 12	|
+|  &e	| load address of variable			| 12	|
+|  -e	| invert sign of e				| 12	|
+|  +e	| do nothing to sign of e			| 12	|
+|  !e	| invert truth value of e			| 12	|
+|  ~e	| flip all bits in `e`				| 12	|
+| **multiplicative**	|				|	|
+|  e1 \* e2	| multiply e1 and e2			| 11	|
+|  e1 / e2	| divide e1 by e2			| 11	|
+|  e1 % e2	| remainder of e1 / e2			| 11	|
+| **shift**	|					|	|
+|  e1 << e2	| shift `e1` left by `e2` bits		| 10 	|
+|  e1 >> e2	| shift `e1` right by `e2` bits		| 10	|
+| **additive**	|					|	|
+|  e1 + e2	| add e1 and e2				| 9	|
+|  e1 - e2	| subtract e2 from e2			| 9	|
+| **bitwise**	|					|	|
+|  e1 & e2	| bitwise AND e1 and e2			| 8	|
+|  e1 \| e2	| bitwise OR e1 and e2			| 7	|
+|  e1 ^ e2	| bitwise XOR e1 and e2			| 7	|
+| **cast**	|					|	|
+| e castto(@t)	|					| 6	|
+| **union**	|					|	|
+| `Tag e	| wrap up `e` in a union constructor	| 5	|
+| **comparative** |					|	|
+|  e1 == e2	| test if e1 is equal to e2		| 4	|
+|  e1 > e2	| test if e1 is greater than e2 	| 4	|
+|  e1 < e2	| test if e1 is less than e2		| 4	|
+|  e1 >= e2	| test if e1 is greater than or equal to e2 | 4	|
+|  e1 <= e2	| test if e1 is less than or equal to e2| 4	|
+|  e1 != e2	| test if e1 is not equal to e2		| 4	|
+| **assignment** |					|	|
+|  e1 = e2	| assign e2 to e1			| 3	|
+|  e1 += e2	| assign e1 the value of e1 + e2	| 3	|
+|  e1 -= e2	| assign e1 the value of e1 - e2	| 3	|
+|  e1 \*= e2	| assign e1 the value of e1 \* e2	| 3	|
+|  e1 /= e2	| assign e1 the value of e1 / e2	| 3	|
+|  e1 %= e2	| assign e1 the value of e1 % e2	| 3	|
+|  e1 |= e2	| assign e1 the value of e1 | e2	| 3	|
+|  e1 ^= e2	| assign e1 the value of e1 ^ e2	| 3	|
+|  e1 &= e2	| assign e1 the value of e1 & e2	| 3	|
+|  e1 <<= e2	| assign e1 the value of e1 << e2	| 3	|
+|  e1 >>= e2	| assign e1 the value of e1 >> e2	| 3	|
+| **logical**   |					|	|
+|  e1 && e2	| test if e1 is true or e2 is true	| 2	|
+|  e1 \|\| e2	| test if e1 is true or e2 is true	| 1	|
+
+These operators will get used and explained as we progress through the 
+tutorial.

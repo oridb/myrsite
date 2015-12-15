@@ -1,0 +1,217 @@
+{
+    title       : Wishlist
+    description : One day my dream will come true
+}
+
+Wishlist: Compiler
+------------------ 
+
+#### Better match statements:
+At the moment, we generate a long chain of if statements. This is slow,
+inefficient, and ugly. We also generate too many copies.
+
+References:
+
+- [http://synrc.com/publications/cat/Functional%20Languages/L/match/jun08.pdf](http://synrc.com/publications/cat/Functional%20Languages/L/match/jun08.pdf)
+- [http://link.springer.com/chapter/10.1007/3-540-15975-4_48](http://link.springer.com/chapter/10.1007/3-540-15975-4_48)
+- [http://pauillac.inria.fr/~maranget/opt-pat.ps.gz](http://pauillac.inria.fr/~maranget/opt-pat.ps.gz)
+- [https://www.cs.tufts.edu/~nr/pubs/match.pdf](https://www.cs.tufts.edu/~nr/pubs/match.pdf)
+- ...and probably a bunch more.
+
+#### More Platforms:
+Pretty much self explanatory. More code gen backends, more supported
+OSes, etc.
+
+#### Self hosting:
+Right now 6m is written in C. This should change. Currently being
+slowly worked on.
+
+#### Iterators:
+Some sort of trait for iterators. Thought needed on how to make it
+work, and it's not clear that iterators are currently powerful enough.
+
+I may need either multiparameter or generic iterators.
+
+#### Better C ABI Compat:
+Right now, we have our own ABI for function calls. It's compatible for
+word sized arguments and large structs, but for small structs, it would
+be nice to also be compatible.
+
+We also are not currently compatible with Plan 9 C.
+
+#### Packed Structs
+At the moment they're not supported. It's an open question to whether
+they should be, but it might be necessary for C compatibility.
+
+#### Packed Structs
+Finishing C Binding Autogeneration. There's a good part of it done,
+but we should be able to generate references to other packages when
+binding, so that, eg, a `libc` package doesn't have a distinct
+`libc.size_t` from a foo package which includes a header that defines
+`size_t`.
+
+Right now we generate all symbols in the closure of includes into one
+package.
+
+#### Optimizations:
+At the moment, we basically don't do them. This should be fixed. This
+will probably be worked on as/after self hosting is completed.
+
+References:
+
+
+- [http://ssabook.gforge.inria.fr/latest/book.pdf](http://ssabook.gforge.inria.fr/latest/book.pdf)
+- [http://www.amazon.com/Advanced-Compiler-Design-Implementation-Muchnick/dp/1558603204](http://www.amazon.com/Advanced-Compiler-Design-Implementation-Muchnick/dp/1558603204)
+
+#### Better error handling:
+What will this look like? Needs thought.
+
+#### Better safety:
+What will this look like? Needs thought.
+
+#### Thread local storage:
+This goes hand in hand with threads. It's also a bit OS specific.
+
+References:
+
+
+- [http://www.darlinghq.org/for-developers/thread-local-storage-on-os-x](http://www.darlinghq.org/for-developers/thread-local-storage-on-os-x)
+- [http://www.akkadia.org/drepper/tls.pdf](http://www.akkadia.org/drepper/tls.pdf)
+- [http://www.x86-64.org/documentation/abi.pdf](http://www.x86-64.org/documentation/abi.pdf)
+
+#### Debug support:
+Right now, we can debug on the asm level, looking at comments. Adding
+line information support is trivial, but actually harmful to debugging.
+Proper DWARF information (or stabs on plan9) would be helpful here.
+
+References:
+
+
+- [http://www.dwarfstd.org/Download.php](http://www.dwarfstd.org/Download.php)
+- [http://www.dwarfstd.org/doc/Debugging%20using%20DWARF.pdf](http://www.dwarfstd.org/doc/Debugging%20using%20DWARF.pdf)
+    
+#### Assembler:
+Using different assemblers on different platforms suck. 6m should
+use our own assembler, maybe even linked in as a library. This
+assembler should probably be the one actually writing out the debug
+info from above, as well as being able to generate usefiles. Eg:
+
+    .func foo.bar : type { ...asm... }
+
+Or something. I haven't put enough thought into the details yet.
+
+References:
+
+
+- [http://www.intel.com/content/www/us/en/processors/architectures-software-developer-manuals.html](http://www.intel.com/content/www/us/en/processors/architectures-software-developer-manuals.html)
+- [http://developer.amd.com/resources/documentation-articles/developer-guides-manuals/](http://developer.amd.com/resources/documentation-articles/developer-guides-manuals/)
+
+Wishlist: Libraries
+-------------------
+
+#### Improved libstd:
+There are a large number of deficiencies and gaps in the standard library:
+
+ - Hashing and random number generation should be cryptographically
+     secure by default.
+ - DNS doesn't currently support AAAA records on Posixy systems; This
+     should be fixed.
+ - Finish up floating point I/O
+ - System call coverage is rather spotty.
+ - And overall, just a more well rounded libstd would be good.
+
+#### Math:
+Floating point is hard. Let's code it. A reasonably complete floating
+point math library should be available as 'use math'.
+
+
+#### Unicode:
+Normalization, canonicalization, collation, and all that good stuff.
+This is going to be big/complicated, and probably shouldn't go into
+libstd.
+
+References:
+
+
+- [http://www.unicode.org/reports/](http://www.unicode.org/reports/)
+
+#### Threads:
+A threading library. This should probably have a portable
+core across all OSes, with access to OS specific extensions
+available.
+
+References:
+
+
+- [http://www.amazon.com/The-Multiprocessor-Programming-Revised-Reprint/dp/0123973376](http://www.amazon.com/The-Multiprocessor-Programming-Revised-Reprint/dp/0123973376)
+- [http://pubs.opengroup.org/onlinepubs/7908799/xsh/pthread.h.html](http://pubs.opengroup.org/onlinepubs/7908799/xsh/pthread.h.html)
+- [https://doc.rust-lang.org/std/thread/](https://doc.rust-lang.org/std/thread/)
+- ...other thread APIs?
+
+#### Crypto:
+A cryptography library. This should have reusable interfaces
+to a bunch of crypto primitives. Currently, libcryptohash
+exists; this should continue building on that work.
+
+References:
+
+  - [https://en.wikipedia.org/wiki/Category:Cryptographic_algorithms](https://en.wikipedia.org/wiki/Category:Cryptographic_algorithms)
+
+
+#### SSL:
+Built on libcrypto, we should have an SSL library that can be
+used for a variety of things. I've started on it, and then run
+out of time.
+
+References:
+
+  - [https://tools.ietf.org/html/rfc5246](https://tools.ietf.org/html/rfc5246)
+
+#### HTTP:
+Yep. HTTP library. HTTP is everywhere, might as well support it.
+HTTP2 is probably also desirable.
+
+References:
+
+  - [http://www.w3.org/Protocols/rfc2616/rfc2616.txt](http://www.w3.org/Protocols/rfc2616/rfc2616.txt)
+  - [https://http2.github.io/http2-spec/](https://http2.github.io/http2-spec/)
+
+#### Restructured Text(?):
+I'd like decent documentation generators. Restructured text looks
+sane. I'd like to be able to manipulate it from code.
+
+References:
+
+  - [http://docutils.sourceforge.net/rst.html](http://docutils.sourceforge.net/rst.html)
+
+#### Whatever else:
+Librarires are useful. If it's generally useful enough, and I'm satisfied with
+the stability and code quality, I'll toss it in with everything else in mc/.
+
+If not, I'll link to it.
+
+Wishlist: Utilities
+-------------------
+
+#### Documentation generator:
+This should probably be built on a slightly extended restructured
+text implementation, although GFM is also probably not a bad idea.
+
+#### Mbld:
+There's a lot of potential for caching the dependency graph.
+
+#### Parser generator:
+Working on something that works like a merged lex/yacc.
+
+#### IDL Generator:
+Protobufs are nice. Thrift is also ok.
+
+#### Package fetcher:
+Should probably wait until packages are a thing; Will fetch,
+install, build, packages that a bit of software depends on. Probably
+should be part of mbld.
+
+#### Static analyzer:
+Pie in the sky project -- statically catching mistakes is probably
+a good idea.
+
