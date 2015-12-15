@@ -56,20 +56,19 @@ The set of specifiers for the default types is sparse, and is fully
 specified below.
 
 <dl>
-    <dd>w=WIDTH</dd>
-    <dt><p>Fill out to at least width WIDTH, filling with pad
-    characters.</p></dt>
+    <dt>w=WIDTH</dt>
+    <dd><p>Fill out to at least width WIDTH, filling with pad
+    characters.</p></dd>
 
-    <dd>p=PAD</dd>
-    <dt>
+    <dt>p=PAD</dt>
+    <dd>
     <p>Fill spare width with this character. Defaults to a space
-    character.</p>
-    </dt>
+    character.</p> </dd>
 
-    <dd>x</dd>
-    <dt>
+    <dt>x</dt>
+    <dd>
     <p>Format in hex. This is only valid for integer types.</p>
-    </dt>
+    </dd>
 </dl>
 
 Specifiers can be installed by custom specifiers, and can be any
