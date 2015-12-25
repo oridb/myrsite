@@ -11,11 +11,16 @@ Unicode
             const Maxcharlen : size 
             const Maxcharval : char 
 
+	    /* iterators */
+	    impl iterable chariter -> char
+
+	    const chariter	: (byte[:] -> chariter)
+
             /* utf8 information */
             const charlen	: (chr : char -> size)
             const encode	: (buf : byte[:], chr : char -> size)
             const decode	: (buf : byte[:] -> char)
-            const striter	: (str : byte[:] -> (char, byte[:]))
+            const strstep	: (str : byte[:] -> (char, byte[:]))
 
             /* character class predicates */
             const isalpha	: (c : char -> bool)
@@ -63,6 +68,16 @@ bytes long will be able to contain any character.
 This is the maximum value that any valid future unicode codepoint may decode
 into. Any character that is greater than this is an invalid character.
 
+Functions: Iterating over strings
+--------------------------------
+
+	impl iterable chariter -> char
+
+	const chariter	: (byte[:] -> chariter)
+
+Chariter returns an iterator which steps through a string character by
+character.
+
 Functions: Encoding and Decoding
 --------------------------------
 
@@ -87,11 +102,11 @@ returning the codepoint itself, or `Badchar` if the codepoint is invalid.
 The tail of the buffer is not considered, allowing this function to be used
 to peek at the contents of a string.
 
-    const striter	: (str : byte[:] -> (char, byte[:]))
+    const strstep	: (str : byte[:] -> (char, byte[:]))
 
-striter is a slightly tricky to use interface for iterating over unicode
-encoded strings. A better API is needed here. It returns the head character
-and the remainder of the string, and is used as follows:
+strstep is a function for stepping through unicode encoded strings. It
+returns the tuple (`Badchar`, str[1:]) if the value cannot be decoded,
+or `(charval, str[std.charlen(charval):])` therwise.
 
 
 ```{runmyr striter}
