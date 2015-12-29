@@ -35,8 +35,9 @@ File Handling
             const chdir	: (path : byte[:] -> bool)
 
             /* file handling */
-            const open	: (path : byte[:], opts : fdopt -> fd)
-            const openmode	: (path : byte[:], opts : fdopt, mode : int64 -> fd)
+            const open	: (path : byte[:], opts : fdopt -> std.result(fd, errno))
+            const openmode	: (path : byte[:], opts : fdopt, mode : int64 -> std.result(fd, errno))
+	    const mktemp	: (base : byte[:], opts : fdopt, mode : int64 -> std.result((fd, byte[:]), errno)
             const close	: (fd : fd -> int64)
             const creat	: (path : byte[:], mode : int64 -> fd)
             const read	: (fd : fd, buf : byte[:] -> size)
@@ -184,6 +185,18 @@ requested will be created with the permissions passed in.
 
 Returns: either a valid file descriptor on success, or an error describing why
 the open failed on failure.
+
+    const mktemp : (base : byte[:], opts : fdopt, mode : int64 -> std.result((fd, byte[:]), errno)
+
+Mktemp is similar to openmode, however instead of taking a full path as
+its first argument, it generates a unique name for a file in temporary
+storage by appending a random string to the base name `base`. The mode
+provided is in addition to the implicit Ocreat | Oexcl.
+
+Returns: Either a successful result containing the tuple of file descriptor
+opened and path generated, or an error describing the failure. The path
+is allocated with `std.slalloc`, and must be freed by the caller using
+`std.slfree`. The file descriptor must be closed as ususal.
 
 
     const close	: (fd : fd -> void)
