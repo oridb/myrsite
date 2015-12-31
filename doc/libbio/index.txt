@@ -27,6 +27,8 @@ Summary
             type file = struct
             ;;
 
+	    type lineiter
+
             type status(@a) = union
                     `Eof
                     `Ok @a
@@ -39,6 +41,8 @@ Summary
                     `Ebadfd
                     `Eioerr
             ;;
+
+	    impl iterable lineiter
 
             /* creation */
             const mkfile	: (fd : std.fd, mode : mode	-> file#)
@@ -71,6 +75,9 @@ Summary
             const readto	: (f : file#, delim : byte[:]	-> status(byte[:]))
             const skipto	: (f : file#, delim : byte[:]	-> bool)
             const skipspace	: (f : file# -> bool)
+
+	    /* iterators */
+	    const lineiter	: (f : file# -> lineiter)
 
             /* formatted i/o */
             const put	: (f : file#, fmt : byte[:], args : ... -> status(std.size))
@@ -292,6 +299,17 @@ any successful reads, and false if an error was encountered.
 
 Skipspace will consume any space tokens from the start of the input stream, It
 returns true for any successful reads, and false if an error was encountered.
+
+Iteration
+---------
+
+    const lineiter	: (f : file# -> lineiter)
+
+Lineiter will return an interable type that will iterate through each line
+in a file. These lines are allocated on the heap, and are automatically freed
+at the end of the iteration.
+
+The returned iterator object is a value type, and does not need to be freed.
 
 Formatted IO
 -------------
