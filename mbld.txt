@@ -188,7 +188,11 @@ below:
 Target Types
 ------------
 
-mbld supports a small number of top level targets:
+mbld supports a small number of top level targets. All of these targets may be
+tagged with any number of 'tag=' attributes to restrict them to a single
+system with those tags. Multiple targets of the same name may be defined with
+different tags, and the same selection algorithm as is applied to files will
+be used to determine which one to build.
 
 ####bin####
 
@@ -200,8 +204,33 @@ specific prefixes or suffixes. For example, building with a custom runtime:
     bin foo {rt=custom_runtime.o} = input.myr list.s ;;
 
 The bin target can include libraries, including libraries from siblings. It
-may not reach outside of the current project, though. In other words, it may
-not 
+may not reach outside of the current project, though. In other words, all
+elements that are not installed must be part of the same project.
+
+In addition to the common attributes, the `bin` supports the attributes
+enumerated below:
+
+<dl>
+	<dt>ldscript script</dt>
+	<dd><p>When linking a binary, use the custom linker script `script` to
+	link the binary.</p></dd>
+	<dt>runtime rt</dt>
+	<dd><p>When linking a binary, use the custom runtime version `rt` instead
+	of the default one shipped with Myrddin.</p></dd>
+	<dt>inc dir</dt>
+	<dd><p>Append `dir` to the default package search path.</p></dt>
+	<dt>inst</dt>
+	<dd><p>Marks that this file should be installed. For a 'bin' target,
+	this is the default.</p></dt>
+	<dt>noinst</dt>
+	<dd><p>Marks that this file should not be installed.</p>
+	</dt>
+	<dt>test</dt>
+	<dd><p>Marks that this file should be run as a test.</p> </dt>
+	<dt>notest</dt>
+	<dd><p>Marks that this file should not be run as a test. This is the
+	default for 'bin' targets.</p> </dt>
+</dd>
 
 ####lib####
 
@@ -214,6 +243,24 @@ The library name used does not include the system specific prefixes or
 suffixes. For example, to produce `libfoo.a`:
 
     lib foo = input.myr list.s ;;
+
+Lib targets accept the same set of attributes as bin targets, with the
+caveat that the ldscript and runtime options do nothing.
+
+####test####
+
+The `test` target is an explicit test. For the most part, this target should
+only be needed rarely: implicit tests should cover most needs.
+
+It's equivalent to a `bin` target, only it is not installed. Instead, it is
+run from mbld as a unit test. A successful exit is interpreted as a successful
+test run. For example:
+
+    test foo = testfoo.myr
+
+Test targets accept the same attributes as bin targets. In fact, they are
+identical, with the exception that their attributes default to 
+`noinst=true, test=true, inc="."`.
 
 ####data####
 
@@ -233,14 +280,6 @@ then the following rule can be used:
     data prog-icons {path=foo/bar} = foo.png bar.png ;;
 
 The data installed may be generated with a 'gen' target.
-
-####test####
-
-The `test` target is an explicit test. It's equivalent to a `bin` target, only
-it is not installed. Instead, it is run from mbld as a unit test. A successful
-exit is interpreted as a successful test run. For example:
-
-    test foo = testfoo.myr
 
 ####man####
 
@@ -270,8 +309,17 @@ it like this:
 
     gen config.myr {durable,dep=configure} = ./configure --redo ;;
 
-The `durable` attribute keeps it around even after a `mbld clean` is run,
-and the `dep` attribute reruns the command after the `configure` file changes.
+
+The following additional attributes are supported by gen targets:
+
+<dl>
+	<dt>durable</dt>
+	<dd><p>Do not remove the output files when running 'mbld
+	clean'</p><dt>
+	<dt>dep</dt>
+	<dd><p>Regenerate the generated outputs if one of these files
+	changes.</p></dt>
+</dl>
 
 ####sub####
 
