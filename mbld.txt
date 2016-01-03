@@ -230,7 +230,7 @@ enumerated below:
 	<dt>notest</dt>
 	<dd><p>Marks that this file should not be run as a test. This is the
 	default for 'bin' targets.</p> </dt>
-</dd>
+</dl>
 
 ####lib####
 
