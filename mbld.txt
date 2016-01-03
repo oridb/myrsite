@@ -215,6 +215,25 @@ suffixes. For example, to produce `libfoo.a`:
 
     lib foo = input.myr list.s ;;
 
+####data####
+
+The `data` target lists a number of blobs to install. The default install
+location defaults to '$PREFIX/$SHAREPATH/blobname', unless it is
+overridden with the 'path' attribute. On unix-like systems, $SHAREPATH
+defaults to 'share', while on Plan 9, it defaults to 'lib'.
+
+For example, the rule below will install the inputs to
+$PREFIX/share/prog-icons/{foo.png, bar.png}
+
+    data prog-icons = foo.png bar.png ;;
+
+If these blobs should be installed to, eg, "$PREFIX/foo/bar" instead,
+then the following rule can be used:
+
+    data prog-icons {path=foo/bar} = foo.png bar.png ;;
+
+The data installed may be generated with a 'gen' target.
+
 ####test####
 
 The `test` target is an explicit test. It's equivalent to a `bin` target, only
