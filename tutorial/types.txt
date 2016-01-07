@@ -1,7 +1,0 @@
-{
-    title       : Types
-    description : Myrddin Tutorial: Types
-}
-
-Types
------

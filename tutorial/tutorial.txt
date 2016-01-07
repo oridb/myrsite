@@ -492,6 +492,11 @@ the result of the second matched value into the variable `divisible`.
 
 ### Types
 
+Myrddin is a typed language -- this means that every variable and value in the
+language has a type associated with it.
+
+We have already been using a number of them
+
 ### Functions
 
 Functions in Myrddin are just values that support a `
