@@ -41,7 +41,7 @@ Summary
                         `Badescape char
                 ;;
 
-	        const parse	: (re : byte[:]	-> std.result(ast#, status))
+		const parse	: (re : byte[:]	-> std.result(ast#, status))
 		const compile	: (re : byte[:] -> std.error(regex#, status))
 		const dbgcompile	: (re : byte[:] -> std.error(regex#, status))
 		const free	: (re : regex# -> void)

@@ -227,6 +227,10 @@ of the buffer, but will never be larger.
 Reads from a bio file, into the buffer 'dst', returning the section of the
 buffer that was read in the result.
 
+	const seek	: (f : file#, std.off -> std.result(std.off, ioerr))
+
+Seeks the bio file to the given absolute offset.
+
     const flush	: (f : file# -> bool)
 
 Flush attempts to clear the buffers within `f`, writing everything within
