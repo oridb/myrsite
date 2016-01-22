@@ -58,7 +58,7 @@ Summary
             const flush	: (f : file# -> bool)
 
             /* seeking */
-			const seek	: (f : file#, std.off -> std.result(std.off, ioerr))
+            const seek	: (f : file#, std.off -> std.result(std.off, ioerr))
 
             /* single unit operations */
             const putb	: (f : file#, b : byte	-> status(std.size))
@@ -76,8 +76,8 @@ Summary
             const skipto	: (f : file#, delim : byte[:]	-> bool)
             const skipspace	: (f : file# -> bool)
 
-			/* iterators */
-			const lineiter	: (f : file# -> lineiter)
+            /* iterators */
+            const lineiter	: (f : file# -> lineiter)
 
             /* formatted i/o */
             const put	: (f : file#, fmt : byte[:], args : ... -> status(std.size))
