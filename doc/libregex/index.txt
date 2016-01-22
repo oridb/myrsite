@@ -80,7 +80,7 @@ The following metacharacters have the meanings listed below:
 Matches a single unicode character
 
 <table>
-        <tr><tr><th>Metachar</th>        <th>Description</th></tr>
+	<tr><tr><th>Metachar</th>        <th>Description</th></tr>
 	<tr><td><code>^</td></code>      <td>Matches the beginning of a line. Does not consume any characters.</td></tr>
 	<tr><td><code>$</td></code>      <td>Matches the end of a line. Does not consume any characters.</td></tr>
 	<tr><td><code>*</td></code>      <td>Matches any number of repetitions of the preceding regex fragment.</td></tr>
@@ -93,7 +93,7 @@ In order to match a literal metacharacter, it needs to be preceded by a '\' char
 The following character classes are supported:
 
 <table>
-        <tr><tr><th>Charclass</th>       <th>Description</th></tr>
+	<tr><tr><th>Charclass</th>       <th>Description</th></tr>
 	<tr><td><code>\d </code></td>    <td>ASCII digits</td></tr>
 	<tr><td><code>\D </code></td>    <td>Negation of ASCII digits</td></tr>
 	<tr><td><code>\x </code></td>    <td>ASCII Hex digits</td></tr>
@@ -111,7 +111,7 @@ The following character classes are supported:
 The current list of supported Unicode character classes `X` are
 
 <table>
-        <tr><th>Abbrev</th> <th>Full name</th>      <th>Description</th></tr>
+	<tr><th>Abbrev</th> <th>Full name</th>      <th>Description</th></tr>
 	<tr>
 		<td><code>L</code></td>  <td><code>Letter</code></td>
 		<td>All letters, including lowercase, uppercase, titlecase,
