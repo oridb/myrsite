@@ -14,6 +14,7 @@ Randomness
 
             generic rand	: (lo : @a::(numeric,integral), hi : @a::(numeric,integral) -> @a::(numeric,integral))
             generic randnum	: (rng : rng# -> @a::(numeric,integral))
+            const randbytes	: (buf : byte[:] -> size)
 
             const mksrng	: (seed : uint32 -> rng#)
             const freerng	: (rng : rng# -> void)
@@ -56,6 +57,10 @@ lo must be less then 2^(type_bits - 1)
 Generates a random integer of any magnitude the type may hold. The returned
 value may be negative, if the type is signed.
 
+    const randbytes	: (buf : byte[:] -> size)
+
+Fills a buffer with random bytes.
+
     const mksrng	: (seed : uint32 -> rng#)
 
 Allocates and initializes a random number generator. The seed `seed` is used
@@ -80,4 +85,4 @@ The returned value may be negative, if the type is signed.
 
     const rngrandbytes	: (rng : rng#, buf : byte[:]	-> size)
 
-Fills a buffer full of random bytes from the random number generator `rng`.
+Fills a buffer with random bytes from the random number generator `rng`.
