@@ -37,7 +37,7 @@ File Handling
             /* file handling */
             const open	: (path : byte[:], opts : fdopt -> std.result(fd, errno))
             const openmode	: (path : byte[:], opts : fdopt, mode : int64 -> std.result(fd, errno))
-	    const mktemp	: (base : byte[:], opts : fdopt, mode : int64 -> std.result((fd, byte[:]), errno)
+            const mktemp	: (base : byte[:], opts : fdopt, mode : int64 -> std.result((fd, byte[:]), errno)
             const close	: (fd : fd -> int64)
             const creat	: (path : byte[:], mode : int64 -> fd)
             const read	: (fd : fd, buf : byte[:] -> size)
