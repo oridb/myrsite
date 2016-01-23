@@ -30,6 +30,12 @@ perfect safety. It is satisfied to be a practical, small, fairly well defined,
 and easy to understand language for code that needs to be close to the
 hardware.
 
+Github
+------
+
+The [code is available on both Github](https://github.com/oridb/mc),
+and [on Eigenstate](https://git.eigenstate.org/git/ori/mc.git)
+
 Status
 ------
 
@@ -39,10 +45,15 @@ Supported Platforms.
 --------------------
 
 Myrddin currently compiles for x86-64. It runs on four OSes at the moment:
-Linux, OSX, Plan 9 (9front, although I have reports that it works on
-9atom), and FreeBSD. It has proved relatively easy to port between these
+
+- Linux
+- OSX
+- Plan 9 (9front)
+- FreeBSD
+
+It has proved relatively easy to port between these
 systems, needing only a few system calls, and a couple of hundred lines of
-glue code to get the bootstrap working.
+code to get the bootstrap working.
 
 Major Features
 --------------
