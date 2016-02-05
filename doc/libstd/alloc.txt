@@ -13,8 +13,8 @@ Memory Allocation
             generic free	: (v:@a#	-> void)
             generic slalloc	: (len : size	-> @a[:])
             generic slzalloc	: (len : size	-> @a[:])
-            generic slgrow	: (sl : @a[:], len : size	-> @a[:])
-            generic slzgrow	: (sl : @a[:], len : size	-> @a[:])
+            generic slgrow	: (sl : @a[:]#, len : size	-> @a[:])
+            generic slzgrow	: (sl : @a[:]#, len : size	-> @a[:])
             generic slfree	: (sl : @a[:]	-> void)
             const bytealloc	: (sz:size	-> byte#)
             const zbytealloc	: (sz:size	-> byte#)
@@ -47,8 +47,8 @@ values uninitialized.,
 does the same, but zeros the memory allocated before returning it. `slfree`
 is used to return the memory to the system.
 
-    generic slgrow	: (sl : @a[:], len : size	-> @a[:])
-    generic slzgrow	: (sl : @a[:], len : size	-> @a[:])
+    generic slgrow	: (sl : @a[:]#, len : size	-> @a[:])
+    generic slzgrow	: (sl : @a[:]#, len : size	-> @a[:])
 
 `slgrow` resizes the slize `sl` to length `len`, allocating the appropriate
 amount of memory. `slzgrow` does the same, but any elements between the old
