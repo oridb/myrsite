@@ -25,8 +25,8 @@ to use and typesafe functions for this to be written.
             generic free	: (v:@a#	-> void)
             generic slalloc	: (len : size	-> @a[:])
             generic slzalloc	: (len : size	-> @a[:])
-            generic slgrow	: (sl : @a[:], len : size	-> @a[:])
-            generic slzgrow	: (sl : @a[:], len : size	-> @a[:])
+            generic slgrow	: (sl : @a[:]#, len : size	-> @a[:])
+            generic slzgrow	: (sl : @a[:]#, len : size	-> @a[:])
             generic slfree	: (sl : @a[:]	-> void)
             const bytealloc	: (sz:size	-> byte#)
             const zbytealloc	: (sz:size	-> byte#)
@@ -387,7 +387,7 @@ boo.
             generic slpush	: (sl : @a[:], elt : @a	-> @a[:])
             generic sldup   : (sl : @a[:] -> @a[:])
             generic slfill	: (sl : @a[:], v : @a	-> @a[:])
-            generic sljoin	: (dst : @a[:], src : @a[:]	-> @a[:])
+            generic sljoin	: (dst : @a[:]#, src : @a[:]	-> @a[:])
     ;;
 
 #### [String Manipulation](strings)

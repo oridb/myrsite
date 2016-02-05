@@ -15,7 +15,7 @@ Slice Manipulation
             generic slpop	: (sl : @a[:] -> (@a, @a[:]))
             generic sldup       : (sl : @a[:] -> @a[:])
             generic slfill	: (sl : @a[:], v : @a	-> @a[:])
-            generic sljoin	: (dst : @a[:], src : @a[:]	-> @a[:])
+            generic sljoin	: (dst : @a[:]#, src : @a[:]	-> @a[:])
     ;;
 
 
@@ -64,8 +64,8 @@ by slcp().
 
 Fills a slice with a value.
 
-    generic sljoin	: (dst : @a[:], src : @a[:]	-> @a[:])
+    generic sljoin	: (dst : @a[:]#, src : @a[:]	-> @a[:])
 
-Concatenates `src` onto the end of `dst`. Equivalent to iterating through
+Concatenates `src` onto the end of `dst#`. Equivalent to iterating through
 every element of `src` and `slpush()`ing it onto `dst`.
 
