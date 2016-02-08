@@ -1,14 +1,14 @@
 {
     title       : Summer of Code 2016
-    description : Summer of Code 2016
+    description : An Introduction to the Myrddin Language
 }
 
 Getting in Contact
 ------------------
 
 The Myrddin hackers hang out in #project79068 on irc.eigenstate.org. Most
-design discussion happens there. Your potential mentors are online using these
-screen names:
+design discussion happens there. The mentors are online using these screen
+names:
 
 ###### Ori
 Ori Bernstein
@@ -19,12 +19,8 @@ Andrew Chambers
 ###### mpu
 Quentin Carbonneaux
 
-###### k0ga
-Roberto Vargas
-
-We also have a mailing list, `myrddin-dev@eigenstate.org`, which is generally
-used for announcements and in depth descriptions of proposals. We encourage 
-you sign up here: [Mailing List](http://eigenstate.org/mail-lists).
+We also have a mailing list, `myrddin-dev@eigenstate.org`, which you can sign
+browse and sign up for here: [Mailing List](http://eigenstate.org/mail-lists).
 This is low traffic.
 
 How to get Selected
@@ -36,9 +32,6 @@ will not be entirely new to the people evaluating it -- while the bulk of the
 work of writing it will be done by you, we will probably have helped flesh in
 parts of it. This isn't an exam, and there's no such thing as cheating.
 
-In order to get in contact with the community, read the
-[contributing](/contributing) page.
-
 When we evaluate a proposal, we are trying to decide two things. First, we are
 trying to understand whether the project will be useful to us. If the end
 product doesn't solve a real problem, then we are unlikely to accept the
@@ -47,31 +40,14 @@ student, are able to successfully complete the project.
 
 Therefore, a good proposal will hit all of the following points:
 
-- An introduction.
-	- Who are you?
+- Who are you? What are you studying, what problems do you find interesting?
 
-- A project summary
-	- What is the project?
-	- What benefits do you expect completing the project will bring?
+- What project do you want to do?
 
-- A plan of action
-	- How will you apporoach the project?
-	- What are the critical milestones? These are the tasks without which,
-	  the project will be considered a failure.
-	- What would you do to polish things, if you finish the critical
-	  milestones early?
-	- What are the biggest anticipated challenges?
-	- How do you plan to approach these challenges?
-	- Mentors
+- How will you apporoach the project? What stages will you break it down into,
+  how long do you expect each stage to take?
 
-- An argument for why you specifically should be selected.
-	- Why are you the right person to do the project?
-	- Why do you find the project interesting?
-
-Challenge ratings range from 1/8 to 25, where 1/8 is extremely easy, and 25
-means that an army of Jeff Deans would have trouble completing the task. We
-are going to aim 
-
+- What are the biggest anticipated challenges?
 
 Summer of Code Project Ideas
 ----------------------------
@@ -88,10 +64,11 @@ You tell us!
 Yes.
 
 ###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
-1/8 to 25
+^\\\*\*\$
 
 ###### Mentor
-Ori Bernstein, Andrew Chambers, Quentin Carbonneaux, Roberto Vargas
+Ori Bernstein, Andrew Chambers, Quentin Carbonneaux
+
 
 ### System Call Generator
 Currently, Myrddin system calls are implmented by hand for a small number of
@@ -106,8 +83,8 @@ least two major platforms will be implemented via autogeneration.
 
 Knowlege Prerequisite: Bash scripting, writing makefiles, x86\_64 assembly
 
-###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
-10
+###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html):
+\*
 
 ### Porting the Myrddin Runtime to Windows
 Begin a port of the Myrddin progrmaming language to Windows. The porting process
@@ -127,28 +104,7 @@ C programming, Bash scripting, writing makefiles, x86\_64 assembly basics,
 general knowledge of windows api's, general operating systems knowledge.
 
 ###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
-15
-
-###### Mentor
-Ori Bernstein or Andrew Chambers 
-
-### Implementing a Simple Package Manager
-Myrddin currently has a build system, but has no package manager that
-integrates nicely with it. Ideally, we would have something similar to
-CPAN, Cargo, Go versioning, or similar tools for other languages. This
-project will be to design and implement a simple system to index packages,
-fetch them, and integrate them into the build.
-
-###### Expected results
-At the end of the summer, I will be able to run commands such as `mbld fetch`,
-which will get all dependent packages needed for building a piece of code,
-install them, and handle versioning and updating them.
-
-###### Knowledge Prerequisite
-Depends on final design. Basic HTTP, SSH, and git is needed.
-
-###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
-10
+\*\*\*
 
 ###### Mentor
 Ori Bernstein or Andrew Chambers 
@@ -171,8 +127,8 @@ modified to invoke this compiler to generate binaries.
 ###### Knowledge Prerequisite
 C programming, Bash scripting, writing makefiles, x86\_64 assembly basics.
 
-###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
-15
+###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html): \*\*\*
+medium to high.
 
 ###### Mentor
 Ori Bernstein or Andrew Chambers 
@@ -191,8 +147,8 @@ tree for the code.
 ###### Knowledge Prerequisite: 
 Parsing algorithms, Bash scripting, writing makefiles, x86\_64 assembly basics.
 
-###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
-15
+###### Skill level
+\*\*\*
 
 ###### Mentor
 Ori Bernstein or Andrew Chambers 
@@ -210,68 +166,26 @@ All assembly code in the Myrddin project will be written using an assembler
 written in Myrddin. The compiler will be able to bootstrap using this
 assembler.
 
-###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
-20
+###### Skill level
+\*\*\*\*
 
 ###### Mentor
 Ori Bernstein, or Quentin Carbonneaux
 
-### Implement Optimizations for QBE
-
-QBE currently has a number of optimizations that are not implemented. A
-student that is interested in adding an optimization to QBE will select an
-optimization, or set of optimizations, make a case for why this optimization
-is a good choice to implemnt, and write code to implmeent it. This project
-can either be a single challenging optimization, or a number of simpler
-optimizations.
+### Implement QBE backend
+QBE is a new SSE backend that is a good fit for the Myrddin project. This
+project will involve implementing a code generator for the compiler that will
+use the QBE backend.
 
 ###### Expected results
-QBE will have a set of optimization that makes many benchmarks run faster.
+All assembly code in the Myrddin project will be written using an assembler
+written in Myrddin. The compiler will be able to bootstrap using this
+assembler.
 
-###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
-10 to 20 (depending on set of optimizations selected)
+###### Skill level
+\*\*\*
 
 ###### Mentor
 Ori Bernstein, or Quentin Carbonneaux
 
-### Implement new backend for QBE
-QBE currently only supports x86-64. This project would add a new supported 
-target architecture. This would involve refactoring the middle end to make
-sure that there are no target architectures, and adding the code to emit
-assembly for this new system. Of particular interest is one of the various
-ARM platforms, including Armv8.
-
-###### Expected results
-QBE will be able to emit code for the selected target architecture by the
-end of the summer.
-
-###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
-18
-
-###### Mentor
-Ori Bernstein, or Quentin Carbonneaux
-
-### Implement a high level thread library.
-Myrddin currently has libthread, however, this library only implements the
-most basic low level threading primitives. The student selecting this summer
-of code project will select, design, and implement a set of higher level
-threading primitives that can be shipped with Myrddin as part of the threading
-library. The student will select between options such as:
-
-- Async/Await/Futures
-- Channels
-- Actor models
-- And other thread models
-
-Make an argument for which one to use, and implement it.
-
-###### Expected results
-A useful set of higher level thread primitives in a state that can be added to
-Myrddin.
-
-###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
-15
-
-###### Mentor
-Ori Bernstein, Roberto Vargas
 
