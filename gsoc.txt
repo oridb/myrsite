@@ -1,0 +1,191 @@
+{
+    title       : Summer of Code 2016
+    description : An Introduction to the Myrddin Language
+}
+
+Getting in Contact
+------------------
+
+The Myrddin hackers hang out in #project79068 on irc.eigenstate.org. Most
+design discussion happens there. The mentors are online using these screen
+names:
+
+###### Ori
+Ori Bernstein
+
+###### ac
+Andrew Chambers
+
+###### mpu
+Quentin Carbonneaux
+
+We also have a mailing list, `myrddin-dev@eigenstate.org`, which you can sign
+browse and sign up for here: [Mailing List](http://eigenstate.org/mail-lists).
+This is low traffic.
+
+How to get Selected
+-------------------
+
+The most important thing to do to get accepted is to talk to us. We'll be glad
+to help answer questions as you explore the projects of interest. A proposal
+will not be entirely new to the people evaluating it -- while the bulk of the
+work of writing it will be done by you, we will probably have helped flesh in
+parts of it. This isn't an exam, and there's no such thing as cheating.
+
+When we evaluate a proposal, we are trying to decide two things. First, we are
+trying to understand whether the project will be useful to us. If the end
+product doesn't solve a real problem, then we are unlikely to accept the
+project. Second, we are looking for evidence that indicates that you, the
+student, are able to successfully complete the project.
+
+Therefore, a good proposal will hit all of the following points:
+
+- Who are you? What are you studying, what problems do you find interesting?
+
+- What project do you want to do?
+
+- How will you apporoach the project? What stages will you break it down into,
+  how long do you expect each stage to take?
+
+- What are the biggest anticipated challenges?
+
+Summer of Code Project Ideas
+----------------------------
+
+### Come with your own ideas
+You are smart and imaginative, and there's no end of work on the queue. Feel
+free to propose your own idea. We'd be glad to discuss it with you before you
+submit to assess viability and usefulness.
+
+###### Expected Results
+You tell us!
+
+###### Knowledge Prerequisite
+Yes.
+
+###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
+^\\\*\*\$
+
+###### Mentor
+Ori Bernstein, Andrew Chambers, Quentin Carbonneaux
+
+
+### System Call Generator
+Currently, Myrddin system calls are implmented by hand for a small number of
+system calls, which are added as needed. Implementing a system call generator
+will write code that takes a machine readable list of system calls provided by
+the OS (for example, under FreeBSD, there is a file named syscalls.master),
+and generates a `sys` package that Myrddin can use.
+
+###### Expected Results
+By the end of this project, all Myrddin system calls for at
+least two major platforms will be implemented via autogeneration. 
+
+Knowlege Prerequisite: Bash scripting, writing makefiles, x86\_64 assembly
+
+###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html):
+\*
+
+### Porting the Myrddin Runtime to Windows
+Begin a port of the Myrddin progrmaming language to Windows. The porting process
+will involve compiler tweaks, assembly programming, interfacing with the OS at a low level
+and contributing to the design of Myrddin standard library.
+
+###### Expected results
+The standard mc toolchain can be compiled for windows using a cygwin based environment. 
+Enough of the standard library will be functional such that the standard build tool 'mbld' can
+be used. This means runtime initialization, memory allocation and basic file io will work at as a minimum.
+
+An excellent student can aditionally tackle other aspects of the std library including
+threads, sockets and any other aspect of the stdlib the student finds interesting and beneficial.
+
+###### Knowledge Prerequisite
+C programming, Bash scripting, writing makefiles, x86\_64 assembly basics,
+general knowledge of windows api's, general operating systems knowledge.
+
+###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
+\*\*\*
+
+###### Mentor
+Ori Bernstein or Andrew Chambers 
+
+### New Assembler/Linker
+Create a new x86-64 assembler and linker for the Myrddin compiler toolchain.
+
+This project will involve implementing a simple assembler and linker for
+Myrddin, written in Myrddin. The assembler will produce type information for
+the compiler. It will also produce a single output format.
+
+The linker will consume a single input binary type, and output a statically
+linked binary in the format needed for all supported platforms.
+
+###### Expected results
+At the end of the summer, an assembler and linker will exist which can produce
+binaries for at least one target platform. The Myrddin compiler will be
+modified to invoke this compiler to generate binaries.
+
+###### Knowledge Prerequisite
+C programming, Bash scripting, writing makefiles, x86\_64 assembly basics.
+
+###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html): \*\*\*
+medium to high.
+
+###### Mentor
+Ori Bernstein or Andrew Chambers 
+
+### Implement Myrddin parser in Myrddin
+Myrddin currently has a parser, but this parser is written
+in C using Yacc. This project will build a parser library for Myrddin that can
+be consumed from other Myrddin code, and used for building tools, and
+eventually making the compiler self hosting.
+
+###### Expected results
+By the end of the project, the student will have a parser implemented that can
+parse itself, the Myrddin standard library, and spit out an abstract syntax
+tree for the code.
+
+###### Knowledge Prerequisite: 
+Parsing algorithms, Bash scripting, writing makefiles, x86\_64 assembly basics.
+
+###### Skill level
+\*\*\*
+
+###### Mentor
+Ori Bernstein or Andrew Chambers 
+
+### Implement DWARF debug information
+Curently, Myrddin is debugged at the assembly level, with comments that allow
+cross referencing line number information. While this is managable, it is far
+from ideal.
+
+This project would implement DWARF debug information, finishing threading type
+information through the backend code, emitting information to track locations
+
+###### Expected results
+All assembly code in the Myrddin project will be written using an assembler
+written in Myrddin. The compiler will be able to bootstrap using this
+assembler.
+
+###### Skill level
+\*\*\*\*
+
+###### Mentor
+Ori Bernstein, or Quentin Carbonneaux
+
+### Implement QBE backend
+QBE is a new SSE backend that is a good fit for the Myrddin project. This
+project will involve implementing a code generator for the compiler that will
+use the QBE backend.
+
+###### Expected results
+All assembly code in the Myrddin project will be written using an assembler
+written in Myrddin. The compiler will be able to bootstrap using this
+assembler.
+
+###### Skill level
+\*\*\*
+
+###### Mentor
+Ori Bernstein, or Quentin Carbonneaux
+
+
