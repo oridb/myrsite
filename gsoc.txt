@@ -19,6 +19,9 @@ Andrew Chambers
 ###### mpu
 Quentin Carbonneaux
 
+###### k0ga
+Roberto Vargas
+
 We also have a mailing list, `myrddin-dev@eigenstate.org`, which you can sign
 browse and sign up for here: [Mailing List](http://eigenstate.org/mail-lists).
 This is low traffic.
