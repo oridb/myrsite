@@ -3,26 +3,44 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="/style.css" />
-    <title><?module title ?></title>
-    <meta name="description" content="<?module description ?>"/>
+    <title><?module description?></title>
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="description" content="<?module description?>"/>
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <script>
+	function runcode(elt) {
+	    var r = new XMLHttpRequest();
+	    var o = document.getElementById(elt + "_output");
+	    o.style.display = "block"
+	    o.innerHTML = "Loading...";
+	    r.onload = function() {
+		o.innerHTML = r.responseText
+		    .replace(/&/g, "&amp;")
+		    .replace(/</g, "&lt;")
+		    .replace(/>/g, "&gt;")
+		    .replace(/"/g, "&quot;")
+		    .replace(/'/g, "&#039;");
+		;
+	    }
+	    r.open("POST", "/myrddin/sandbox", true);
+	    r.send(document.getElementById(elt).value);
+	}
+    </script>
   </head>
 
   <body>
-    <header> <h1>Default header</h1> </header>
+    <header> <h1>Eigenstate : <?module title?></h1> </header>
 
     <nav>
-      <a href="/">Home</a>
-      <?module menu ?>
+        <a href="/">Home</a><br>
+        <?module menu?>
+        <a href="/resume.pdf">Resume</a>
     </nav>
 
-    <article> <?module core ?> </article>
+    <article> <?module core?> </article>
 
     <footer>
-      Default footer. Legalese typically goes here. <br />
-      If you have <em>any</em> trouble using
-      <a href="http://loup-vaillant.fr/projects/ussm">USSM</a>,
-      please <a href="mailto:l@loup-vaillant.fr">send me an email</a>. <br />
-      Your confusion is my problem.
+        Feel free to contact me at ori@eigenstate.org
     </footer>
   </body>
 </html>
