@@ -130,7 +130,8 @@ modified to invoke this compiler to generate binaries.
 ###### Knowledge Prerequisite
 C programming, Bash scripting, writing makefiles, x86\_64 assembly basics.
 
-###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html): \*\*\*
+###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
+\*\*\*
 medium to high.
 
 ###### Mentor
@@ -150,7 +151,7 @@ tree for the code.
 ###### Knowledge Prerequisite: 
 Parsing algorithms, Bash scripting, writing makefiles, x86\_64 assembly basics.
 
-###### Skill level
+###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
 \*\*\*
 
 ###### Mentor
@@ -169,23 +170,39 @@ All assembly code in the Myrddin project will be written using an assembler
 written in Myrddin. The compiler will be able to bootstrap using this
 assembler.
 
-###### Skill level
+###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
 \*\*\*\*
 
 ###### Mentor
 Ori Bernstein, or Quentin Carbonneaux
 
-### Implement QBE backend
-QBE is a new SSE backend that is a good fit for the Myrddin project. This
-project will involve implementing a code generator for the compiler that will
-use the QBE backend.
+### Implement Optimizations for QBE
+QBE currently has a number of optimizations that are not implemented. A
+student that is interested in adding an optimization to QBE will select an
+optimization, make a case for why this optimization is a good choice to
+implemnt, and write code to implmeent it.
 
 ###### Expected results
-All assembly code in the Myrddin project will be written using an assembler
-written in Myrddin. The compiler will be able to bootstrap using this
-assembler.
+QBE will have a new optimization that makes many benchmarks run faster.
 
-###### Skill level
+###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
+\*\* (depending on optimization selected)
+
+###### Mentor
+Ori Bernstein, or Quentin Carbonneaux
+
+### Implement new backend for QBE
+QBE currently only supports x86-64. This project would add a new supported 
+target architecture. This would involve refactoring the middle end to make
+sure that there are no target architectures, and adding the code to emit
+assembly for this new system. Of particular interest is one of the various
+ARM platforms, including Armv8.
+
+###### Expected results
+QBE will be able to emit code for the selected target architecture by the
+end of the summer.
+
+###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
 \*\*\*
 
 ###### Mentor
