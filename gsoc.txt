@@ -103,7 +103,7 @@ least two major platforms will be implemented via autogeneration.
 
 Knowlege Prerequisite: Bash scripting, writing makefiles, x86\_64 assembly
 
-###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html):
+###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
 \*
 
 ### Porting the Myrddin Runtime to Windows
