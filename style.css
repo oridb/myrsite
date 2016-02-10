@@ -1,0 +1,170 @@
+/* reset */
+header {
+	padding: 1em;
+	margin: 0em;
+	color: #CCCCCC;
+	text-align: center;
+	text-shadow: #000000 0.5em 0.5em 0.8em;
+	background-color: #204070;
+}
+
+article, body{
+	margin: 0;
+	display: block;
+	color: #000;
+	background-color: #fff;
+	font-family: sans-serif;
+}
+
+article h2 {
+	width: 100%;
+	border-bottom: solid 1px #cccccc;
+	color: #204070;
+}
+
+article h2 {
+	width: 100%;
+	border-bottom: solid 1px #cccccc;
+	color: #204070;
+}
+
+article h6::before {
+	display: block;
+	content: "";
+}
+
+article h6 {
+	display: inline;
+	font-size: inherit;
+	font-weight: bold;
+}
+
+article h6::after {
+	display: inline;
+	content: ": ";
+}
+
+article h6+p {
+	display: inline;
+}
+
+ul li p {
+	margin: 0.25em;
+}
+
+
+table {
+	border-spacing: 0;
+	margin-left: 5%;
+	margin-right: 5%;
+	width: 90%;
+}
+
+table th {
+	color: #204070;
+	text-align: left;
+	text-decoration: underline;
+}
+
+tr:nth-child(even) {
+	background: #eee;
+}
+
+tr:nth-child(odd) {
+	background: #fff;
+}
+
+h3 {
+	font-size: 1em;
+	color: #204070;
+}
+
+html {
+	display:block;
+	margin:0;
+	color:#000;
+	background-color: #204070;
+	min-height: 100%;
+}
+
+pre textarea {
+	width: 100%;
+	background-color: #eeffff;
+	display: block;
+	margin: 1em 0 1em 0;
+	padding: 0.5em;
+	font-family: monospace;
+}
+
+
+pre code {
+	background-color: #eeeeee;
+	border: none;
+	border-width: 1px;
+	display: block;
+	margin: 1em 0 1em 0;
+	padding: 0.5em;
+}
+
+nav ul {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+nav ul ul {
+	list-style-type: none;
+	padding-left: 1em;
+}
+
+nav a:link {
+	text-decoration: none;
+}
+
+dl dt {
+	font-style: italic;
+}
+
+dl dd {
+	margin-left: 1.5em;
+	margin-bottom: 0.3em;
+}
+
+/* layout */
+@media (max-width: 640px) {
+	nav {
+		background-color: #eeeeee;
+		border-bottom: thin solid black;
+	}
+}
+@media (min-width: 640px) {
+	nav {
+		float: left;
+		width: 14em;
+	}
+	article {
+		margin-left: 16em;
+		border-left: thin dotted black;
+	}
+}
+
+article {
+	max-width: 55em;
+	min-width: 5em;
+	padding: 1em;
+}
+
+nav {
+	height: 100%;
+	padding: 1.5em;
+	font-family: sans-serif;
+}
+
+footer  {
+	color: #CCCCCC;
+	background-color: #204070;
+	text-align: center;
+	padding: 1em;
+	margin: 0em;
+	clear: left;
+}
