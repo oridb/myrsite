@@ -1,0 +1,43 @@
+{
+    title       : Contributing
+    description : How to Contribute
+}
+
+Contact Info
+------------
+
+The Myrddin hackers hang out in #project79068 on irc.eigenstate.org. Most
+design discussion happens there. 
+
+We also have the [myrddin-dev](http://eigenstate.org/mail-lists)
+mailing list on eigenstate.org, which is largely used for announcements
+and design summaries.
+
+- [Archives](http://eigenstate.org/mail-lists)
+- [Subscribe](http://eigenstate.org/mail-lists)
+
+Submitting Code
+---------------
+
+The canonical code repository is on
+[https://git.eigenstate.org](https://git.eigenstate.org), but is
+mirrored on github. We will accept patches on the mailing lists,
+github pull requests, or snail mail (Please inquire in IRC for the
+address).
+
+Updating the site
+----------------
+
+This [website](http://git.eigenstate.org/ori/myrsite.git) is maintained using
+markdown, and is stored in git. We accept pull requests for it, and treat it
+like a wiki.
+
+	git clone git://git.eigenstate.org/git//ori/myrsite.git
+
+Should you wish to generate the HTML locally, the site is generated using
+[USSM](http://loup-vaillant.fr/projects/ussm/), and compiled with a mildly
+customized Markdown compiler, which knows how to generate runnable code
+snippets. This markdown compiler is available
+[here](https://git.eigenstate.org/ori/sundown-myr.git).
+
+
