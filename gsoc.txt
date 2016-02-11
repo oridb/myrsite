@@ -129,6 +129,27 @@ general knowledge of windows api's, general operating systems knowledge.
 ###### Mentor
 Ori Bernstein or Andrew Chambers 
 
+### Implementing a Simple Package Manager
+Myrddin currently has a build system, but has no package manager that
+integrates nicely with it. Ideally, we would have something similar to
+CPAN, Cargo, Go versioning, or similar tools for other languages. This
+project will be to design and implement a simple system to index packages,
+fetch them, and integrate them into the build.
+
+###### Expected results
+At the end of the summer, I will be able to run commands such as `mbld fetch`,
+which will get all dependent packages needed for building a piece of code,
+install them, and handle versioning and updating them.
+
+###### Knowledge Prerequisite
+Depends on final design. Basic HTTP, SSH, and git is needed.
+
+###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
+\*\*
+
+###### Mentor
+Ori Bernstein or Andrew Chambers 
+
 ### New Assembler/Linker
 Create a new x86-64 assembler and linker for the Myrddin compiler toolchain.
 
