@@ -25,6 +25,16 @@ mirrored on github. We will accept patches on the mailing lists,
 github pull requests, or snail mail (Please inquire in IRC for the
 address).
 
+Proposing Libraries for Inclusion
+---------------------------------
+
+If you've written a library for Myrddin, and you feel like it can be merged
+with the current standard library, or it is generally useful enough to be
+shipped along with the compiler, feel free to contact us.
+
+Overall, Myrddin's plan is to ship with a wide variety of "batteries included"
+libraries, and we'd love to have your code be a part of that.
+
 Updating the site
 ----------------
 

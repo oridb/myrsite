@@ -30,7 +30,7 @@ perfect safety. It is satisfied to be a practical, small, fairly well defined,
 and easy to understand language for code that needs to be close to the
 hardware.
 
-Github
+Code
 ------
 
 The [code is available on both Github](https://github.com/oridb/mc),
