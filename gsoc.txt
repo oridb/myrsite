@@ -6,7 +6,7 @@
 Getting in Contact
 ------------------
 
-The Myrddin hackers hang out in #project79068 on irc.eigenstate.org. Most
+The Myrddin hackers hang out in #myrddin on irc.eigenstate.org. Most
 design discussion happens there. Your potential mentors are online using these
 screen names:
 
@@ -104,7 +104,7 @@ and generates a `sys` package that Myrddin can use.
 By the end of this project, all Myrddin system calls for at
 least two major platforms will be implemented via autogeneration. 
 
-Knowlege Prerequisite: Bash scripting, writing makefiles, x86\_64 assembly
+Knowlege Prerequisite: sh scripting, writing makefiles, x86\_64 assembly
 
 ###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
 10
@@ -123,7 +123,7 @@ An excellent student can aditionally tackle other aspects of the std library inc
 threads, sockets and any other aspect of the stdlib the student finds interesting and beneficial.
 
 ###### Knowledge Prerequisite
-C programming, Bash scripting, writing makefiles, x86\_64 assembly basics,
+C programming, sh scripting, writing makefiles, x86\_64 assembly basics,
 general knowledge of windows api's, general operating systems knowledge.
 
 ###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
@@ -169,7 +169,7 @@ binaries for at least one target platform. The Myrddin compiler will be
 modified to invoke this compiler to generate binaries.
 
 ###### Knowledge Prerequisite
-C programming, Bash scripting, writing makefiles, x86\_64 assembly basics.
+C programming, sh scripting, writing makefiles, x86\_64 assembly basics.
 
 ###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
 15
@@ -189,7 +189,7 @@ parse itself, the Myrddin standard library, and spit out an abstract syntax
 tree for the code.
 
 ###### Knowledge Prerequisite: 
-Parsing algorithms, Bash scripting, writing makefiles, x86\_64 assembly basics.
+Parsing algorithms, sh scripting, writing makefiles, x86\_64 assembly basics.
 
 ###### [Challenge Rating](http://paizo.com/pathfinderRPG/prd/gamemastering.html)
 15

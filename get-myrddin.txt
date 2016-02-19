@@ -1,7 +1,18 @@
 {
-    title       : Environment Setup
+    title       : Get Myrddin
     description : How To Set Up A Myrddin Environment
 }
+
+Supported platforms
+-------------------
+
+Myrddin currently compiles for x86-64. It runs on four OSes at the moment:
+
+- Linux
+- OSX
+- Plan 9 (9front)
+- FreeBSD
+
 
 Installing the Binaries
 -----------------------
@@ -10,18 +21,16 @@ To get the source, for the compiler, standard library, and myrbuild, you
 download it from git:
 
         git clone git://git.eigenstate.org/git/ori/mc.git
+or
+        git clone https://github.com/oridb/mc.git
 
 There are currently no released versions, and the language is in a heavy state
 of flux. I promise that if you use it, and I break some of your code, I will
 help port it to whatever the new sexiness is.
 
-There are also a number of useful libraries:
+Build and install the compiler and mbld:
 
-        git clone git://git.eigenstate.org/git/ori/libbio.git
-        git clone git://git.eigenstate.org/git/ori/libregex.git
-        git clone git://git.eigenstate.org/git/ori/libcryptohash.git
-
-These are downloaded and installed in the same manner.
+        ./make && sudo make install
 
 Useful Supporting Tools
 ------------------------
