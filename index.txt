@@ -30,6 +30,29 @@ perfect safety. It is satisfied to be a practical, small, fairly well defined,
 and easy to understand language for code that needs to be close to the
 hardware.
 
+Major Features
+--------------
+
+- Type inference. Types are inferred across the whole program.
+- Algebraic data types.
+- And their friend, pattern matching.
+- Generics.
+- A package system.
+- Low level control.
+- (Almost) no runtime library.
+- Entirely self contained.
+- Simple and easy to understand implementation.
+
+Try It Online
+-------------
+
+If you want to try before you buy, there is an online playground that you can
+use to experiment with code. It's fairly restrictive, and prevents you from
+using the vast majority of system calls, but it's enough to get a feel for
+things.
+
+[So, give it a shot.](http://eigenstate.org/myrddin/playground)
+
 Code
 ------
 
@@ -54,29 +77,6 @@ Myrddin currently compiles for x86-64. It runs on four OSes at the moment:
 It has proved relatively easy to port between these
 systems, needing only a few system calls, and a couple of hundred lines of
 code to get the bootstrap working.
-
-Major Features
---------------
-
-- Type inference. Types are inferred across the whole program.
-- Algebraic data types.
-- And their friend, pattern matching.
-- Generics.
-- A package system.
-- Low level control.
-- (Almost) no runtime library.
-- Entirely self contained.
-- Simple and easy to understand implementation.
-
-Try It Online
--------------
-
-If you want to try before you buy, there is an online playground that you can
-use to experiment with code. It's fairly restrictive, and prevents you from
-using the vast majority of system calls, but it's enough to get a feel for
-things.
-
-[So, give it a shot.](http://eigenstate.org/myrddin/playground)
 
 Installing The Compiler
 -----------------------
