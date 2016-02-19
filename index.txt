@@ -519,7 +519,7 @@ Mailing List
 
 [Subscribe to the Mailing List](/myrddin/list-subscribe)
 
-IRC: irc.wsyntax.com, in #project79068
+IRC: irc.eigenstate.org, in #myrddin
 
 Or contact me directly, at 'ori@eigenstate.org'
 
