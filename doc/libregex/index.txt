@@ -42,10 +42,10 @@ Summary
                 ;;
 
         const parse	: (re : byte[:]	-> std.result(ast#, status))
-        const compile	: (re : byte[:] -> std.error(regex#, status))
-        const dbgcompile	: (re : byte[:] -> std.error(regex#, status))
+        const compile	: (re : byte[:] -> std.result(regex#, status))
+        const dbgcompile	: (re : byte[:] -> std.result(regex#, status))
         const free	: (re : regex# -> void)
-        const exec	: (re : regex#, str : byte[:] -> bool)
+        const exec	: (re : regex#, str : byte[:] -> std.option(byte[:][:]))
     ;;
 
 
@@ -154,8 +154,8 @@ regex could not be parsed. This AST can be used to further process the regex,
 possibly turning it into a multiregex as in Hairless, or using it for NFA and
 DFA tricks.
 
-    const compile	: (re : byte[:] -> std.error(regex#, status))
-    const dbgcompile	: (re : byte[:] -> std.error(regex#, status))
+    const compile	: (re : byte[:] -> std.result(regex#, status))
+    const dbgcompile	: (re : byte[:] -> std.result(regex#, status))
 
 `compile` takes a regex string, and converts it to a compiled regex, returning
 `\`std.Success regex` if the regex was valid, or a `\`std.Failure r` with the
@@ -169,7 +169,7 @@ only of academic interest.
 `free` must be called on a compiled regex to release it's resources after you
 are finished using it.
 
-    const exec	: (re : regex#, str : byte[:] -> bool)
+    const exec	: (re : regex#, str : byte[:] -> std.option(byte[:][:])
 
 `exec` runs the regex over the specified text, returning an `\`std.Some matches`
 if the text matched, or `std.None` if the text did not match. matches[0] is
