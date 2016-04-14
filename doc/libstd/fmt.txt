@@ -176,19 +176,18 @@ This example shows how you would set up a
 use std
 
 const main = {
-        x : int
-        std.fmtinstall(typeof(x), goaway, [][:])
+        var x : int = 0 /* dummy: used for typeof */
 
-        std.put("custom format: {}\n", 123)
+        std.fmtinstall(std.typeof(x), goaway, [][:])
+        std.put("custom format: {}\n", 0x41)
 }
 
 const goaway = {sb, ap, opts
-        var i : int
+        var i : int64
 
-        i = std.vanext()
-        sbfmt(sb, "go away! val={}\n" i)
+        i = std.vanext(ap)
+        std.sbfmt(sb, "go away! char val={}\n", i castto(char))
 }
-
 ```
 
 

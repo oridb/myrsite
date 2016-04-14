@@ -3,6 +3,14 @@
     description : Subscribe to Myrddin-dev
 }
 
+List Archives
+-------------
+
+Development discussion, 
+
+[Myrddin-dev archives](http://eigenstate.org/archive/myrddin-dev/)
+
+
 Subscribe: myrddin-dev@eigenstate.org
 -------------------------------------
 

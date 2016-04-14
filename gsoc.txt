@@ -68,6 +68,10 @@ Therefore, a good proposal will hit all of the following points:
 	- Why do you find the project interesting?
 
 
+How Succeed after You Have Been Accepted
+------------------------------------------
+
+
 
 Summer of Code Project Ideas
 ----------------------------
