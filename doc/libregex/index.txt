@@ -46,6 +46,7 @@ Summary
         const dbgcompile	: (re : byte[:] -> std.result(regex#, status))
         const free	: (re : regex# -> void)
         const exec	: (re : regex#, str : byte[:] -> std.option(byte[:][:]))
+        const search	: (re : regex#, str : byte[:] -> std.option(byte[:][:]))
     ;;
 
 
@@ -176,8 +177,14 @@ if the text matched, or `std.None` if the text did not match. matches[0] is
 always the full text that was matched, and will always be returned regardless
 of whether capture groups are specified.
 
-A search call can be emulated by providing a regex of the form '.*(regex).*'.
-Eventually this call will be added to libregex.
+    const exec	: (re : regex#, str : byte[:] -> std.option(byte[:][:])
+
+`search` searches for a matching sub-segment of the regex over the specified
+text, returning an `\`std.Some matches` if the text matched, or `std.None` if
+the text did not match.  matches[0] is always the full text that was matched,
+and will always be returned regardless of whether capture groups are
+specified. `search` returns the the earliest match in the string provided.
+
 
 Example
 ------
