@@ -6,13 +6,6 @@
 Libthread
 ---------
 
-__Libthread is extremely immature. It's broken, buggy, and Linux specific. It's
-not ready for use. None of the standard library calls that touch global state
-are thread safe, so without locking around every call that can potentially
-allocate memory, expect to see crashes.__
-
-<span style="color: red"><b>This API is highly experiemntal</b></span>
-
     pkg thread =
             trait atomic @a::(integral,numeric) =
                     xget	: (p : @a# -> @a)
