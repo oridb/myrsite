@@ -26,12 +26,6 @@ OSes, etc.
 Right now 6m is written in C. This should change. Currently being
 slowly worked on.
 
-#### Iterators:
-Some sort of trait for iterators. Thought needed on how to make it
-work, and it's not clear that iterators are currently powerful enough.
-
-I may need either multiparameter or generic iterators.
-
 #### Better C ABI Compat:
 Right now, we have our own ABI for function calls. It's compatible for
 word sized arguments and large structs, but for small structs, it would
@@ -43,7 +37,7 @@ We also are not currently compatible with Plan 9 C.
 At the moment they're not supported. It's an open question to whether
 they should be, but it might be necessary for C compatibility.
 
-#### Packed Structs
+#### C Binding Autogeneration
 Finishing C Binding Autogeneration. There's a good part of it done,
 but we should be able to generate references to other packages when
 binding, so that, eg, a `libc` package doesn't have a distinct
@@ -135,10 +129,9 @@ References:
 
 - [http://www.unicode.org/reports/](http://www.unicode.org/reports/)
 
-#### Threads:
-A threading library. This should probably have a portable
-core across all OSes, with access to OS specific extensions
-available.
+#### Fleshing out libthread:
+Libthread has landed, but it's not very useful right now. More
+features should probably go in.
 
 References:
 
@@ -198,7 +191,8 @@ This should probably be built on a slightly extended restructured
 text implementation, although GFM is also probably not a bad idea.
 
 #### Mbld:
-There's a lot of potential for caching the dependency graph.
+There's a lot of potential for caching the dependency graph, and
+making builds lightning fast and parallel.
 
 #### Parser generator:
 Working on something that works like a merged lex/yacc.
