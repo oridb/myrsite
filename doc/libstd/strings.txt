@@ -35,7 +35,9 @@ Summary
 
             /* tokenizing and splitting */
             const strsplit	: (s : byte[:], delim : byte[:] -> byte[:][:])
+            const bstrsplit	: (sp : byte[:][:], s : byte[:], delim : byte[:] -> byte[:][:])
             const strtok	: (s : byte[:] -> byte[:][:])
+            const bstrtok	: (sp : byte[:][:], s : byte[:] -> byte[:][:])
 
             /* string joining and stripping */
             const strcat	: (a : byte[:], b : byte[:] -> byte[:])
@@ -165,11 +167,21 @@ Functions: Splitting and joining
 
 Strsplit and strtok will split a string into its components. Strsplit uses a
 string passed in as a delimiter, while strtok will use a variable amount of
-whitespace to split the string.
+whitespace to split the string. They dynamically allocate the split vector,
+but not the elements within it.
 
 If there are repeated delimiters, `strsplit` will include zero length strings
 between them. For example, `std.strsplit("a<><>b<>c", "<>")` will return
 `["a", "", "b", "c"]`.
+
+    const bstrsplit	: (sp : byte[:][:], s : byte[:], delim : byte[:] -> byte[:][:])
+    const strtok	: (sp : byte[:][:], s : byte[:] -> byte[:][:])
+
+The bstrsplit and bstrtok functions produce a split string similar to the
+strsplit versions above, but will fill the `sp` vector passed in, instead of
+allocating their own storage. If there are more splits to be made than the
+vector can hold, then the last element will contain the tail of the string.
+
 
     const strcat	: (a : byte[:], b : byte[:] -> byte[:])
 

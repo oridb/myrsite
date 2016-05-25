@@ -41,12 +41,22 @@ Summary
                         `Badescape char
                 ;;
 
+	/* regex compilation */
         const parse	: (re : byte[:]	-> std.result(ast#, status))
         const compile	: (re : byte[:] -> std.result(regex#, status))
         const dbgcompile	: (re : byte[:] -> std.result(regex#, status))
         const free	: (re : regex# -> void)
+
+        /* regex execution */
         const exec	: (re : regex#, str : byte[:] -> std.option(byte[:][:]))
         const search	: (re : regex#, str : byte[:] -> std.option(byte[:][:]))
+
+        const sub	: (re : regex#, str : byte[:], subst : byte[:][:] -> std.option(byte[:]))
+        const sbsub	: (sb : std.strbuf#, re : regex#, str : byte[:], subst : byte[:][:] -> bool)
+        const suball	: (re : regex#, str : byte[:], subst : byte[:][:] -> byte[:])
+        const sbsuball	: (sb : std.strbuf#, re : regex#, str : byte[:], subst : byte[:][:] -> void)
+
+        const matchfree	: (pat : byte[:][:] -> void)
     ;;
 
 
@@ -177,7 +187,7 @@ if the text matched, or `std.None` if the text did not match. matches[0] is
 always the full text that was matched, and will always be returned regardless
 of whether capture groups are specified.
 
-    const exec	: (re : regex#, str : byte[:] -> std.option(byte[:][:])
+    const search	: (re : regex#, str : byte[:] -> std.option(byte[:][:]))
 
 `search` searches for a matching sub-segment of the regex over the specified
 text, returning an `\`std.Some matches` if the text matched, or `std.None` if
@@ -186,8 +196,28 @@ and will always be returned regardless of whether capture groups are
 specified. `search` returns the the earliest match in the string provided.
 
 
+    const sub	: (re : regex#, str : byte[:], subst : byte[:][:] -> std.option(byte[:]))
+    const sbsub	: (sb : std.strbuf#, re : regex#, str : byte[:], subst : byte[:][:] -> bool)
+
+`sub` will take a pattern, an input string, and a set of substitutions, and
+attempt to match. If the match is successful, it will replace each group
+within `str` with `subst`, returning a freshly allocated string.  `sbsub`
+behaves identically, however it inserts the new string into the string
+buffer provided, instead of allocating a new string.
+
+If there is no match, then `\`std.None` will be returned.
+
+    const suball	: (re : regex#, str : byte[:], subst : byte[:][:] -> byte[:])
+    const sbsuball	: (sb : std.strbuf#, re : regex#, str : byte[:], subst : byte[:][:] -> void)
+
+`suball` replaces every match within the string using the given substitutions.
+Only captured groups will be substituted. The remaining text will be left in
+place.
+
 Example
 ------
+
+#### Pattern matching
 
 ```{runmyr regex}
 use std
@@ -207,8 +237,43 @@ const runwith = {re, txt
 		for m in matches
 			std.put("Match: {}\n", m)
 		;;
+		regex.matchfree(matches)
 	| `std.None:
 		std.put("%s did not match\n")
 	;;
+}
+```
+
+#### Substitution
+
+```{runmyr regex}
+use std
+use regex
+
+const main = {
+	var re
+
+	re = std.try(regex.compile("(a*)bc(d)e"))
+	match regex.sub(re, "aaabcdef", ["HEY", "X"][:])
+	| `std.Some sub:
+		std.put("{}\n", sub[0])
+		regex.matchfree(matches)
+	| `std.None:
+		std.fatal("should have matched")
+	;;
+}
+```
+
+```{runmyr regex}
+use std
+use regex
+
+const main = {
+	var re, sub
+
+	re = std.try(regex.compile("(b|e)"))
+        sub = regex.suball(re, "aaabbbcdef", ["SUB"][:])
+	std.put("subst: {}\n", sub)
+	std.slfree(sub)
 }
 ```
