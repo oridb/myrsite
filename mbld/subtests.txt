@@ -1,0 +1,103 @@
+{
+    title       : Subtests
+    description : Testing and Subtests
+}
+
+Subtests
+-------
+
+Often, simply running one binary per test is not sufficient. In many cases, it
+makes a good deal of sense to bundle a large number of tests in one binary or
+command. This can be because splitting each test into its own binary is
+clunky, or because there are simply too many processes, or simply because
+you don't want to test from Myrddin code -- instead, you may want to run a
+script.
+
+The mbld subtest protocol is designed to accomodate these uses. If a test,
+of any sort, outputs data using the mtest protocol, then mbld will interpret
+the subtests appropriately, displaying useful output for them, and logging
+them at a more granular level than test binaries.
+
+Using libtestr
+--------------
+
+Of course, writing while writing mtest output isn't difficult, it's often
+convenient to have a test runner library available to you, which handles
+the output directly. Myrddin ships with one such library for Myrddin,
+`libtestr`. It can be used as follows:
+
+	use testr
+
+	const main = {
+		testr.run([
+			[.name="true", .fn={ctx; 
+				std.check(true, "true isn't true\n")}],
+			[.name="false", .fn={ctx; 
+				std.check(!false, "!false isn't true\n")}],
+		][:])
+	}
+
+For more information, take a look at [the testr documentation](/doc/libtestr/)
+
+The MTEST protocol
+------------------
+
+The mtest protocol is a simple test protocol inspired by
+[TAP](https://testanything.org/tap-specification.html), although it is
+designed to solve a few problems I had with tap.
+
+An MTEST test starts with a test plan, which looks something like this:
+
+	MTEST <ntests>
+
+The test plan starts with the word 'MTEST' at the 0th character in the line,
+followed by an integer `ntests` representing number of tests we expect to see.
+If a negative number of tests is specified, then any number of tests are
+accepted. The number of tests is given up front in order to make it easy to
+detect missing tests.
+
+This MTEST line may appear in the test output multiple times. Each time it
+appears, it indicates that the prevous `ntests` tests must have successfully
+completed, and that another `ntest` tests are expected. This allows multiple
+runs of tests to be emitted by the test framework, with less pain in counting
+them up front.
+
+This is then followed by `ntest` test outputs. A test output looks like
+
+	test <name> <<{!
+
+This specifies the test name. After this come any number of lines of log
+output, which may be preserved by the framework for later analysis. Finally,
+this is followed by the test ending:
+
+	!}>> ok
+
+for a successful test, and
+
+	!}>> fail [reason]
+
+for an unsuccessful test. The reason `reason` is shown in the `mbld` log
+output.
+
+Writing your own provider
+-------------------------
+
+For Myrddin, writing a custom test provider is trivial. `libtestr` is
+the best solution, but if it's unsuitable for whatever reason, an mbld
+test binary is also a good solution:
+
+	test foo =
+		bar.myr
+	;;
+
+However, what if you want to write your own test script? This is also
+not difficult:
+
+	cmd my-test-cmd {test} =
+		./test.sh
+	;;
+
+would suffice. Any command that `mbld` will run can be tagged as a test and
+run this way. For a working example of a custom test script, you can look in
+the 
+[mbld test/ drectory for the compiler tests](https://github.com/oridb/mc/tree/master/test/bld.sub)

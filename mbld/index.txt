@@ -1,10 +1,10 @@
 {
-    title       : mbld: How To Use It
+    title       : Using mbld
     description : Care and feeding of bld.proj
 }
 
-Mbld: A Simple Build System for Myrddin
----------------------------------------
+Care and Feeding of bld.proj
+----------------------------
 
 Mbld is a build system put together to avoid the inadequacies of traditional
 `make`, which, although it's great, does not have a way of scanning for
@@ -256,7 +256,7 @@ It's equivalent to a `bin` target, only it is not installed. Instead, it is
 run from mbld as a unit test. A successful exit is interpreted as a successful
 test run. For example:
 
-    test foo = testfoo.myr
+    test foo = testfoo.myr ;;
 
 Test targets accept the same attributes as bin targets. In fact, they are
 identical, with the exception that their attributes default to 
