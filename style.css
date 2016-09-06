@@ -1,139 +1,151 @@
-/* reset */
-header {
-    padding: 1em;
-    margin: 0em;
-    color: #CCCCCC;
-    text-align: center;
-    text-shadow: #000000 0.5em 0.5em 0.8em;
-    background-color: #204070;
-}
-
-article, body{
-    margin: 0;
-    display: block;
-    color: #000;
-    background-color: #fff;
-    font-family: sans-serif;
-}
-
-article h2 {
-    width: 100%;
-    border-bottom: solid 1px #cccccc;
-    color: #204070;
-}
-
-table {
-    border-spacing: 0;
-    margin-left: 5%;
-    margin-right: 5%;
-    width: 90%;
-}
-
-table th {
-    color: #204070;
-    text-align: left;
-    text-decoration: underline;
-}
-
-tr:nth-child(even) {
-    background: #eee;
-}
-
-tr:nth-child(odd) {
-    background: #fff;
-}
-
-h3 {
-    font-size: 1em;
-    color: #204070;
-}
-
-html {
-    display:block;
-    margin:0;
-    color:#000;
-    background-color: #204070;
-    min-height: 100%;
-}
-
-pre textarea {
-    width: 100%;
-    background-color: #eeffff;
-    display: block;
-    margin: 1em 0 1em 0;
-    padding: 0.5em;
-    font-family: monospace;
-}
-
-
-pre code {
-    background-color: #eeeeee;
-    border: none;
-    border-width: 1px;
-    display: block;
-    margin: 1em 0 1em 0;
-    padding: 0.5em;
-}
-
-nav ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-nav ul ul {
-    list-style-type: none;
-    padding-left: 1em;
-}
-
-nav a:link {
-    text-decoration: none;
-}
-
-dl dt {
-    font-style: italic;
-}
-
-dl dd {
-    margin-left: 1.5em;
-    margin-bottom: 0.3em;
-}
-
 /* layout */
-@media (max-width: 640px) {
-    nav {
-        background-color: #eeeeee;
-        border-bottom: thin solid black;
-    }
-}
-@media (min-width: 640px) {
-    nav {
-        float: left;
-        width: 14em;
-    }
-    article {
-        margin-left: 16em;
-        border-left: thin dotted black;
-    }
+body {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+	font-family: sans-serif;
+	margin : 0px;
 }
 
-article {
-    max-width: 55em;
-    min-width: 5em;
-    padding: 1em;
-}
-
-nav {
-    height: 100%;
-    padding: 1.5em;
-    font-family: sans-serif;
+header {
+	padding: 1em;
+	margin: 0em;
+	color: #CCCCCC;
+	text-align: center;
+	text-shadow: #000000 0.5em 0.5em 0.8em;
+	background-color: #204070;
 }
 
 footer  {
-    color: #CCCCCC;
-    background-color: #204070;
-    text-align: center;
-    padding: 1em;
-    margin: 0em;
-    clear: left;
+	color: #CCCCCC;
+	background-color: #204070;
+	text-align: center;
+	padding: 1em;
+	margin: 0em;
+}
+
+#main {
+	display: flex;
+	flex-flow: row;
+	flex: 1;
+}
+
+#main > article {
+	max-width: 55em;
+	min-width: 5em;
+	padding: 1em;
+	flex: 3 1;
+	order: 2;
+}
+
+#main > nav {
+	padding: 1.5em;
+	font-family: sans-serif;
+	flex: 1 6;
+	order: 1;
+}
+
+@media (max-width: 640px) {
+	nav {
+		background-color: #eeeeee;
+		border-bottom: thin solid black;
+	}
+	#main {
+		flex-direction: column;
+		flex: 4 1;
+	}
+}
+
+@media (min-width: 640px) {
+	nav {
+		max-width: 14em;
+	}
+	article {
+		border-left: thin dotted black;
+	}
+	#main {
+		flex-direction: row;
+	}
+}
+
+h2 {
+	border-bottom: solid 1px #cccccc;
+	color: #204070;
+}
+
+h3 {
+	font-size: 1em;
+	color: #204070;
+}
+
+table {
+	border-spacing: 0;
+	margin-left: 5%;
+	margin-right: 5%;
+	width: 90%;
+}
+
+th {
+	color: #204070;
+	text-align: left;
+	text-decoration: underline;
+}
+
+tr:nth-child(even) {
+	background: #eee;
+}
+
+tr:nth-child(odd) {
+	background: #fff;
+}
+
+pre textarea {
+	width: 95%;
+	background-color: #eeffff;
+	display: block;
+	padding: 0.5em;
+	font-family: monospace;
+	border-style: solid;
+}
+
+#imgcenter {
+	text-align: center;
+}
+
+label {
+	font-style: italic;
+	color: #204070;
+}
+
+pre code {
+	background-color: #eeeeee;
+	border: none;
+	border-width: 1px;
+	display: block;
+	margin: 1em 0 1em 0;
+	padding: 0.5em;
+}
+
+nav ul {
+	list-style-type: none;
+	padding-left: 0em;
+	margin: 0;
+}
+
+nav ul ul {
+	list-style-type: none;
+	padding-left: 1em;
+}
+
+nav a:link {
+	text-decoration: none;
+}
+
+dl dt {
+	font-style: italic;
+}
+
+dl dd {
+	margin-left: 1.5em;
+	margin-bottom: 0.3em;
 }
