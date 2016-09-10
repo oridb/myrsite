@@ -41,7 +41,7 @@ footer  {
 #main > nav {
 	padding: 1.5em;
 	font-family: sans-serif;
-	flex: 1 6;
+	flex: 0 6;
 	order: 1;
 }
 
