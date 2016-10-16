@@ -299,6 +299,30 @@ formatters by default.
 		-> void)
     ;;
 
+#### [Iteration Utilities](iterutil)
+
+Support for some common iteration patterns is provided. There are many kinds
+of iteration that are done, and some of the most common ones are directly
+supported by libstd.
+
+There are a few syntactic(!) issues in the language preventing these from
+taking arbitrary iterators as parameters, but when this is resolved, that
+restriction will be lifted.
+
+	pkg std =
+		type zipiter(@a, @b)
+		type reverseiter(@a)
+		type enumiter(@a)
+
+		impl iterable zipiter(@a, @b) -> (@a, @b)
+		impl iterable enumiter(@a) -> (size, @a)
+		impl iterable reverseiter(@a) -> @a
+
+		generic byzip	: (a : @a[:], b : @b[:]	 -> zipiter(@a, @b))
+		generic byenum	: (a : @a[:] -> enumiter(@a))
+		generic byreverse 	: (sl : @a[:] -> reverseiter(@a))
+	;;
+
 
 #### [Variadic Arguments](varargs)
 
