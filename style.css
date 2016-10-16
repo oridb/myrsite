@@ -1,10 +1,16 @@
 /* layout */
 body {
 	display: flex;
-	min-height: 100vh;
+	min-height: 100%;
 	flex-direction: column;
 	font-family: sans-serif;
 	margin : 0px;
+}
+
+#main {
+	display: flex;
+	flex-flow: row;
+	flex-grow: 1;
 }
 
 header {
@@ -24,24 +30,18 @@ footer  {
 	margin: 0em;
 }
 
-#main {
-	display: flex;
-	flex-flow: row;
-	flex: 1;
-}
 
 #main > article {
 	max-width: 55em;
 	min-width: 5em;
 	padding: 1em;
-	flex: 3 1;
+	flex-grow: 1;
 	order: 2;
 }
 
 #main > nav {
 	padding: 1.5em;
 	font-family: sans-serif;
-	flex: 0 6;
 	order: 1;
 }
 
@@ -52,7 +52,6 @@ footer  {
 	}
 	#main {
 		flex-direction: column;
-		flex: 4 1;
 	}
 }
 
