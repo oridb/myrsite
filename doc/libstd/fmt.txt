@@ -69,6 +69,13 @@ specified below.
     <dd>
     <p>Format in hex. This is only valid for integer types.</p>
     </dd>
+
+    <dt>j=joiner</dt>
+    <dd>
+    <p>Join slices with the joiner string. This leaves off the square
+    brackets from the ends, and replaces the default joiner string ", ".
+    </p>
+    </dd>
 </dl>
 
 Specifiers can be installed by custom specifiers, and can be any
