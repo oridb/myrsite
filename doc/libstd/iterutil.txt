@@ -73,7 +73,7 @@ This is a simple zip iterator:
 use std
 const main = {
 	for x in std.byzip([1,2,3][:], [4,5,6][:])
-		std.put("{}\n")
+		std.put("{}\n", x)
 	;;
 }
 ```
@@ -84,7 +84,7 @@ This is a simple enum iterator:
 use std
 const main = {
 	for x in std.byenum(["hello", "world"][:])
-		std.put("{}\n")
+		std.put("{}\n", x)
 	;;
 }
 ```
@@ -93,7 +93,7 @@ const main = {
 use std
 const main = {
 	for x in std.byreverse(["hello", "world"][:])
-		std.put("{}\n")
+		std.put("{}\n", x)
 	;;
 }
 ```
