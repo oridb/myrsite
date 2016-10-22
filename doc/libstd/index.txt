@@ -512,6 +512,12 @@ Sets, and hash tables. Libstd includes them for that reason.
             type htab(@k, @v) = struct
             ;;
 
+	    type htkviter(@k, @v)
+	    impl iterable htkviter
+
+	    type bsiter = struct
+	    impl iterable bsiter
+
             /* bit sets */
             const mkbs	: (-> bitset#)
             const bsdup	: (bs : bitset# -> bitset#)
@@ -526,6 +532,7 @@ Sets, and hash tables. Libstd includes them for that reason.
             const bseq	: (a : bitset#, b : bitset# -> bool)
             const bsissubset	: (a : bitset#, b : bitset# -> bool)
             const bsclear	: (bs : bitset# -> bitset#)
+	    const bybsvalue	: (bs : bitset# -> bsiter)
 
             /* hash tables */
             generic mkht	: (h : (k : @k -> uint32), eq : (a : @k, b : @k -> bool) -> htab(@k, @v)#)
@@ -536,6 +543,7 @@ Sets, and hash tables. Libstd includes them for that reason.
             generic htgetv	: (ht : htab(@k, @v)#, k : @k, fallback : @v-> @v)
             generic hthas	: (ht : htab(@k, @v)#, k : @k -> bool)
             generic htkeys	: (ht : htab(@k, @v)# -> @k[:])
+            generic byhtkeyvals	: (ht : htab(@k, @v)# -> htkviter(@k, @v))
 
             /* prepackaged hashing and equality tests */
             const strhash	: (s : byte[:]	-> uint32)
