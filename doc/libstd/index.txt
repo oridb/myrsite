@@ -408,7 +408,7 @@ boo.
             generic sleq	: (a : @a[:], b : @a[:] -> bool)
             generic slcp    : (a : @a[:], b : @a[:] -> void)
             generic slput	: (sl : @a[:], idx : size, elt : @a	-> @a[:])
-            generic slpush	: (sl : @a[:], elt : @a	-> @a[:])
+            generic slpush	: (sl : @a[:]#, elt : @a	-> @a[:])
             generic sldup   : (sl : @a[:] -> @a[:])
             generic slfill	: (sl : @a[:], v : @a	-> @a[:])
             generic sljoin	: (dst : @a[:]#, src : @a[:]	-> @a[:])
