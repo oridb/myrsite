@@ -523,6 +523,7 @@ Sets, and hash tables. Libstd includes them for that reason.
             const bsdup	: (bs : bitset# -> bitset#)
             const bsfree	: (bs : bitset# -> void)
             const bsmax	: (a : bitset# -> size)
+            const bscount	: (a : bitset# -> size)
             generic bsput	: (bs : bitset#, v : @a::(integral,numeric) -> bool)
             generic bsdel	: (bs : bitset#, v : @a::(integral,numeric) -> bool)
             generic bshas	: (bs : bitset#, v : @a::(integral,numeric) -> bool)

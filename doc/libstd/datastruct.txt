@@ -129,8 +129,13 @@ Frees all resources associated with the bitset `bs`.
 
     const bsmax	: (a : bitset# -> size)
 
-Returns the maximum value that the bitset contains. This is a completely
-awful interface for iterating the contents of a bitset.
+Returns the maximum value that the bitset contains. This is an approximation
+of the capacity of the bitset, not a hard limit on the number of elements.
+
+    const bscount	: (a : bitset# -> size)
+
+Returns the total number of elements that the bitset contains. This is an
+O(n) operation that involves iterating all of the bits.
 
     generic bsput	: (bs : bitset#, v : @a::(integral,numeric) -> bool)
 
