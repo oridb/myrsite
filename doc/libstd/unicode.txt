@@ -84,7 +84,8 @@ Functions: Encoding and Decoding
     const charlen	: (chr : char -> size)
 
 Charlen returns the length in bytes that decoding the character provided into
-unicode would take. This can vary between 1 and Maxcharlen bytes.
+unicode would take. This can vary between 1 and Maxcharlen bytes. In the case
+of an invalid character, `1` is returned.
 
     const encode	: (buf : byte[:], chr : char -> size)
 

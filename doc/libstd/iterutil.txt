@@ -1,5 +1,5 @@
 {
-        title:  libstd
+        title:  Iterator Utilities
         description:  libstd: Summary
 }
 
