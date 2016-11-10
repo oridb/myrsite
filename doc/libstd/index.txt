@@ -312,14 +312,17 @@ restriction will be lifted.
 	pkg std =
 		type zipiter(@a, @b)
 		type reverseiter(@a)
+		type refiter(@a)#
 		type enumiter(@a)
 
 		impl iterable zipiter(@a, @b) -> (@a, @b)
 		impl iterable enumiter(@a) -> (size, @a)
 		impl iterable reverseiter(@a) -> @a
+		impl iterable refiter(@a) -> @a#
 
 		generic byzip	: (a : @a[:], b : @b[:]	 -> zipiter(@a, @b))
 		generic byenum	: (a : @a[:] -> enumiter(@a))
+		generic byref 	: (sl : @a[:] -> refiter(@a))
 		generic byreverse 	: (sl : @a[:] -> reverseiter(@a))
 	;;
 

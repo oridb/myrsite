@@ -9,15 +9,18 @@ Iteration Utilities
 
 	pkg std =
 		type zipiter(@a, @b)
+		type refiter(@a)#
 		type reverseiter(@a)
 		type enumiter(@a)
 
 		impl iterable zipiter(@a, @b) -> (@a, @b)
 		impl iterable enumiter(@a) -> (size, @a)
+		impl iterable refiter(@a) -> @a#
 		impl iterable reverseiter(@a) -> @a
 
 		generic byzip	: (a : @a[:], b : @b[:]	 -> zipiter(@a, @b))
 		generic byenum	: (a : @a[:] -> enumiter(@a))
+		generic byref 	: (sl : @a[:] -> refiter(@a))
 		generic byreverse 	: (sl : @a[:] -> reverseiter(@a))
 	;;
 
@@ -52,6 +55,15 @@ Zip Iterators
 The enumiter takes a single sequence, and returns the pair of (index, element)
 tuples. If you were to call `std.byenum(["hello", "there", "friend"][:])`, you
 iterate through the elements `(1, "hello"), (2, "there"), (3, "friend")`.
+
+Ref Iterators
+-----------------
+	impl iterable refiter(@a) -> @a#
+	generic byreverse 	: (sl : @a[:] -> refiter(@a))
+
+The reference iterator takes a single slice, and returns pointers to the
+elements back. This prevents spurious copies of large values, and may 
+also be used to mutate the values being iterated over.
 
 Reverse Iterators
 -----------------
