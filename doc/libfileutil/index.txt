@@ -1,0 +1,43 @@
+{
+        title:  libfileutil
+        description:    A collection of utility functions for files
+}
+
+Libfileutil
+---------
+
+	pkg fileutil =
+		/* File walking */
+		type walkiter
+
+		impl iterable walkiter -> byte[:]
+		const bywalk    : (dir : std.dir# -> walkiter)
+
+		/* information about files */
+		const homedir   : (-> byte[:])
+	;;
+
+Overview
+--------
+
+The file util library provides some useful functionality
+for handling files. It's intent is to provide a number of
+high level operations like walking a directory heirarchy.
+
+Functions: file walking
+------------------
+            
+    const bywalk	: (dir : std.dir# -> walkiter)
+
+Walks through all files and subdirectories of the directory
+`dir`.
+
+
+Functions: File info
+------------------
+
+	const homedir   : (-> byte[:])
+
+Returns the current user's home directory. Does not require
+the home directory to be freed.
+
