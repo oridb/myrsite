@@ -6,7 +6,7 @@
 Getting in Contact
 ------------------
 
-The Myrddin hackers hang out in #project79068 on irc.eigenstate.org. Most
+The Myrddin hackers hang out in #myrddin on irc.eigenstate.org. Most
 design discussion happens there. The mentors are online using these screen
 names:
 
