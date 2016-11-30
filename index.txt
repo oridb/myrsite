@@ -76,7 +76,7 @@ use to experiment with code. It's fairly restrictive, and prevents you from
 using the vast majority of system calls, but it's enough to get a feel for
 things.
 
-[So, give it a shot.](http://eigenstate.org/myrddin/playground)
+[So, give it a shot.](http://myrlang.org/playground)
 
 Installing The Compiler
 -----------------------
@@ -480,22 +480,22 @@ Libraries
 
 Myrddin ships with a number of useful libraries. The most common ones, and the
 ones that ship with the compiler, are libsys, libstd, libbio, libregex,
-libcryptohash, and libdate. Other libraries are in the works.
+libcrypto, and libdate. Other libraries are in the works.
 
-[Libstd](/myrddin/doc/libstd) handles functionality that most programs written
+[Libstd](doc/libstd) handles functionality that most programs written
 would find useful.  It's a bit of a grab bag, but it's useful.
 
-[Libbio](/myrddin/doc/libbio) handles buffered IO, allowing you to do fancy
+[Libbio](doc/libbio) handles buffered IO, allowing you to do fancy
 things with input and output, line reading linewise, or reading up to
 delimiters.
 
-[Libregex](/myrddin/doc/libregex) handles regexes. It implements a simple but powerful regex syntax,
+[Libregex](doc/libregex) handles regexes. It implements a simple but powerful regex syntax,
 and has working unicode support.
 
-[Libcryptohash](/myrddin/doc/libcryptohash) provides cryptographic hashes. It
+[Libcrypto]doc/libcrypto) provides cryptographic functions. It
 implements many of the most common ones.
 
-[Libdate](/myrddin/doc/libdate) provides a fairly complete interface for
+[Libdate](doc/libdate) provides a fairly complete interface for
 manipulating dates, times, and timezones.
 
 C Binding
@@ -511,13 +511,13 @@ Further Reading
 
 - [Language Specification](http://git.eigenstate.org/ori/mc.git/tree/doc/lang.txt)`
 - [Library source](http://git.eigenstate.org/ori/mc.git/tree/lib/)`
-- [Standard library API docs](/myrddin/doc/libstd)`
+- [Standard library API docs](doc/libstd)`
 - [Compiler Internals Documentation](http://git.eigenstate.org/ori/mc.git/tree/doc/compiler.txt)`
 
 Mailing List
 ------------
 
-[Subscribe to the Mailing List](/myrddin/list-subscribe)
+[Subscribe to the Mailing List](list-subscribe)
 
 IRC: irc.eigenstate.org, in #myrddin
 

@@ -1,0 +1,132 @@
+{
+        title:  libsys
+        description:    System call libraries.
+}
+
+Libsys
+------
+
+Libsys is a direct interface to system calls provided by the platform. It is 
+a platform specific wrapper to the system. The documentation for the various
+system calls is largely deferrred to the systems themselves.
+
+Any code that uses libsys will likely not be portable, but in many cases it
+is the only way to access system specific functionality, which may not be
+implemented elsewhere.
+
+Manpages
+--------
+
+Generally, you should be able to get the C documentation for a system call
+by looking at `man 2 syscall-name`. Reading that will give a far better idea
+of what is supported.
+
+For knowing which calls are wrapped up in Myrddin, look at [the syscall
+implementation for your platform](http://git.eigenstate.org/ori/mc.git/tree/lib/sys)
+
+
+
+Translating from System Documentation
+-------------------------------------
+
+Obviously, for a number of reasons, an API that perfectly mirrors
+the OS is not possible or desirable in Myrddin for a number of reasons:
+
+- C style unions are not supported directly in Myrddin. The system call
+  wrappers tend to replace these with structs that get cast to the appropriate
+  type or void pointer.
+- Passing a `@a#, std.size` pair is clunky, so these are generally replaced
+  with a slice of the given type.
+
+Finally, although the trend is to put system call compatibility glue
+into the libstd wrappers, there are a number of places where APIs are
+wrapped in libstd for the sake of portability. These are listed below.
+
+### All posix systems.
+
+- Sigpipe is disabled by default. It's not useful. If you want to enable
+  it, do it manually.
+
+### Linux Quirks
+
+- Clock IDs are specified with a clock id enum, instead of just using
+  the predefined constnats
+- Waitstatus is provided in order to extract the appropriate parts of
+  the status.
+
+### OSX Quirks
+
+- the clock_{get,set}time calls are faked with gettimeofday/settimeofday
+- waitpid actually calls wait4
+- sys.uname is actually implemented as a number of sysctl calls
+- Waitstatus is provided in order to extract the appropriate parts of
+  the status.
+- sleep() is actually a no-op dummy. std.sleep() calls select(<none>,
+  timeout), which was broken on some recent OSX versions.
+
+### FreeBSD Quirks
+- Clock IDs are specified with a clock id enum, instead of just using
+  the predefined constnats
+- Waitstatus is provided in order to extract the appropriate parts of
+  the status.
+
+### OpenBSD Quirks
+
+- Clock IDs are specified with a clock id enum, instead of just using
+  the predefined constnats
+- sys.uname is actually implemented as a number of sysctl calls
+- Waitstatus is provided in order to extract the appropriate parts of
+  the status.
+- sleep(tm) is actually nanosleep
+
+### Plan 9 quirks
+- It's plan 9. The system calls are all completely different. Other than
+  that, they are all translated directly.
+
+
+Adding new system calls
+-----------------------
+
+### Finding the Myrddin code
+
+System calls live in
+[mc/lib/sys](http://git.eigenstate.org/ori/mc.git/tree/lib/sys). The list of
+system call numbers should be relatively complete for all of the supported
+systems, but in the case of new system calls, it may be necessary to add them.
+
+Because libsys is, in theory, a library that should give full access to the
+capabilities of the underlying system, any pull request for adding a system
+call will be accepted.
+
+### Finding the information about system calls.
+
+On BSD-like systems, including OSX, there is a file called `syscalls.master`
+which usually lives in `/usr/src`, `/usr/include`, or the appropriate vendor
+tarballs. This contains the most accurate syscall ABI.
+
+On plan9, the calls are in `/sys/src/libc/9syscall/sys.h`.
+
+On Posix-like systems, another place to find information on the system calls
+is `/usr/include/sys/syscall.h` or a file included by it. To save time wading
+through the large maze of twisty headers, all the same, in /usr/include,
+your final destination is `/usr/include/asm-generic/unistd.h`. However, raw
+system calls do not give argument lists, and sometimes the libc arguments will
+differ from the calls made to the OS -- a good example of this is `mmap` on
+OpenBSD, which has a dummy argument that needs to be passed in.
+
+The system headers will generally contain the types used for the system calls.
+Be careful here, often there will be a variety of #ifdefs around which version
+of the struct gets used.
+
+### Debugging System Calls
+
+The most important tool for debugging is your system call tracer. `strace` on
+linux, `truss` on FreeBSD `dtruss` on OSX, `ktrace/kdump` on OpenBSD, and
+`ratrace` on Plan 9.
+
+Often, it helps to compare against what your sytem libc is doing. The various
+BSDs ship their libc in `/usr/src/lib/libc`. Apple makes their libc interface
+avialable [on the Apple open source
+page](https://opensource.apple.com/source/Libc/Libc-1158.1.2/).  For Plan 9,
+look in `/sys/src/libc`. And for Linux, I suggest avoiding the glibc source,
+and instead reading [musl libc](https://git.musl-libc.org/cgit/musl/tree)
