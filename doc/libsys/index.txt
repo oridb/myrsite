@@ -69,6 +69,8 @@ wrapped in libstd for the sake of portability. These are listed below.
   the predefined constnats
 - Waitstatus is provided in order to extract the appropriate parts of
   the status.
+- Because a slice is ABI compatible with an iovec, the API for `readv()`
+  and `writev()` uses native slices instead of iovec structs.
 
 ### OpenBSD Quirks
 

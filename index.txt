@@ -50,6 +50,7 @@ Myrddin currently compiles for x86-64. It runs on four OSes at the moment:
 - OSX
 - Plan 9 (9front)
 - FreeBSD
+- OpenBSD
 
 It has proved relatively easy to port between these
 systems, needing only a few system calls, and a couple of hundred lines of
