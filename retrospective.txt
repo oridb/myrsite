@@ -13,7 +13,8 @@ new operating systems and a number of interesting projects using Myrddin.
 
 The summary, for those who don't care to read the whole page:
 
-- 574 new commits on the compiler, and hundreds more in libraries.
+- 574 new commits on the compiler, and hundreds more in libraries and other
+  code.
 - Users and hackers appeared.
 - The standard libraries their most glaring holes.
 - OpenBSD support got added.
@@ -86,6 +87,9 @@ pending discussion.
 		;;
 	}
 
+Right now, it works well on FreeBSD and Linux, and acceptably on Plan 9.
+Doing a good job on OSX and OpenBSD is a work in progress.
+
 
 [Libcrypto](https://github.com/oridb/mc/tree/master/lib/crypto) has gathered
 more functionality, including a secure RNG based off of OpenBSD arc4random,
@@ -147,21 +151,33 @@ nature of the recursion in the type checker.
 the glaring holes that were present at the start of the year, and presents
 nearly all the functions I find myself wanting as I write programs.
 
-- Basic floating point support is done, both input and output. It should be
-  accurate, rounding input correctly, and producing the shortest correct
-  output when formatting.
+- Basic floating point support is done, both
+  [input](https://github.com/oridb/mc/blob/master/lib/std/fltparse.myr) and
+  [output](https://github.com/oridb/mc/blob/master/lib/std/fltfmt.myr). It
+  should be accurate, rounding input correctly, and producing the shortest
+  correct output when formatting.
 
-- Formatting values now descends into them, producing a sane output for
-  nearly all types. This makes printf debugging far more pleasant.
+- Formatting values now [descends into
+  them](https://github.com/oridb/mc/blob/master/lib/std/fmt.myr#L259),
+  producing a sane output for nearly all types. This makes printf debugging
+  far more pleasant. This is also some of the ugliest code in the Myrddin
+  standard library.
 
 - Traits and iterators have landed. This allows things like `for path in
-  std.bydirentry(dir)` to work. Custom iterators are pretty easy to implement.
+  std.bydirentry(dir)` to work. [Custom iterators are pretty easy to
+  implement](https://github.com/oridb/mc/blob/master/lib/std/iterutil.myr).
 
 - Libstd is now thread safe for all calls with unshared arguments. All
   functions in libstd either appropriately lock their global state, or have no
-  shared state to protect. This is done via the thread hooks.
+  shared state to protect.
 
-And of course, there's much much more.
+- [Type introspection](https://github.com/oridb/mc/blob/master/lib/std/introspect.myr)
+  has landed. The API is shit, and needs to be reworked.
+
+- [Path manipulation](https://github.com/oridb/mc/blob/master/lib/std/pathjoin.myr)
+  is how shipped with libstd.
+
+- And much much more.
 
 ### Language Changes
 
