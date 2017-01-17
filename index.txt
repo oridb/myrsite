@@ -493,7 +493,7 @@ delimiters.
 [Libregex](doc/libregex) handles regexes. It implements a simple but powerful regex syntax,
 and has working unicode support.
 
-[Libcrypto]doc/libcrypto) provides cryptographic functions. It
+[Libcrypto](doc/libcrypto) provides cryptographic functions. It
 implements many of the most common ones.
 
 [Libdate](doc/libdate) provides a fairly complete interface for
