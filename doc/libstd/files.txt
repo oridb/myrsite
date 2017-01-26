@@ -120,7 +120,7 @@ to an object which tracks the state of the directory, allowing for reading
 file names one by one from this directory.
 
 Returns: Either a directory wrapped up in the `\`Ok` branch of the result,
-or a string describing the failure reason in the `\`Fail` branch.
+or a string describing the failure reason in the `\`Err` branch.
 
     const dirread	: (d : dir# -> result(option(byte[:]), errno)
 

@@ -49,7 +49,7 @@ fire, and screaming, if that's more appropriate.
             pkg std =
                     type result(@a, @b) = union
                             `Ok	@a
-                            `Fail	@b
+                            `Err @b
                     ;;
             ;;
 

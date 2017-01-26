@@ -14,8 +14,8 @@ Error Handling
             ;;
 
             type result(@a, @b) = union
-                    `Ok	@a
-                    `Fail	@b
+                    `Ok @a
+                    `Err @b
             ;;
 
             $noret const fatalv	: (fmt : byte[:], ap : valist# -> void)
@@ -62,8 +62,8 @@ and error type. It is typically used  in places where a missing value is the
 only exceptional condition.
 
     type result(@a, @b) = union
-            `Ok	@a
-            `Fail	@b
+            `Ok @a
+            `Err @b
     ;;
 
 

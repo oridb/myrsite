@@ -131,12 +131,12 @@ Some simple examples of how to use the Myrddin networking API
 
 		match std.announce(Dialstr)
 		| `std.Ok f:    lfd = f
-		| `std.Fail e:  std.fatal("unable to announce on {}: {}\n", Dialstr, e)
+		| `std.Err e:  std.fatal("unable to announce on {}: {}\n", Dialstr, e)
 		;;
 
 		match std.listen(lfd)
 		| `std.Ok f:    afd = f
-		| `std.Fail e:  std.fatal("unable to listen on {}: {}\n", Dialstr, e)
+		| `std.Err e:  std.fatal("unable to listen on {}: {}\n", Dialstr, e)
 		;;
 
 		while true
@@ -145,11 +145,11 @@ Some simple examples of how to use the Myrddin networking API
 				match std.read(fd, buf[:])
 				| `std.Ok n:
 					std.writeall(fd, buf[:n])
-				| `std.Fail e:
+				| `std.Err e:
 					std.put("lost conection while reading: {}\n", e)
 				;;
 				std.close(fd)
-			| `std.Fail e:
+			| `std.Err e:
 				std.fatal("unable to accept connection on {}: {}\n", Dialstr, e)
 			;;
 		;;
@@ -170,7 +170,7 @@ Some simple examples of how to use the Myrddin networking API
 			std.writeall(fd, req)
 			resp = std.try(std.fslurp(fd))
 			std.put("{}\n", resp)
-		| `std.Fail e:
+		| `std.Err e:
 			std.fatal("unable to dial {}: {}\n", Dialstr, e)
 		;;
 	}

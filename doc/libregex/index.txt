@@ -160,7 +160,7 @@ Functions
     const parse	: (re : byte[:]	-> std.result(ast#, status))
 
 Parse takes a regex string, and converts it to a regex syntax tree, returning
-`\`std.Success ast#` if the regex was valid, or a `\`std.Failure r` if the
+`\`std.Ok ast#` if the regex was valid, or a `\`std.Err e` if the
 regex could not be parsed. This AST can be used to further process the regex,
 possibly turning it into a multiregex as in Hairless, or using it for NFA and
 DFA tricks.
@@ -169,7 +169,7 @@ DFA tricks.
     const dbgcompile	: (re : byte[:] -> std.result(regex#, status))
 
 `compile` takes a regex string, and converts it to a compiled regex, returning
-`\`std.Success regex` if the regex was valid, or a `\`std.Failure r` with the
+`\`std.Ok regex` if the regex was valid, or a `\`std.Err e` with the
 reason that the compilation failed. `dbgcompile` is similar, however, the
 regex is compiled so it will spit out a good deal of debugging output. Unless
 you are intent on debugging the internals of the regex engine, this is likely
@@ -226,7 +226,7 @@ use regex
 const main = {
 	match regex.compile("ab(c+)")
 	| `std.Ok re:	runwith(re, "abccc")
-	| `std.Fail m:	std.fatal("Failed to compile regex\n")
+	| `std.Err m:	std.fatal("Failed to compile regex\n")
 	;;
 }
 
