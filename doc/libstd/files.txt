@@ -8,8 +8,8 @@ File Handling
 
 
     pkg std =
-            type dir = struct
-            ;;
+            type dir
+	    type diriter
 
             /* seek options */
             const Seekset	: whence 
@@ -26,13 +26,14 @@ File Handling
             const Odir	: fdopt 
 
             /* directory handling */
+            const byentry	: (d : dir# -> diriter)
             const diropen	: (p : byte[:] -> std.result(dir#, byte[:]))
             const dirread	: (d : dir# -> std.option(byte[:]))
             const dirclose	: (d : dir# -> void)
             const dirname	: (p : byte[:] -> byte[:])
-            const mkdir	: (path : byte[:], mode : int64 -> int64)
+            const mkdir		: (path : byte[:], mode : int64 -> int64)
             const mkpath	: (p : byte[:] -> bool)
-            const chdir	: (path : byte[:] -> bool)
+            const chdir		: (path : byte[:] -> bool)
 
             /* file handling */
             const open	: (path : byte[:], opts : fdopt -> std.result(fd, errno))
@@ -122,10 +123,10 @@ file names one by one from this directory.
 Returns: Either a directory wrapped up in the `\`Ok` branch of the result,
 or a string describing the failure reason in the `\`Err` branch.
 
-    const dirread	: (d : dir# -> result(option(byte[:]), errno)
+    const dirread	: (d : dir# -> std.option(byte[:]))
 
 The `dirread` reads a single entry from the directory, opened with `diropen`,
-returning it as a string. 
+returning it as a string. The returned string must be freed by the caller.
 
 Returns `\`Some entry`, or `\`None` at the end of the directory.
 
@@ -166,8 +167,11 @@ to fail on failure.
     const chdir	: (path : byte[:] -> bool)
 
 Chdir changes the current working directory to the path specified in `path`.
+Returns True on success, false on failure.
 
-Returns: True on success, false on failure.
+    const byentry : (d : dir# -> diriter)
+
+Returns a directory iterator that can be used in a for loop.
 
 Files
 -----
