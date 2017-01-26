@@ -17,6 +17,8 @@ API Reference
             type sha256
             type sha224
             type sha512
+            type aesctx
+            type chacha20ctx
 
             /* md5 funtions */
             const md5       : (data : byte[:] -> byte[16])
@@ -53,6 +55,22 @@ API Reference
             const sha384init        : (st : sha384# -> void)
             const sha384add : (st : sha384#, data : byte[:] -> void)
             const sha384fin : (st : sha384# -> byte[48])
+
+	    /* AES functions */
+            const ortho	: (q : uint64[:] -> void)
+            const aeskeysched	: (x : aesctx#, k : byte[:] -> void) 
+            const aesencrypt	: (x : aesctx#, m : byte[:], c : byte[:] -> void)
+            const aesdecrypt	: (x : aesctx#, c : byte[:], m : byte[:] -> void)
+
+            /* Chacha20 functions */
+            const chacha20keysetup	: (x : chacha20ctx#, k : byte[:] -> void) 
+            const chacha20ivsetup	: (x : chacha20ctx#, iv : byte[:] -> void)
+            const chacha20encrypt	: (x : chacha20ctx#, m : byte[:], c : byte[:] -> void)
+
+            /* Randomness */
+            const randbytes	: (buf : byte[:] -> void)
+            generic rand	: (lo : @a::(integral,numeric), hi : @a::(integral,numeric) -> @a::(numeric,integral))
+            generic randnum	: (-> @a::(numeric,integral))
     ;;
 
 The `hashtype` functions (eg, `md5()`, `sha1()`, etc) all compute and
