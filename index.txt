@@ -44,7 +44,7 @@ Status
 Supported Platforms.
 --------------------
 
-Myrddin currently compiles for x86-64. It runs on four OSes at the moment:
+Myrddin currently compiles for x86-64. It runs on five OSes at the moment:
 
 - Linux
 - OSX
