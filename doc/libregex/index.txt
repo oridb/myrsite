@@ -246,7 +246,7 @@ const runwith = {re, txt
 
 #### Substitution
 
-```{runmyr regex}
+```{runmyr regex2}
 use std
 use regex
 
@@ -264,7 +264,7 @@ const main = {
 }
 ```
 
-```{runmyr regex}
+```{runmyr regex3}
 use std
 use regex
 
