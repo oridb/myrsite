@@ -79,7 +79,7 @@ Summary
 
             /* iterators */
             const byline	: (f : file# -> lineiter)
-	    const bychar	: (f : file# -> chariter)
+            const bychar	: (f : file# -> chariter)
 
             /* formatted i/o */
             const put	: (f : file#, fmt : byte[:], args : ... -> status(std.size))
