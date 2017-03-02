@@ -1,0 +1,1685 @@
+{
+	title:	Tutorial
+	description:	Myrddin Tutorial
+}
+
+Myrddin Tutorial
+----------------
+
+Myrddin is a simple modern programming language. It allows you to write clear,
+terse, and readable code with a powerful but comprehensible type system. The
+compiler infers types globally, checking your code without getting in your
+way. It is currently available on Linux, OSX, FreeBSD, OpenBSD, and Plan 9.
+
+This tutorial will get a new user up to speed with Myrddin quickly. This
+tutorial comes in three parts. The first will discuss key concepts via several
+example programs, the second will cover parts of the language in more detail,
+and the third will give an idea of what libraries exist and how to use them.
+For deeper coverage, look at the [language specification](spec) and the
+[library reference manual](doc).
+
+We assume that you are already familiar with programming, and have installed
+Myrddin on your machine already, following the instructions on the
+[Environment Setup](setup) page.
+
+A Simple Program
+---------------
+
+```{runmyr hello}
+	use std
+	const main = {
+		std.put("hello world\n")
+	}
+```
+
+A program begins running at the first line of the function named `main`, and
+proceeds line by line, executing statements one after the other. Each
+statement is ended by a newline or semicolon.
+
+Here, the first line of main invokes `std.put`. This function does formatted
+output. We pass it the string `hello world`, and it dutifully prints out
+
+	hello world
+
+The put function can also handle more complex formatting. The first argument
+to `std.put` can contain format specifers (`{}`). These will be substituted
+with the corresponding argument in the parameter list. Myrddin passes type
+information to the format function, and tries to produce a reasonable output
+for all arguments.
+
+For example,
+
+	std.put("{} + {} = {}\n", 2, 2, 5)
+
+would output the string `2 + 2 = 5`.  Additional parameters for specifying
+the formatting can be passed between the `{` and `}`. These vary by type,
+and are fully documented in the [library documentation](doc/libstd/fmt).
+
+The `std.put` function comes from the `std` library, loaded via `use std` on
+the first line of the program. Use statements will import a library, allowing
+the program to access all of the functions and variables that the library
+provides.
+
+In order to compile this program, save it into a file with the extension
+`.myr`. A good name for this program is `hello.myr`. Then, build it with
+`mbld`:
+
+	mbld -b hello hello.myr
+	./hello
+
+There are other ways to invoke mbld, which will be covered later in this
+tutorial.
+
+Another small program
+----------------
+
+This program computes factorials.
+
+```{runmyr factorial}
+	use std
+
+	const main = {
+		var x : int64
+
+		x = factorial(10)
+		std.put("factorial {} = {}\n", 10, x)
+	}
+
+	const factorial = {n
+		var acc
+
+		acc = 1
+		for var i = 1; i < n + 1; i++
+			acc *= i
+		;;
+		-> acc
+	}
+```
+
+As before, it can be compiled and run with the following comand:
+
+	mbld -b factorial factorial.myr
+
+Expressions are similar to other common programming languages, such as C,
+Java, or Python. A full table of operators will be in the second half of
+this document.
+
+Declarations begin with the keyword `var`, `const`, or `generic`, followed by
+a list of variable names, optionally with types and initializers. Variable
+names are composed of the characters 'a-z', 'A-Z', '0-9', and '_'. The first
+character of the variable must not be a digit.
+
+If we want to provide a type for the variable, then the variable name can
+be followed by a ':', and then the type we want to declare. Providing the
+type explicitly is optional, because the compiler can usually infer the type
+on its own.
+
+Functions in Myrddin follow the pattern outlined above, with no special syntax
+for declarations. Instead, we simply declare a `const`, and assign it a
+function literal expression. Function literal expressions are chunks of code
+with arguments and a body, and generally follow this form:
+
+	{arg, list
+		function
+		body
+	}
+
+The argument list consists of a list of argument names. Like declarations,
+types can be added with `:type`, but are usually not needed. Like statements,
+the argument list is terminated with a line ending.
+
+Functions are called using the function call operator, `()`. The types and
+arguments of the function must match the declared or inferred type of the
+function arguments.
+
+In our factorial program, the variable `x` is given the type `int64`. This
+means that when we all `factorial(n)`, the compiler realizes that the
+`factorial` function must return an int64. Because the factorial function
+returns the variable `acc`, this means that it must also have the type
+`int64`. Thus, the type of `acc` is fixed, in spite of the lack of explicit
+type declation. If we attempted to assign `acc` anything other than `int64`,
+the compiler would reject the program.
+
+For loops in Myrddin come in stepping form, and iterator form. The type of
+loop used in the `factorial` function is a stepping loop.
+
+Stepping for loops will be familiar to anyone who has used C. This type of
+loop has the form `for init; test; incr; body ;;`. The `init` expression is
+executed before the loop is entered. The `test` expression is run at the start
+of each loop iteration, and the `incr` expression is run at the end of every
+loop iteration. The `test` expression is a boolean expression, and the loop is
+exited when it returns false.
+
+Iterator loops have the form `for pat in expr; body ;;`. These loops
+operate on an iterable expresson such as an array or a slice. Each time
+that the loop runs, the next element in that iterable is stored into `pat`,
+and the body is run. This continues until all elements of the iterable are
+exhausted. Pat is actually not simply a variable, and may be a pattern.
+Patterns are covered later in this tutorial.
+
+Myrddin also has other common control flow statements. If statements
+are written as you'd expect:
+
+	if cond
+		thing()
+	;;
+
+As usual, the control construct is separated from the body of the if statement
+using a line ending or semicolon. The condition is a boolean typed expression,
+which, if true, will enter the body of the if statement. Otherwise, it will
+skip over it. If statements can also be expanded with `elif` and `else`
+conditions.
+
+	if cond
+		thing()
+	elif othercond
+		otherthing()
+	elif moreconds
+		morethings()
+	else
+		fallback()
+	;;
+
+While loops are also supported. These loops repeat as long as the condition
+on the `while` is true:
+
+	while cond
+		thing()
+	;;
+
+The only other significant tool for controlling program flow are match
+statements. These are covered below.
+
+Pattern Matching
+------------------------
+
+This is a simple example demonstrating pattern matching.
+
+```{runmyr match}
+use std
+
+const main = {
+	var x = 11
+	match x
+	| 7:	std.put("first\n")
+	| 9:	std.put("second\n")
+	| n:	std.put("got {}\n", n)
+	;;
+}
+```
+
+This program will output `"got 11"`. Each pattern in the match statement is
+checked against the value in sequence, and the first one that matches has its
+body executed. Here, 7 and 9 are not equal to 11, so their bodies are not
+executed. Hoever, a free name matches any value, so matching against `n`
+succeeds. Furthermore, Furthermore, the free name captures the value that it
+is being matched against, meaning that in the expression `std.put("got {}\n")`,
+the variable n evaluates to 11.
+
+This kind of matching can be applied to more than just integers. If `x` was
+assigned the tuple `(11, 33)`, then in the code below, the pattern `(11, n)`
+would match, and `n` would hold the value `33`:
+
+	match x
+	...
+	| (11, n):	std.put("got {}\n", n)
+	...
+
+Pattern matches can descend into the structure of almost any type. Structures,
+arrays, strings, unions, and even values on the other end of pointers are fair
+game. Of these, matching on unions is likely to be the most common.
+
+A union is a type that has two parts: A tag, and a body. The body is optional,
+but the tag is always present. We could define a union type as:
+
+	type u = union
+		`Bodyless
+		`Int int
+		`Pair (int, char)
+	;;
+
+The word after the \` (backtick) is the tag. A union can only hold one of
+its variants at once. Unions are written out with the tag and body value,
+as in:
+
+	x = `Int 123
+
+Once a value is in a union, the only way to extract is by applying a
+pattern match to it.  The tag is matched on to decide which variant of the
+union to extract, and the body is matched using the usual rules. For example:
+
+```{runmyr umatch}
+use std
+
+type u = union
+	`Bodyless
+	`Int int
+	`Pair (int, char)
+;;
+
+const main = {
+	match `Pair (1, 'c')
+	| `Bodyless:	std.put("no body\n")
+	| `Int i:	std.put("int body is {}\n")
+	| `Pair (a,b):	std.put("pair body: first={}, second={}\n", a, b)
+	;;
+}
+```
+
+In order for a match statement to compile, it must be exhaustive. This means
+that there must be at least one case that will match any possible value.
+Additionally, each pattern must be useful. This means that a match must not
+be fully subsumed by earlier matches.
+
+Patterns also show up in iterator style for loops. In this context, only
+a single pattern is allowed, on the loop variable. If a value does not
+match the pattern, the loop body is skipped.
+
+```{runmyr formatch}
+use std
+
+const main = {
+	for (1, x) in [(1,1), (2, 4), (1, 3), (2, 7)][:]
+		std.put("x = {}\n", x)
+	;;
+}
+```
+
+This program will only print `x = 1` and `x = 3`, even though it is iterating
+over 4 values. This is because the pattern `(1, x)` only matches the values
+`(1,1)` and `(1,3)`.
+
+A Marginally Useful Program
+----------------
+
+This program behaves like the Unix `wc` program. Unfortunately, it does input
+and output, and therefore will fail when run in the playground.
+
+```{runmyr wc}
+use std
+use bio
+
+const main = {
+	var lines = 0, words = 0, chars = 0
+	var inword
+	var f
+
+	f = bio.mkfile(std.In, bio.Rd)
+
+	inword = false
+	while true
+		match bio.getc(f)
+		| `bio.Err e:	std.fatal("error reading file: {}\n", e)
+		| `bio.Eof:	break
+		| `bio.Ok ' ':	inword = false
+		| `bio.Ok '\t':	inword = false
+		| `bio.Ok '\n':
+			lines++
+			inword = false
+		| `bio.Ok c:
+			if !inword
+				words++
+			;;
+			inword = true
+		;;
+		chars++
+	;;
+
+	std.put("lines: {}\n", lines)
+	std.put("words: {}\n", words)
+	std.put("chars: {}\n", chars)
+}
+```
+
+This program is a state machine centered around a pattern match statement.
+It operates by keeping track of whether it's currently inside a word or not,
+and every time it flips into a word, it increments the number of words
+using a `++` expression.
+
+We start off by initializing all of our counters to zero, and creating a
+buffered wrapper around the `std.In` input stream. This buffered reader is
+used to efficiently read and decode whole unicode codepoints.
+
+The main loop of the `wc` program matches over the result of `bio.getc`. The
+bio result type is generic, but for our purposes right now we can assume it is
+defined as:
+
+	type bio.result = union
+		`Eof
+		`Err bio.err
+		`Ok char
+	;;
+
+A value of `` `bio.Eof `` indicates that the reader has successfully reached
+the end of the file. A value of `` `bio.Err bio.err`` indicates that the
+reader has encountered an error reading the file. And a value of `` `bio.Ok
+char`` indicates that a single character was successfully read from the file.
+
+Refer to the [API documentation](http://myrlang.org/doc/libbio/) for the full
+details of what the buffered io library provides.
+
+The main loop first checks for errors, bailing out of the program with a
+failure if one is encountered. Then, it checks for the end of the file,
+exiting the loop and printing the accumulated statistics if one is
+encountered. In all other cases it matches on the character that was encountered
+to count up the lines, words, and characters.
+
+There are four patterns that match on the `bio.Ok` union tag. The first two
+match on spaces and tabs.
+
+	| `bio.Ok ' ':	inword = false
+	| `bio.Ok '\t':	inword = false
+
+These patterns simply set the `inword` state variable to false. If we are in a
+word, this records that we have left the word. Otherwise, the state is
+unchanged.
+
+The next pattern matches on `bio.Ok \n`. Here, in addition to recording the
+end of a word, the program increments the line count.
+
+	| `bio.Ok '\n':
+		lines++
+		inword = false
+
+And finally, the last case matches any character that was successfully read.
+Since this character is not a space character or newline, we define it to be
+a word character. If we are not currently in a word, then this must mark the
+start of a new word, so we increment the word count. Finally, the fact that
+the program is scanning along a word is recorded.
+
+	| `bio.Ok c:
+		if !inword
+			words++
+		;;
+		inword = true
+	;;
+
+The program then finishes the loop, incrementing the total number of
+characters in the program, and reads the next character, starting the
+cycle over again.
+
+Stacks
+------------
+
+Here's a program that defines a stack. For simplicity, the stack is statically
+sized, holding at most 100 elements.
+
+```{runmyr stack}
+	use std
+
+	type fixstack(@a) = struct
+		top : std.size
+		data	: @a[100]
+	;;
+
+	generic stkpush = {s : fixstack(@a)#, val : @a
+		s.data[s.top++] = val
+	}
+
+	generic stkpop = {s : fixstack(@a)# -> @a
+		-> s.data[--s.top]
+	}
+
+	generic mkstk = { -> fixstack(@a)
+		-> [.top=0]
+	}
+
+	const main = {
+		var intstk : fixstack(int)
+		var strstk : fixstack(byte[:])
+
+
+		/* create the stacks */
+		intstk = mkstk()
+		strstk = mkstk()
+
+		/* initialize the integer stack */
+		stkpush(&intstk, 0)
+		stkpush(&intstk, 1)
+		stkpush(&intstk, 2)
+		/* type error: stkpush(intstk, "foo") */
+
+		/* initialize the string stack */
+		stkpush(&strstk, "foo")
+		stkpush(&strstk, "bar")
+		stkpush(&strstk, "baz")
+		/* type error: stkpush(strstk, true) */
+
+		for var i = 0; i < 3; i++
+			std.put("{}\n", stkpop(&intstk))
+			std.put("{}\n", stkpop(&strstk))
+		;;
+	}
+```
+
+User defined types are created using the `type` keyword. Type definitons
+may define new types based on existing ones, and may optionally take
+parameters. For example:
+
+	type flags = int32
+	type slice(@a) = @a[:]
+
+The `flags` type is a definition based off of the `int32` type. This definiton
+is a distinct type, and requires an explicit cast to be converted to an int32.
+The `slice(@a)` type is parameterized, taking a single type parameter `@a`.
+When this type is used, the type parameter must be passed in. This substitutes
+the type parameter on the right hand side, producing a new type.
+
+In the stack example, the type `stack` is generic. It gets specialized into
+`stack(int)` and `stack(byte[:])` in the body of `main`. The `int` stack can
+only contain ints, as verified by the compiler when type checking. Similarly,
+the `byte[:]` stack can only contain `byte[:]`.
+
+The functions `stkpush`, `stkpop`, and `mkstk` are declared with the keyword
+`generic`. The `generic` keyword tels the compiler that they may contain type
+parameters in their signatures. This means that when `stkpush` is called with
+a stack of `fixstack(int)`, the type `@a` is substituded with `int`.
+Similarly, when called with `fixstack(byte[:])`, `@a` is substituted with
+`byte[:]`. Note that `@a` is substituted with the same type throughout the
+context, so if we defined a `max` function, we would not be able to mix
+arguments:
+
+	generic max = {a : @t::numeric, b : @t::numeric
+		if a > b
+			-> a
+		else
+			-> b
+		;;
+	}
+
+	max(1, 2)	/* ok, @t is replaced with int */
+	max('x', 'y')	/* ok, @t is replaced with char */
+	max('x', 2)	/* error: @t wants to be both int and char */
+
+In the `max` example, we also used traits to restrict the types passed to
+`max`, requiring them to be numeric. Traits are constraints on generic types,
+requiring the type passed to have certain attributes. Numeric is a trait built
+in to the language, and is defined for integer, floating point, and character
+types. If a type has the numeric trait, it can be compared using relational
+operators (`<`, `<=`, `>`, `>=`). It can also have the usual numeric operators
+applied (`+`, `-`, `*`, `/`).
+
+Turning Code into a Library
+----------------------------
+
+Often, code can be reused from multiple files. This example shows how to put
+code into reusable libraries, available from a `use` statement.
+
+	pkg stack =
+		type fixed(@a) = struct
+			top	: std.size
+			data	: @a[100]
+		;;
+
+		generic mk	: (-> fixstack(@a))
+		generic push	: (s : fixstack(@a)#, val : @a -> void)
+		generic pop	: (s : fixstack(@a)#, val : @a -> void)
+	;;
+
+	generic push = {s, val
+		s.data[s.top++] = val
+	}
+
+	generic pop = {s, val
+		-> s.data[--s.top]
+	}
+
+	generic mk = {
+		-> [.top=0]
+	}
+
+The library code is based on the stack example above, but repackaged so that
+it can be used from multiple places. We removed the `main` function, and added
+a `pkg` section to declare the exports. The `pkg` section contains the data
+type that we are providing, and the function prototypes that expose in order
+to manipulate that type.
+
+There were also a few stylistic changes. Because the fully qualified name
+of the functions (`stack.funcname`) must be used to refer to the library
+exports, the `stk` prefix is redundant. It has been removed, replacing, for
+example, `stkpush()` with `push()`.
+
+The package name is unrelated to the file name that we decide to save this
+code into, and as a general rule, packages consist of multiple files. However,
+this example is small enough that a single file suffices.
+
+This library is built and installed with mbld. If the file that the code was
+in was named `stk.myr`, then we need to create a file named `bld.proj`, in the
+same directory as `stk.myr`, containing the following:
+
+	lib stack =
+		stk.myr
+	;;
+
+The `lib` clause produces a library named `stack` out of the files listed in
+the package. In our case, there is only one file.
+
+	mbld
+
+will build the library, and
+
+	mbld install
+
+will install it to a place that `use` statements in other code will be able
+to find it. To use it, we might write a program similar to our previous one,
+but using this library. For brevity, main is shortened:
+
+	use std
+	use stack
+
+	const main = {
+		var istk : stack.fixed(int)
+
+		istk = stack.mk()
+		stack.push(&istk, 123)
+		std.put("{}\n", stack.pop(&istk))
+	}
+
+If `mbld install` has been run, then the usual `mbld -b main main.myr` would
+produce a binary linked against the stack library that we just wrote.
+
+Alternatively, `main.myr` may also be built with a `bld.proj` file. We can
+put this into a bld.proj file in the same directory as `main.myr`:
+
+	bin main =
+		main.myr
+	;;
+
+There is one problem that separate bld.proj files and installed libraries does
+not address. We may want to have the binaries and libraries shipped as part of
+the same project, implying that we want to build them all together as a unit.
+To do this, we could put the two build targets into the same `bld.proj`, we
+and add a dependency from `main` to the `stack` library, as below:
+
+	lib stack =
+		stk.myr
+	;;
+
+	bin main =
+		main.myr
+		lib stack
+	;;
+
+Splitting code into multiple files is done in a similar way. Only two small
+changes need to be done. First, because the files are being compiled into the
+same unit, instead of dependent libraries, the use statements have to be
+changed to the quote form:
+
+	use std
+	use "stk"
+
+	const main = { ... }
+
+Then, the bld.proj needs to be changed to put both files into a single
+unit:
+
+	bin stackdemo =
+		stk.myr
+		main.myr
+	;;
+
+The distinction between quoted and unquoted use statements is how the
+packages are looked up. An unquoted use looks for a fully compiled and
+installed library with requested name. A quoted use looks for a single
+`.myr` file and imports the definitions from that. The quoted form is
+used for dependencies within a single package, while the unquoted form
+is used for dependencies between different packages.
+
+There's a lot more to mbld, and the full documentation is available
+in the [mbld tutorial](mbld).
+
+Printing Roman Numerals
+-----------------------
+
+This program uses traits to decide how to stringify integers. Traits are a
+powerful mechanism for attaching behavior to types that can be overridden at
+compile time.
+
+They add a lot of expressiveness, but the overloading that they imply can
+heavily hurt readability. As a result, they are best used sparingly, and with
+care.
+
+```{runmyr trait}
+	use std
+
+	trait  stringable @a =
+		stringify	: (buf : std.strbuf#, v : @a -> void)
+	;;
+
+	type roman = int64
+
+	const romanmap = [
+		(1000,  "M"), ( 900, "CM"),
+		( 500,  "D"), ( 400, "CD"),
+		( 100,  "C"), (  90, "XC"),
+		(  50,  "L"), (  40, "XL"),
+		(  10,  "X"), (   9, "IX"),
+		(   5,  "V"), (   4, "IV"),
+		(   1,  "I"),
+	][:]
+
+	impl stringable roman =
+		stringify = {sb, n
+			for (i, s) in romanmap[:]
+				while n >= i
+					std.sbputs(sb, s)
+					n -= i
+				;;
+			;;
+		}
+	;;
+
+	impl stringable int32 =
+		stringify = {sb, n
+			std.sbfmt(sb, "{}", n)
+		}
+	;;
+
+	const main = {
+		var i32 : int32
+		var r : roman
+		var sb, s
+
+		r = 1234
+		i32 = 1234
+
+		sb = std.mksb()
+		std.sbputs(sb, "roman: ")
+		stringify(sb, r)
+		std.sbputs(sb, ", i32: ")
+		stringify(sb, i32)
+		s = std.sbfin(sb)
+
+		std.put("traity conversion: {}\n", s)
+
+		std.slfree(s)
+	}
+```
+
+This program begins by defining a trait `stringable @a`. The `stringable`
+trait requires implementations to provide a `stringify` function with
+a type ` (buf : std.strbuf#, v : @a -> void)`. This function will put a
+string version of the value `v` into the string buffer.
+
+Next, a new type `roman` is defined. It's an integer, but we attach a
+trait to it that will cause `stringify` to render it as a roman numeral.
+The implementation follows.
+
+Then, another trait is defined to stringify `int32` values. The `int32`
+impl just uses `std.sbfmt()` to render the integer into the string buffer.
+
+Finally, `main` uses the `string` function on the two types, demonstrating
+that the roman numeral value indeed gets formatted as a roman numeral,
+and the int32 gets formatted with boring old arabic numerals.
+
+Traits are closely related to generics, however instead of substituting
+the type within the body of a function, the types are used to look up a
+type specific implementation when the program is compiled.
+
+Command Line Arguments
+----------------------
+
+This program implements the Unix `echo` program. When run on the command
+line, it will echo all of the arguments given to it.
+
+```{runmyr echo}
+use std
+
+const main = {args : byte[:][:]
+	for a in args[1:]
+		std.put("{} ", a)
+	;;
+	std.put("\n")
+}
+```
+
+Arguments given on the command line are passed to Myrddin programs as
+the first argument to main. The type of the arguments is a `byte[:][:]`.
+The first element of this slice is the program name. The second element
+onwards are the arguments passed to the program.
+
+This program is the first program written where an additional type annotation
+is needed. Because the operations on `args` can be done on both a slice or
+an array, type inference has too little information to disambiguate the two
+cases. Therefore, the `args` parameter to `main` is annotated with a type.
+
+By convention, options are flagged with a leading `-`. Flags which take no
+arguments can be grouped together, so that `-a -b -c` is equivalent to `-abc`.
+Flags that do take arguments are insensitive to spaces in the argument list,
+so that `-o arg` is equivalent to `-oarg`. And option processing is stopped
+after the first `--` seen in the input.
+
+Following these rules yourself isn't difficult, but standard library
+provides code that handles these cases for you.
+
+The example program above is incomplete: According to posix, `/bin/echo`
+accepts a `-n` option which suppresses the final newline. For the sake of
+illustration, let's also extend it with a `-p prefix` argument, which adds a
+prefix to each value printed.
+
+```{runmyr echoargs}
+use std
+
+const main = {args
+	var cmd
+	var printnl, pfx
+
+	printnl = true
+	pfx = ""
+
+	cmd = std.optparse(args, &[
+		.argdesc="args...",
+		.opts=[
+			[.opt='n', .desc="suppress newlines"],
+			[.opt='p', .arg="pfx", .desc="insert prefix"],
+		][:]
+	])
+
+	for o in cmd.opts
+		match o
+		| ('n', ""):	printnl = false
+		| ('p', p):	pfx = p
+		| _:		std.die("bug: unhandled arg\n")
+		;;
+	;;
+
+	for a in cmd.args
+		std.put("{}{} ", pfx, a)
+	;;
+
+	if printnl
+		std.put("\n")
+	;;
+}
+```
+
+The `std.optparse` function takes two arguments. The first is the argument
+list to parse. The second is a pointer to an argument description structure.
+In this program, this is written out as a struct literal.
+
+The argument description structure is used for two purposes. The primary
+purpose is for describing to `std.optparse` what the command line should look
+like. The second purpose is producing a useful help message for the user.
+
+The `optparse` function parses the command line into two data structures. The
+first is a slice of (char, byte[:]) pairs that contains the options and their
+values. The second is a slice of byte[:] that contains the non-option
+arguments.
+
+Once the options are parsed, the program loops over them and processes them,
+storing the prefix and recording whether to print newlines.
+
+This program only exercises a small portion of the command line parser.
+The [API reference](doc/libstd/cli) covers the rest of the capabilities
+in detail.
+
+Declarations in Detail
+----------------------
+
+Declarations come in three flavors. There are constant declarations and
+variable declarations. Constant declarations are indicated with `const`.
+Variable declarations are indicated with `var`. Generic declarations are
+indicated with `generic`.
+
+This keyword is followed by the variable name. The type follows, optionally.
+If the type is ommitted, then it will be inferred. Finally, the initializer
+follows. In the case of consts, the initializer is mandatory. Otherwise, it
+can be omitted.
+
+Here's an example of a fully specified declaration:
+
+	var x : int = 123
+
+The type can be omitted, and left up to the type inference:
+
+	const y = 123
+	
+And, if the declaration is a var, then the initializer can also be omitted:
+
+	var z
+
+Multiple declarations can be placed after a single keyword. Each type and
+initializer is independent.
+
+	var w, x = 123, y : char = 'a', z = "string"
+
+Vars are mutable at runtime. The compiler prevents using them before they
+are intialized. If the address of a variable is passed to a function, the
+analysis assumes that they are being passed as an out parameter, and will
+be initialized by this function.
+
+	var a
+	f(a)	/* illegal: used before defined */
+	g(&a)	/* ok: assumption that g initializes a */
+
+Consts are are compile time constants, and are often placed in read only
+memory by the compiler. Consts must be initialized with an expression that is
+computable at compile time. Generics are closely related to constants,
+although their type may contain type variables.
+
+Myrddin has no special syntax for declaring functions. Functions are simply
+declared by initializing a const or var with an anonymous function.  For
+example, to declare a function that takes a single argument and returns it
+unmodified:
+
+	const id = {a
+		-> a
+	}
+
+Because it is desirable to make mutual recursion convenient, functions
+may be declared in any order. But because there is no distinction between
+functions and variables, this means that variables may also be declared in
+any order. This leads to interesting effects, where it is possible to use
+a variable before it is declared.
+
+	const f = {
+		y = 123
+		-> y
+
+		var y
+	}
+
+This is strongly discouraged, stylistically.
+
+Literals in Detail
+-------------------
+
+Many values in can be written out directly in code, as literals. Integers,
+characters, strings, arrays, structs, and slices are all examples.
+
+#### Ints
+
+Integer literals are usually written out as decimal numbers. Integers can
+also be written out in hex, octal, or binary. These variants are specified
+with the prefixes `0x`, `0o` or `0b`, respectively. For example:
+	
+	123	/* decimal 123 */
+	0x123	/* hex 123 (291 decimal) */
+	0b101	/* binary 101 (5 decimal) */
+
+Integer literals have a generic type. and can therefore be assigned to any
+type with the `integral` and `numeric` traits. Integer suffixes can be used
+to restrict the type. The integer suffixes 'b', 's', 'i', and 'l' respectively
+indicate that the integer is a signed 8, 16, 32, or 64 bit integer. Adding a
+`u` suffix indicates that the integer is unsigned.
+
+#### Floats
+
+Floating point literals are written using decimal notation, separating the
+integer portion from the fractional portion with a period. Optionally, an
+exponent may be written using either an 'e' or an 'E'. For example:
+
+	0.5	/* 0.5 decimal */
+	1.0e2	/* 100.0 decimal */
+
+Floating point literals have a generic type, and can be assigned to any other
+type with the `floating` and `numeric` traits. 
+
+#### Characters
+
+Characters are quoted using single quotes. They represent a single unicode
+codepoint. Most characters can be written directly, but some are either
+syntactically significant, or would combine with the quotes. As a result,
+the following escape sequences are recognized:
+
+<table>
+	<tr><td>\n</td><td>New line</td></tr>
+	<tr><td>\r</td><td>Carriage return</td></tr>
+	<tr><td>\b</td><td>Backspace</td></tr>
+	<tr><td>\"</td><td>Double quote</td></tr>
+	<tr><td>\'</td><td>Single quote</td></tr>
+	<tr><td>\\</td><td>Backslash</td></tr>
+	<tr><td>\v</td><td>Vertical tab</td></tr>
+	<tr><td>\0</td><td>Null character</td></tr>
+	<tr><td>\xDD</td><td>Hex byte. DD are two hex digits</td></tr>
+	<tr><td>\u{codepoint}</td><td>Unicode codepoint</td></tr>
+</table>
+
+The codepoint value for unicode escapes is a hex encoded integer.
+
+#### Strings
+
+Strings are quoted using double quotes. They contain a byte slice, which
+is conventionally a utf8 encoded string. The language, however, enforces
+no such constraint on the contents of a string, and leaves the interpretation
+up to the libraries using it.
+
+The escape codes allowed in strings are the same as those allowed in
+characters. Unicode escapes (`\u{codepoint}`) will be utf8-encoded. All other
+escape codes, including hex escapes, will be inserted into the byte sequence
+uninterpreted.
+
+#### Arrays and Slices
+
+Array literals are written as comma separated sequences of values enclosed in
+square brackets. Optionally, indexes can be given to the initializes values.
+If there are gaps in an indexed initializer sequence, then the missing values
+are zero initialized. For example:
+
+	/* packed 3 element array */
+	x = [1,2,3]
+	/* 74 element array, with x[0]==1, x[73] == 2 */
+	x = [0: 1, 73: 2]	
+
+There is no dedicated slice literal syntax in Myrddin, but slices can be taken
+off of array literals, giving a compact syntax that serves the purpose.
+
+	sl = [1,2,3][:]
+
+Beware, array literals within functions are allocated on the stack, so the
+lifetime of a slice is the same as the lifetime of the array literal.
+
+#### Structs
+
+Struct literals are written as comma separated sequences of initializers
+enclosed in square brackets. Initializers come in the form `.membername =
+value`. In order for the compiler to be able to tell apart a struct literal
+and an array literal, at least one initializer is needed. For example:
+
+	type example = struct
+		a : int
+		b : int
+	;;
+
+	var x : example
+	x = [.a=123]
+
+If a member of a struct is not initialized by the literal, it is zeroed.
+
+#### Unions
+
+Unions are constructed by prefixing a value of the appropriate type with the
+union tag. If the union has no value for the tag, then the tag stands on its
+own as a constructor. For example:
+
+	uval = `Tag2 123
+	uval = `Tag1
+
+Operators In Detail
+-------------------
+
+This is the full list of operators in the Myrddin language, and what they
+do.
+
+#### Precedence 11:
+<dl>
+	<dt>x.name</dt>	
+	<dd><p>
+		The member lookup operator. Looks up a value from within a
+		structure or pointer to structure, and evaluates to that
+		value. As a special case, it also lets you get the length
+		of a slice or array using the <code>.len</code> member. Used as:
+	</p></dd>
+	<dt>x++</dt>
+	<dd><p>
+		The postincrement operator. This operator evaluates to the
+		expression it is applied to and increments the value after
+		the subexpression is evaluated. Multiple increments within
+		the same expression are applied after the full expression
+		is evaluated.
+	</p></dd>
+	<dt>x--</dt>
+	<dd><p>
+		The postdecrement operator acts the same way as the
+		postincrement operator, but with subtraction instead
+		of addition.
+	</p></dd>
+	<dt>x#</dt>
+	<dd><p>
+		The dereference operator loads a value through a pointer.
+	</p></dd>
+	<dt>x[e]</dt>
+	<dd><p>
+		The index operator loads a value at an integer offset from
+		an indexable type (an array or a slice). Pointers are not
+		indexable.
+	</dd>
+	<dt>x[lo:hi]</dt> 
+	<dd><p>
+		The slice operator takes a view into another slicable type.
+		Slices may be taken off of arrays, other slices, or pointers.
+		Taking slices off of pointers is essential for writing lower
+		level code or binding with C, but it should be done with care,
+		as there are no bounds checks.</p>
+
+		<p>When slicing an array or slice, the upper and lower bounds
+		may be omitted. If the lower bound is omitted, it defaults to
+		0. If the upper bound is omitted, then it is replaced with
+		the length of the value being sliced.</p>
+
+		<p>The lower bound is inclusive. The upper bound is
+		exclusive. For example, if the array <code>a</code>
+		contained <code>[1,2,3,4]</code>, then the slice <code>
+		a[1:3]</code> would contain <code>[2,3]</code>.</p>
+	</p></dd>
+	<dt>x(arg,list)</dt>
+	<dd><p>
+		The function call operator calls a function with the given
+		arguments. Arguments are evaluated before the call in left
+		to right order.
+	</p></dd>
+</dl>
+
+#### Precedence 10:
+<dl>
+	<dt>&x</dt> 
+	<dd><p>
+		The addres-of operator takes the address of any value,
+		evaluating to a pointer to that value.
+	</p></dd>
+	<dt>!x</dt>
+	<dd><p>
+		The logical negation operator works on a boolean value,
+		inverting it. It's functionality is quite Orwellian: True becomes
+		false, and false becomes true.
+	</p></dd>
+	<dt>~x</dt>
+	<dd><p>
+		The bitwise negation operator inverts every bit in its integer
+		traited argument.
+	</p></dd>
+	<dt>-x</dt>
+	<dd><p>
+		The unary minus operator negates its operand.
+	</p></dd>
+	<dt>+x</dt>
+	<dd><p>
+		The unary plus operator does nothing. It's present for
+		symmetry with the unary minus.
+	</p></dd>
+	<dt>`Name x</dt>
+	<dd><p>
+		The union constructor operator creates a new union with tag
+		Name wrapping the value x. 
+	</dd>
+</dl>
+
+#### Precedence 9:
+<dl>
+	<dt>x << y</dt>
+	<dd><p>
+		The left shift operator shifts <code>x</code> left by
+		<code>y</code> bits. Shifting by more than the number of bits
+		in <code>x</code> can lead to implementation defined results,
+		because different CPUs handle large shifts differently.
+	</p></dd>
+	<dt>x >> y</dt>
+	<dd>
+		<p>The left shift operator shifts <code>x/code> right by
+		<code>y</code> bits. Shifting by more than the number of bits
+		in <code>x</code> can lead to strange results.</p>
+
+		<p>If <code>x</code> is an unsigned integer, then the top bits
+		of the result will be filled with zeros. Otherwise, the result
+		will be sign extended.</p>
+	</dd>
+</dl>
+
+#### Precedence 8:
+<dl>
+	<dt>x * y</dt>
+	<dd><p>
+		The multiplication operator multiplies two values using
+		the appropriate arithmetic for the type.  Complement 2s
+		arithmetic is used for signed integers. Unsigned arithmetic is
+		used for unsigned integers. IEEE754 arithmetic is used for
+		floating point values.
+	</p></dd>
+	<dt>x / y</dt> 
+	<dd><p>
+		The division operator divides two values. Like multiplication,
+		appropriate arithmetic for the type is applied.
+	</p></dd>
+	<dt>x % y</dt>
+	<p><dd>
+		The modulo operator finds the value of x modulo y. Like
+		multiplication, appropriate arithmetic for the type is
+		applied.
+	</p></dd>
+</dl>
+
+#### Precedence 7:
+<dl>
+	<dt>x + y</dt>
+	<dd><p>
+		The addition operator adds two values using the appropriate
+		kind of arithmetic.
+	</p></dd>
+	<dt>x - y</dt>
+	<dd><p>
+		The subtraction operator adds two values using the appropriate
+		kind of arithmetic.
+	</p></dd>
+</dl>
+
+#### Precedence 6:
+<dl>
+	<dt>x & y</dt>
+	<dd><p>
+		The bitwise and operator ANDs every bit in its integer
+		traited arguments.
+	</p></dd>
+</dl>
+
+#### Precedence 5:
+<dl>
+	<dt>x | y</dt>
+	<dd><p>
+		The bitwise or operator ORs every bit in its integer
+		traited arguments.
+	</p></dd>
+	<dt>x ^ y</dt>
+	<dd><p>
+		The bitwise xor operator XORs every bit in its integer
+		traited arguments.
+	</p></dd>
+</dl>
+
+#### Precedence 4:
+<dl>
+	<dt>x == y</dt>
+	<dd><p>
+		The equality operator checks if two operands are equal,
+		evaluating to a boolean.
+	</p></dd>
+	<dt>x != y</dt>
+	<dd><p>
+		The inequality operator checks if two operands are notequal,
+		evaluating to a boolean.
+	</p></dd>
+	<dt>x > y</dt>
+	<dd><p>
+		The greater-than operator checks if the numeric traited
+		operands follow a greater-than relation, evaluating to a
+		boolean.
+	</p></dd>
+	<dt>x >= y</dt>
+	<dd><p>
+		The greater-than-or-equal operator checks if the numeric
+		traited operands follow a greater-than-or-equal relation,
+		evaluating to a boolean.
+	</p></dd>
+	<dt>x < x</dt>
+	<dd><p>
+		The less-than operator checks if the numeric traited operands
+		follow a less-than relation, evaluating to a boolean.
+	</p></dd>
+	<dt>x <= x</dt>
+	<dd><p>
+		The less-than-or-equal operator checks if the numeric traited
+		operands follow a less-than-or-equal relation, evaluating to a
+		boolean.
+	</p></dd>
+</dl>
+
+#### Precedence 3:
+<dl>
+	<dt>x && y</dt>
+	<dd><p>
+		The logical and operator checks if both the left and right
+		side of the operator evaluate to true. If the left side
+		evaluates to false, then the right side is not evaluated.
+	</p></dd>
+</dl>
+
+#### Precedence 2:
+<dl>
+	<dt>x || y</dt>
+	<dd><p>
+		The logical or operator checks if one of the left and right
+		side of the operator evaluate to true. If the left side
+		evaluates to true, then the right side is not evaluated.
+	</p></dd>
+</dl>
+
+#### Precedence 1: Assignment Operators (Right associative)
+<dl>
+	<dt>x = y</dt> <dd>Fused assign</dd> <dt>x += y</dt> <dd>Fused add/assign</dd>
+	<dt>x -= y</dt> <dd>Fused sub/assign</dd>
+	<dt>x *= y</dt> <dd>Fused mul/assign</dd>
+	<dt>x /= y</dt> <dd>Fused div/assign</dd>
+	<dt>x %= y</dt> <dd>Fused mod/assign</dd>
+	<dt>x |= y</dt> <dd>Fused or/assign</dd>
+	<dt>x ^= y</dt> <dd>Fused xor/assign</dd>
+	<dt>x &= y</dt> <dd>Fused and/assign</dd>
+	<dt>x <<= y</dt> <dd>Fused shl/assign</dd>
+	<dt>x >>= y</dt> <dd>Fused shr/assign</dd>
+</dl>
+
+#### Precedence 0:
+<dl>
+	<dt>-> x</dt> <dd>Return expression</dd>
+</dl>
+
+Types In Detail
+----------------
+
+##### Primitive Types
+
+Myrddin has a number of types built in. All of them are below:
+
+<dl>
+	<dt> void </dt>
+	<dd> A void. This is both a type and a value. It occupies no space,
+	and can only ever hold the value `void`. The reason that it is a value
+	is so that generic functions do not need to treat void specially.</dd>
+	<dt> bool </dt>
+	<dd> boolean value, either `true` or `false`.</dd>
+	<dt> byte </dt>
+	<dd> 8 bit unsigned integer value. Similar to `uint8`, but typically
+	used to denote plain data. </dd>
+	<dt> int8, int16, int32, int64 </dt>
+	<dd> Signed N-bit complement 2's integers. </dd>
+	<dt> uint8, uint16, uint32, uint64 </dt>
+	<dd> unsigned N-bit integers. </dd>
+	<dt> char </dt>
+	<dd> unicode codepoint </dd>
+	<dt> flt32, flt64 </dt>
+	<dd> IEE754 floating point value </dd>
+</dl>
+
+#### Constructed Types
+
+You can create new types by with modifiers. The allowable modifiers are listed
+below:
+
+<dl>
+	<dt># (pointer)</dt>
+	<dd> Creates a pointer to the underlying type.</dd>
+	<dt>[:] (slice)</dt>
+	<dd> Creates a slice of the underlying type </dd>
+	<dt>[N] (array)</dt>
+	<dd> Creates an array with N elements of the underlying type </dd>
+</dl>
+
+#### Type Parameters and traits.
+
+Type parameters are variables for types. They are substituted for concrete
+types by the compiler as part of the compilation process. They are written
+`@t`, and may specify traits:
+
+	@a
+	@a::trait
+	@a::(trait,list)
+
+Generic types can be substituted with any type, and therefore, cannot rely
+on any internal details of the type. You cannot access members of a generic
+type, call functions that expect a more specific type, or do much else with
+it.
+
+Traits relax this limitation by adding constraints on the type. For example,
+if the built in trait `numeric` is required, then this signals to the compiler
+that the numeric operators are available for this type, and they may be used.
+
+Users may also define traits:
+
+	trait foo @a =
+		double : (x : @a -> @a)
+	;;
+
+In this case, if I had a function that required a generic type with the
+`foo` trait, then I would be able to call the `double` function on it:
+
+	generic f = {x : @a::foo
+		-> double(x)
+	}
+
+Generic types are only allowed as part of a generic declaration, or within a
+paremeterized type definition. If they are used outside of this context,
+then the compiler will flag this as an error.
+
+There are only a handful of built in traits. All, except for the iterable
+trait, cannot be implemented by user code in the current version of the
+language.
+
+<table>
+	<tr>
+		<th>Trait</th>
+		<th>Summary</th>
+		<th>Implemented On</th>
+	<tr>
+		<td>numeric</td>
+		<td>
+			Supports common numeric operations: 
+			<code>+, -, *, /</code>
+		</td>
+		<td>
+			byte, char, int,
+			int8, int32, int64,
+			uint8, uint32, uint64,
+			flt32, flt64
+		</td>
+	</tr>
+	<tr>
+		<td>integral</td>
+		<td>
+			Supports integer operators: 
+			<code>++, --, |, &, ^ </code>
+		</td>
+		<td>
+			byte, char, int,
+			int8, int32, int64,
+			uint8, uint32, uint64,
+		</td>
+	</tr>
+	<tr>
+		<td>floating</td>
+		<td>
+			Behaves like a float. Adds no operators,
+			but indicates that fractional values will
+			be preserved.
+		<td>
+		<td>
+			flt32, flt64
+		</td>
+	</tr>
+	<tr>
+		<td>indexable</td>
+		<td>Supports the index operator.</td>
+		<td>@a[:], @a[N]</td>
+	</tr>
+	<tr>
+		<td>sliceable</td>
+		<td>Supports the slice operator</td>
+		<td>@a[:], @a[N], @a#</td>
+	</tr>
+	<tr>
+		<td>function</td>
+		<td>Is a callable function.</td>
+		<td>(func : arg, ument : list -> ret)</td>
+	</tr>
+	<tr>
+		<td>iterable</td>
+		<td>Can be iterated over.</td>
+		<td>@a[N], @a[:], user types</td>
+	</tr>
+</table>
+
+
+The type for the iterable trait is:
+
+	trait iterable @iterator -> @iteratedvalue
+		__iternext__	: (iterp : @iterator#, valp : val# -> bool)
+		__iterfin__	: (iterp : @iterator#, valp : val# -> void)
+	;;
+
+The __iternext__ function takes a pointer to an interator, and a pointer
+to a value. If there are no values remaining, __iternext__ should return
+false. If there are values remaining, __iternext__ should return true.
+
+When __iternext__ is called, it should fill in the pointer to the value
+appropriately. It should also update the iterator state so that on the next
+call, it will return the next value.
+
+The __iterfin__ function should clean up any resources allocated by
+__iternext__.
+
+For example, if implementing a `byrange(lo, hi)` iterator, I might write:
+
+	type rangeiter = struct
+		idx	: int
+		stop	: int
+	;;
+
+	const byrange = {lo, hi
+		-> [.idx=lo, .stop=hi]
+	}
+
+	impl iterable rangeiter -> int =
+		__iternext__ = {iterp, valp
+			if iterp.idx == iterp.stop
+				-> false
+			;;
+			valp# = iterp.idx++
+			-> true
+		}
+		___iterfin__ = {iterp, valp
+			/* nothing to clean up */
+		}
+	;;
+
+#### Named Types
+
+Named types create a new type based on an existing one. The created type
+is a fresh type, and is not simply an alias. For example, in the standard
+library, we define a new type that can index any array, even if that array
+spans all of memory. It would be unwise to simply hard code a fixed size
+integer, so a new named type is defined:
+
+	type size = int64
+
+Named types can also take type parameters, which can be substituted into
+the defined type. For example, we may want to define a linked list. Since
+the algoritms for a linked list are identical regardless of what it would
+contain, it makes sense to abstract the data structure over the contained
+types:
+
+	type list(@elt) = struct
+		val	: @elt
+		next	: list(@elt)#
+	;;
+
+Type names live in a namespace from variable names. This means that a variable
+may share a name with a type without conflict.
+
+#### Struct Types
+
+Structs are used to lump together variables into a single unit. Unlike
+many other languages, they are anonymous. The named type facility, introduced
+above, is typically used to name these types.
+
+	struct
+		len : int
+		var2 : char
+		var3 : byte[:]
+	;;
+	
+In typical use, they are coupled with a named type for ergonomic reasons. Each
+element in a struct is called a 'member', and is accessed with the `.`
+operator:
+
+	var s : struct
+		val : int
+	;;
+
+	x = s.val
+
+The member operator also works on pointers to structs, implicitly
+dereferencing the struct. 
+
+	var sptr = &struct
+	sptr.val = 123
+
+#### Union Types
+
+Union types are used to select between one of many alternatives contained in a
+value. They can be thought of as a tag and value pair. The tag is sometimes
+referred to as a `constructor`, because of its use in creating a union from a
+value.  Like structs, typically unions are used in conjunction with a named
+type for convenience and readability.
+
+	union
+		`Tag1
+		`Tag2 int
+		`Tag3 int
+	;;
+
+Unions are constructed by prefixing a value of the appropriate type with the
+union tag. If the union has no value for the tag, then the tag stands on its
+own as a constructor.
+
+	uval = `Tag2 123
+	uval = `Tag1
+
+Once a value is put into a union, extracting it requires checking the tag in
+a pattern match. This pattern match can come from either a match statement
+or a loop pattern:
+
+	for `std.Some val in iterable
+
+or 
+
+	match x
+	| `Foo:
+	| `Bar x:
+	;;
+
+Types in unions may be repeated. Only the tag must be unique for each case.
+
+#### Tuple Types
+
+Tuples are defined with a parenthesized list of types. They store a number
+of values, similar to structs, but each member is anonymous. The main
+advantage of a tuple is that they are syntactically lighter, and allow
+for easily assigning or returning multiple values at once. Tuple types
+are written out as a parenthesized sequence of types:
+
+	(int, char, byte[:])
+
+They are created by parenthesizing a list of values:
+
+	tup = (1,'2', "three")
+
+If the tuple has only one element, a trailing comma is required to distinguish
+the tuple from an expression that was parenthesized for precedence:
+
+	one_element_tuple = (1 + 1,)
+
+Tuples can be destructured on assignment, with an lvalue tuple assigning
+to each member elementwise. For example, in the below code, `x`, `y`, and
+`z` will hold the first, second, and third elements of the tuple `tup`
+respectively:
+
+	(x, y, z) = tup
+
+
+#### Function Types
+
+Functions are defined using '(arg : type1, list : type2-> ret)'. For example,
+`(x : int -> void)` would denote a function type with a single argument `x`,
+and a void return type. Functions can also be variadic. This means that they
+can take any number of arguments through a final parameter of type `...`.
+For example, you could declare a put function as:
+
+	const put : (fmt : byte[:], args : ... -> void)
+
+and call it as:
+
+	put("{}, {}\n", 123, 456)
+
+The variadic arguments can be extracted and manipulated through the std.va*
+functions in libstd. These are [documented here](doc/libstd/varargs).
+
+
+Style
+-----
+
+Myrddin is a simple language, and is best served with a sparse style.
+Cleverness, while sometimes useful, is often best avoided. Complicated features
+are best use sparingly. The code should be written to minimize surprise
+for the reader.
+
+Avoid ceremony. Code should simply do what it says it does, without
+getters, factories and generators, design patterns written for the sake
+of following best practices. Some ceremony can be useful, but often
+it seems to be solutions in search of a problem.
+
+Many powerful features are like salt. When used sparingly, they make
+programming palatable, but heavy use leads to unpleasant results. Use
+function pointers, traits, and generics if they fit the problem, but
+stop first and think if there is a simpler way to write the code.
+
+Functon pointers and traits are especially harmful to readability when
+used heavily. Both break the one to one relationship between a name
+and the code that is is mapped to, making it harder to build a mental
+model of the code.
+
+Function names are ideally terse. The ideal function name is simply a
+`verb()`. For the same reason that people don't expand out words to the
+full dictionary definition, it's best to avoid expanding function names
+to full sentences. Sometmes, a name isn't sufficiently expressive, so
+this rule may be broken.
+
+Comments are useful, but should explain why a decision was made, rather
+than explaining what the code does. For example, this comment is very
+useful:
+
+	/*
+	tricky: we need power of two alignment, so we allocate double the
+	needed size, chop off the unaligned ends, and waste the address
+	space. With 64 bits of address space, this waste should not be
+	an issue. On a 32 bit system this would be a bad idea, and we
+	may want to revisit this.
+	*/
+	p = getmem(Slabsz *2)
+	s = (align((p : size), Slabsz) : slab#)
+
+However, if we merely commented what we were doing, this would be a waste
+of space:
+
+	/* allocate 2 * Slabsz bytes of memory */
+	p = getmem(Slabsz *2)
+	/* align the result to slabsz */
+	s = (align((p : size), Slabsz) : slab#)
+
+Comments that fail to explain the reasoning behind a decision should be
+deleted.
+
+Conventions
+-----------
+
+Functions, variables, and types are named with `lowercase` names. We prefer
+`oneword` names, but `snake_case` is also acceptable. Types follow the same
+convention.  Constants are named with `Initialupper` names.
+
+Names should be as short as clarity allows. Local variables in small functions
+have all the context needed to make sense of them. Global variables may need
+longer names.
+
+Use the standard result and option types. If a function may return a value,
+use `std.option(val)`. If a function returns an error, use `std.result(ret,
+err)`. If a function returns `void` on success, then the return type should be
+`std.result(void, errtype)`.
+
+Abstract lazily. While it makes sense to think about decoupling dependencies
+and slotting in multiple backends, it rarely pays to do the work before
+actually implementing that second backend. Hold off on abstraction until
+it is needed.
+
+Keep lines short. Break up long, complex expressions into smaller ones. If
+necessary, use temporary variables for intermediate results. Overly long
+lines are difficult for eyes to track, so work to eliminate them. 60
+characters of non-whitespace text is ideal.
+
+Avoid deep nesting. It is better to return early than to nest conditionals.
+If matching patterns, often it is better to extract the match into a temporary
+variable than to nest another match.
+
+Favour simplicity over efficiency until data suggests otherwise. If a fancy
+algorithm turns out to be warranted, a comment citing a reference that
+explains it in depth is a good idea.
+
+Tabs are for indentation. Spaces are for surrounding operators, particularly
+low precedence operators.
+
+Use block comments (/\* and \*/). Line comments (// comments) are for
+commenting out code during development.
+
+Name custom iterators `by<valuetype>`. For example, bio provides a line
+iterator and a char iterator for files. These are named, respectively,
+`bio.byline` and `bio.byfile`.
+
+Break these rules when it makes sense. They are suggestions, not laws.
+
+Getting Help and Contributing
+------------------------------
+
+The language is young, and many bugs still lurk in the libraries and
+compilers. Furthermore, many libraries still exist only in our minds and
+hearts, and would be made more usable through the act of implementation.
+
+Most discussion is on IRC, in #myrddin on irc.eigenstate.org. You can join
+using your favorite client, or online via [kiwi IRC](https://kiwiirc.com/client/irc.eigenstate.org/?nick=yournick#myrddin)
+
+We are also responsive on the [mailing list](list-subscribe).
+
