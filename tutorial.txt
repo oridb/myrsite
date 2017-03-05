@@ -133,7 +133,7 @@ arguments of the function must match the declared or inferred type of the
 function arguments.
 
 In our factorial program, the variable `x` is given the type `int64`. This
-means that when we all `factorial(n)`, the compiler realizes that the
+means that when we call `factorial(n)`, the compiler realizes that the
 `factorial` function must return an int64. Because the factorial function
 returns the variable `acc`, this means that it must also have the type
 `int64`. Thus, the type of `acc` is fixed, in spite of the lack of explicit
@@ -212,9 +212,9 @@ This program will output `"got 11"`. Each pattern in the match statement is
 checked against the value in sequence, and the first one that matches has its
 body executed. Here, 7 and 9 are not equal to 11, so their bodies are not
 executed. Hoever, a free name matches any value, so matching against `n`
-succeeds. Furthermore, Furthermore, the free name captures the value that it
-is being matched against, meaning that in the expression `std.put("got {}\n")`,
-the variable n evaluates to 11.
+succeeds. Additionally, the free name captures the value that it is being
+matched against, meaning that in the expression `std.put("got {}\n")`, the
+variable n evaluates to 11.
 
 This kind of matching can be applied to more than just integers. If `x` was
 assigned the tuple `(11, 33)`, then in the code below, the pattern `(11, n)`
@@ -471,7 +471,7 @@ only contain ints, as verified by the compiler when type checking. Similarly,
 the `byte[:]` stack can only contain `byte[:]`.
 
 The functions `stkpush`, `stkpop`, and `mkstk` are declared with the keyword
-`generic`. The `generic` keyword tels the compiler that they may contain type
+`generic`. The `generic` keyword indicates that they may contain type
 parameters in their signatures. This means that when `stkpush` is called with
 a stack of `fixstack(int)`, the type `@a` is substituded with `int`.
 Similarly, when called with `fixstack(byte[:])`, `@a` is substituted with
@@ -531,7 +531,7 @@ code into reusable libraries, available from a `use` statement.
 The library code is based on the stack example above, but repackaged so that
 it can be used from multiple places. We removed the `main` function, and added
 a `pkg` section to declare the exports. The `pkg` section contains the data
-type that we are providing, and the function prototypes that expose in order
+type that we are providing, and the function prototypes to expose in order
 to manipulate that type.
 
 There were also a few stylistic changes. Because the fully qualified name
@@ -952,7 +952,7 @@ uninterpreted.
 #### Arrays and Slices
 
 Array literals are written as comma separated sequences of values enclosed in
-square brackets. Optionally, indexes can be given to the initializes values.
+square brackets. Optionally, indexes can be given to the initialized values.
 If there are gaps in an indexed initializer sequence, then the missing values
 are zero initialized. For example:
 
