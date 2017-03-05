@@ -7,7 +7,7 @@ Myrddin 0.1: "The Sobbing Never Ends"
 -------------------------------------
 
 Myrddin 0.1 has been released. It's full of sharp edges and bugs. It's
-targeted towards people with a larger than average amount of self loathing.
+targeted towards people with a larger-than-average amount of self-loathing.
 All parts of the language and libraries are subject to change, breakage, and
 unbreakage.
 
@@ -32,7 +32,7 @@ install from source.
 #### From Git
 
 Myrddin is a young language. There are regular fixes to the language and
-libraries.,Therefore, it's probably a good idea to install it from git. To
+libraries. Therefore, it's probably a good idea to install it from Git. To
 install Myrddin from source:
 
 	git clone git://git.eigenstate.org/git/ori/mc.git
@@ -44,12 +44,12 @@ install Myrddin from source:
 #### Debian and Ubuntu
 
 Myrddin has been put into a `deb` package. Here is how you can install
-it on any Debian based distro:
+it on any Debian-based distro:
 
 	wget https://myrlang.org/pkg/myrddin_0.1.0_amd64.deb
 	dpkg -i myrddin_0.1.0_amd64.deb
 
-#### OSX
+#### OSX (macOS)
 
 There is a brew tap for OSX. If you have Homebrew installed,
 here is how you can use it to install Myrddin:
@@ -74,7 +74,7 @@ using:
 
 #### Plan 9
 
-Because mercurial is the preferred distribution mechanism for Plan 9, there
+Because Mercurial is the preferred distribution mechanism for Plan 9, there
 is a mirror of the repository on Bitbucket. To install it:
 
 	hg clone https://bitbucket.org/oridb/mc

@@ -21,17 +21,17 @@ categorized into the following subsections:
 - [OS Interfaces](libstd/os): Ask not what you can do for your OS, ask what
   your OS can do for you.
 - [File Handling](libstd/files): Sometimes data just wants to persist.
-- [Networking](libstd/networking): Communicating with other sytems isn't just
+- [Networking](libstd/networking): Communicating with other systems isn't just
   a fad.
 - [Command Line Parsing](libstd/cli): Makes it easy to parse options from the
-  commad line.
+  command line.
 - [Formatted Output](libstd/fmt): I/O. Without monads.
 - [Variadic Arguments](libstd/varargs): If you want ugly APIs, we've got you
   covered.
 - [Slice manipulation](libstd/slices): Some generic functions. Easy to write
   yourself, but a bit tedious.
-- [String Manipulation](libstd/strings): Some unicode aware string poking.
-- [Unicode](libstd/unicode): Wait a second, all languages aren't english?
+- [String Manipulation](libstd/strings): Some Unicode-aware string poking.
+- [Unicode](libstd/unicode): Wait a second, all languages aren't English?
 - [Pervasive Data Structures](libstd/datastruct): At least, I use them a lot.
   If you use them too, we've got you covered.
 - [Misc](libstd/misc): Random crap that doesn't really fit into a category.
@@ -40,7 +40,7 @@ categorized into the following subsections:
 
 Libsys is a direct interface to system calls provided by the platform. It is 
 a platform specific wrapper to the system. The documentation for the various
-system calls is largely deferrred to the systems themselves.
+system calls is largely deferred to the systems themselves.
 
 Any code that uses libsys will likely not be portable, but in many cases it
 is the only way to access system specific functionality, which may not be
@@ -51,13 +51,13 @@ implemented elsewhere.
 
 This is a buffered IO library. It allows for many small reads and writes to be
 done with better performance than writing a system call for each one. On top
-of that, it allows for more convenient interfaces to handle linewise or
+of that, it allows for more convenient interfaces to handle line-wise or
 delimited input, where peeking at the input stream may be necessary.
 
 ### [Libregex](libregex)
 
 This is a regex library, as implied by the name. It implements a simple but
-powerful regex syntax, with full unicode support. It also exposes the regex
+powerful regex syntax, with full Unicode support. It also exposes the regex
 syntax tree if needed, which is useful for code that wants custom regex
 handling, but wants to remain consistent with the regexes in hairless.
 
@@ -75,7 +75,7 @@ and parsing dates.
 
 ### [Libthread](libthread)
 
-Libthread is currently half assed and broken, and it doesn't work very well
+Libthread is currently half-assed and broken, and it doesn't work very well
 with libstd, which is not yet thread aware. This needs work.
 
 Utilities
