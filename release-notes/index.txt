@@ -21,11 +21,16 @@ spec](../spec) has also been revised and updated. It now has fewer lies.
 Additionally, our [library documentation](../doc/) has been fixed and updated,
 and should reflect the state of our libraries.
 
-
-
 ### Changes since the last version
 
 Yes.
+
+### Tarballs
+
+The release tarballs are on
+[https://myrlang.org/releases](https://myrlang.org/releases). The
+tag for the release is `r0.1.0`.
+
 
 ### Packages and Installation
 
