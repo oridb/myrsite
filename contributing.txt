@@ -22,8 +22,8 @@ Submitting Code
 
 The canonical code repository is on
 [https://git.eigenstate.org](https://git.eigenstate.org), but is
-mirrored on github. We will accept patches on the mailing lists,
-github pull requests, or snail mail (Please inquire in IRC for the
+mirrored on GitHub. We will accept patches on the mailing lists,
+GitHub pull requests, or snail mail (Please inquire in IRC for the
 address).
 
 Proposing Libraries for Inclusion

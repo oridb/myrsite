@@ -96,7 +96,7 @@ This program computes factorials.
 	}
 ```
 
-As before, it can be compiled and run with the following comand:
+As before, it can be compiled and run with the following command:
 
 	mbld -b factorial factorial.myr
 
@@ -137,7 +137,7 @@ means that when we call `factorial(n)`, the compiler realizes that the
 `factorial` function must return an int64. Because the factorial function
 returns the variable `acc`, this means that it must also have the type
 `int64`. Thus, the type of `acc` is fixed, in spite of the lack of explicit
-type declation. If we attempted to assign `acc` anything other than `int64`,
+type declaration. If we attempted to assign `acc` anything other than `int64`,
 the compiler would reject the program.
 
 For loops in Myrddin come in stepping form, and iterator form. The type of
@@ -151,7 +151,7 @@ loop iteration. The `test` expression is a boolean expression, and the loop is
 exited when it returns false.
 
 Iterator loops have the form `for pat in expr; body ;;`. These loops
-operate on an iterable expresson such as an array or a slice. Each time
+operate on an iterable expression such as an array or a slice. Each time
 that the loop runs, the next element in that iterable is stored into `pat`,
 and the body is run. This continues until all elements of the iterable are
 exhausted. Pat is actually not simply a variable, and may be a pattern.
@@ -211,7 +211,7 @@ const main = {
 This program will output `"got 11"`. Each pattern in the match statement is
 checked against the value in sequence, and the first one that matches has its
 body executed. Here, 7 and 9 are not equal to 11, so their bodies are not
-executed. Hoever, a free name matches any value, so matching against `n`
+executed. However, a free name matches any value, so matching against `n`
 succeeds. Additionally, the free name captures the value that it is being
 matched against, meaning that in the expression `std.put("got {}\n")`, the
 variable n evaluates to 11.
@@ -338,7 +338,7 @@ using a `++` expression.
 
 We start off by initializing all of our counters to zero, and creating a
 buffered wrapper around the `std.In` input stream. This buffered reader is
-used to efficiently read and decode whole unicode codepoints.
+used to efficiently read and decode whole Unicode codepoints.
 
 The main loop of the `wc` program matches over the result of `bio.getc`. The
 bio result type is generic, but for our purposes right now we can assume it is
@@ -356,7 +356,7 @@ reader has encountered an error reading the file. And a value of `` `bio.Ok
 char`` indicates that a single character was successfully read from the file.
 
 Refer to the [API documentation](http://myrlang.org/doc/libbio/) for the full
-details of what the buffered io library provides.
+details of what the buffered I/O library provides.
 
 The main loop first checks for errors, bailing out of the program with a
 failure if one is encountered. Then, it checks for the end of the file,
@@ -452,14 +452,14 @@ sized, holding at most 100 elements.
 	}
 ```
 
-User defined types are created using the `type` keyword. Type definitons
+User-defined types are created using the `type` keyword. Type definitions
 may define new types based on existing ones, and may optionally take
 parameters. For example:
 
 	type flags = int32
 	type slice(@a) = @a[:]
 
-The `flags` type is a definition based off of the `int32` type. This definiton
+The `flags` type is a definition based off of the `int32` type. This definition
 is a distinct type, and requires an explicit cast to be converted to an int32.
 The `slice(@a)` type is parameterized, taking a single type parameter `@a`.
 When this type is used, the type parameter must be passed in. This substitutes
@@ -752,7 +752,7 @@ after the first `--` seen in the input.
 Following these rules yourself isn't difficult, but standard library
 provides code that handles these cases for you.
 
-The example program above is incomplete: According to posix, `/bin/echo`
+The example program above is incomplete: According to POSIX, `/bin/echo`
 accepts a `-n` option which suppresses the final newline. For the sake of
 illustration, let's also extend it with a `-p prefix` argument, which adds a
 prefix to each value printed.
@@ -844,7 +844,7 @@ initializer is independent.
 	var w, x = 123, y : char = 'a', z = "string"
 
 Vars are mutable at runtime. The compiler prevents using them before they
-are intialized. If the address of a variable is passed to a function, the
+are initialized. If the address of a variable is passed to a function, the
 analysis assumes that they are being passed as an out parameter, and will
 be initialized by this function.
 
@@ -917,7 +917,7 @@ type with the `floating` and `numeric` traits.
 
 #### Characters
 
-Characters are quoted using single quotes. They represent a single unicode
+Characters are quoted using single quotes. They represent a single Unicode
 codepoint. Most characters can be written directly, but some are either
 syntactically significant, or would combine with the quotes. As a result,
 the following escape sequences are recognized:
@@ -935,17 +935,17 @@ the following escape sequences are recognized:
 	<tr><td>\u{codepoint}</td><td>Unicode codepoint</td></tr>
 </table>
 
-The codepoint value for unicode escapes is a hex encoded integer.
+The codepoint value for Unicode escapes is a hex encoded integer.
 
 #### Strings
 
 Strings are quoted using double quotes. They contain a byte slice, which
-is conventionally a utf8 encoded string. The language, however, enforces
+is conventionally a UTF-8 encoded string. The language, however, enforces
 no such constraint on the contents of a string, and leaves the interpretation
 up to the libraries using it.
 
 The escape codes allowed in strings are the same as those allowed in
-characters. Unicode escapes (`\u{codepoint}`) will be utf8-encoded. All other
+characters. Unicode escapes (`\u{codepoint}`) will be UTF-8 encoded. All other
 escape codes, including hex escapes, will be inserted into the byte sequence
 uninterpreted.
 
@@ -1036,7 +1036,7 @@ do.
 	</dd>
 	<dt>x[lo:hi]</dt> 
 	<dd><p>
-		The slice operator takes a view into another slicable type.
+		The slice operator takes a view into another sliceable type.
 		Slices may be taken off of arrays, other slices, or pointers.
 		Taking slices off of pointers is essential for writing lower
 		level code or binding with C, but it should be done with care,
@@ -1100,7 +1100,7 @@ do.
 	<dd><p>
 		The left shift operator shifts <code>x</code> left by
 		<code>y</code> bits. Shifting by more than the number of bits
-		in <code>x</code> can lead to implementation defined results,
+		in <code>x</code> can lead to implementation-defined results,
 		because different CPUs handle large shifts differently.
 	</p></dd>
 	<dt>x >> y</dt>
@@ -1120,9 +1120,9 @@ do.
 	<dt>x * y</dt>
 	<dd><p>
 		The multiplication operator multiplies two values using
-		the appropriate arithmetic for the type.  Complement 2s
+		the appropriate arithmetic for the type.  Two's complement
 		arithmetic is used for signed integers. Unsigned arithmetic is
-		used for unsigned integers. IEEE754 arithmetic is used for
+		used for unsigned integers. IEEE 754 arithmetic is used for
 		floating point values.
 	</p></dd>
 	<dt>x / y</dt> 
@@ -1184,7 +1184,7 @@ do.
 	</p></dd>
 	<dt>x != y</dt>
 	<dd><p>
-		The inequality operator checks if two operands are notequal,
+		The inequality operator checks if two operands are unequal,
 		evaluating to a boolean.
 	</p></dd>
 	<dt>x > y</dt>
@@ -1269,13 +1269,13 @@ Myrddin has a number of types built in. All of them are below:
 	<dd> 8 bit unsigned integer value. Similar to `uint8`, but typically
 	used to denote plain data. </dd>
 	<dt> int8, int16, int32, int64 </dt>
-	<dd> Signed N-bit complement 2's integers. </dd>
+	<dd> Signed N-bit two's complement integers. </dd>
 	<dt> uint8, uint16, uint32, uint64 </dt>
 	<dd> unsigned N-bit integers. </dd>
 	<dt> char </dt>
-	<dd> unicode codepoint </dd>
+	<dd> Unicode codepoint </dd>
 	<dt> flt32, flt64 </dt>
-	<dd> IEE754 floating point value </dd>
+	<dd> IEEE 754 floating point value </dd>
 </dl>
 
 #### Constructed Types
@@ -1403,7 +1403,7 @@ The type for the iterable trait is:
 		__iterfin__	: (iterp : @iterator#, valp : val# -> void)
 	;;
 
-The __iternext__ function takes a pointer to an interator, and a pointer
+The __iternext__ function takes a pointer to an iterator, and a pointer
 to a value. If there are no values remaining, __iternext__ should return
 false. If there are values remaining, __iternext__ should return true.
 
@@ -1450,7 +1450,7 @@ integer, so a new named type is defined:
 
 Named types can also take type parameters, which can be substituted into
 the defined type. For example, we may want to define a linked list. Since
-the algoritms for a linked list are identical regardless of what it would
+the algorithms for a linked list are identical regardless of what it would
 contain, it makes sense to abstract the data structure over the contained
 types:
 
@@ -1546,7 +1546,7 @@ the tuple from an expression that was parenthesized for precedence:
 	one_element_tuple = (1 + 1,)
 
 Tuples can be destructured on assignment, with an lvalue tuple assigning
-to each member elementwise. For example, in the below code, `x`, `y`, and
+to each member element-wise. For example, in the below code, `x`, `y`, and
 `z` will hold the first, second, and third elements of the tuple `tup`
 respectively:
 
@@ -1589,15 +1589,15 @@ programming palatable, but heavy use leads to unpleasant results. Use
 function pointers, traits, and generics if they fit the problem, but
 stop first and think if there is a simpler way to write the code.
 
-Functon pointers and traits are especially harmful to readability when
-used heavily. Both break the one to one relationship between a name
+Function pointers and traits are especially harmful to readability when
+used heavily. Both break the one-to-one relationship between a name
 and the code that is is mapped to, making it harder to build a mental
 model of the code.
 
 Function names are ideally terse. The ideal function name is simply a
 `verb()`. For the same reason that people don't expand out words to the
 full dictionary definition, it's best to avoid expanding function names
-to full sentences. Sometmes, a name isn't sufficiently expressive, so
+to full sentences. Sometimes, a name isn't sufficiently expressive, so
 this rule may be broken.
 
 Comments are useful, but should explain why a decision was made, rather
