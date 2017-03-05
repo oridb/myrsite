@@ -190,15 +190,15 @@ strong, with no implicit conversions between them.
    `void`      | A void type
    `bool`      | A boolean type
    `char`      | A single Unicode codepoint
-   `int8`      | A 8-bit integer
-   `int16`     | A 16-bit integer
-   `int32`     | A 32-bit integer
-   `int64`     | A 64-bit integer
+   `int8`      | A 8 bit integer
+   `int16`     | A 16 bit integer
+   `int32`     | A 32 bit integer
+   `int64`     | A 64 bit integer
    `int`       | A native integer, 32 bits or greater
-   `uint8`     | A 8-bit unsigned integer
-   `uint16`    | A 16-bit unsigned integer
-   `uint32`    | A 32-bit unsigned integer
-   `uint64`    | A 64-bit unsigned integer
+   `uint8`     | A 8 bit unsigned integer
+   `uint16`    | A 16 bit unsigned integer
+   `uint32`    | A 32 bit unsigned integer
+   `uint64`    | A 64 bit unsigned integer
    `uint`      | A native unsigned integer, 32 bits or greater
    `flt32`     | A single precision floating point
    `flt64`     | A double precision floating point
@@ -487,7 +487,7 @@ libcrypto, and libdate. Other libraries are in the works.
 would find useful.  It's a bit of a grab bag, but it's useful.
 
 [Libbio](doc/libbio) handles buffered IO, allowing you to do fancy
-things with input and output, line reading line-wise, or reading up to
+things with input and output, line reading linewise, or reading up to
 delimiters.
 
 [Libregex](doc/libregex) handles regexes. It implements a simple but powerful regex syntax,

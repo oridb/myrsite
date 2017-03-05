@@ -1546,7 +1546,7 @@ the tuple from an expression that was parenthesized for precedence:
 	one_element_tuple = (1 + 1,)
 
 Tuples can be destructured on assignment, with an lvalue tuple assigning
-to each member element-wise. For example, in the below code, `x`, `y`, and
+to each member elementwise. For example, in the below code, `x`, `y`, and
 `z` will hold the first, second, and third elements of the tuple `tup`
 respectively:
 
@@ -1597,8 +1597,8 @@ model of the code.
 Function names are ideally terse. The ideal function name is simply a
 `verb()`. For the same reason that people don't expand out words to the
 full dictionary definition, it's best to avoid expanding function names
-to full sentences. Sometimes, a name isn't sufficiently expressive, so
-this rule may be broken.
+to full sentences. Sometimes a single verb isn't sufficiently expressive.
+Use your judgement here.
 
 Comments are useful, but should explain why a decision was made, rather
 than explaining what the code does. For example, this comment is very

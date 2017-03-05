@@ -51,7 +51,7 @@ implemented elsewhere.
 
 This is a buffered IO library. It allows for many small reads and writes to be
 done with better performance than writing a system call for each one. On top
-of that, it allows for more convenient interfaces to handle line-wise or
+of that, it allows for more convenient interfaces to handle linewise or
 delimited input, where peeking at the input stream may be necessary.
 
 ### [Libregex](libregex)

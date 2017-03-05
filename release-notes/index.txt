@@ -7,7 +7,7 @@ Myrddin 0.1: "The Sobbing Never Ends"
 -------------------------------------
 
 Myrddin 0.1 has been released. It's full of sharp edges and bugs. It's
-targeted towards people with a larger-than-average amount of self-loathing.
+targeted towards people with a larger than average amount of self loathing.
 All parts of the language and libraries are subject to change, breakage, and
 unbreakage.
 
@@ -44,12 +44,12 @@ install Myrddin from source:
 #### Debian and Ubuntu
 
 Myrddin has been put into a `deb` package. Here is how you can install
-it on any Debian-based distro:
+it on any Debian based distro:
 
 	wget https://myrlang.org/pkg/myrddin_0.1.0_amd64.deb
 	dpkg -i myrddin_0.1.0_amd64.deb
 
-#### OSX (macOS)
+#### Mac OSX
 
 There is a brew tap for OSX. If you have Homebrew installed,
 here is how you can use it to install Myrddin:
