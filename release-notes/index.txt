@@ -1,0 +1,99 @@
+{
+	title: Releases
+	description: Releases
+}
+
+Myrddin 0.1: "The Sobbing Never Ends"
+-------------------------------------
+
+Myrddin 0.1 has been released. It's full of sharp edges and bugs. It's
+targeted towards people with a larger than average amount of self loathing.
+All parts of the language and libraries are subject to change, breakage, and
+unbreakage.
+
+The 0.1 release comes with an amd64 compiler. The supported platforms are
+Linux, OSX, FreeBSD, OpenBSD, and Plan9front.
+
+To get started, check out the [tutorial](../tutorial). The [language
+spec](../spec) has also been revised and updated. It now has fewer lies.
+
+Additionally, our [library documentation](../doc/) has been fixed and updated,
+and should reflect the state of our libraries.
+
+### Changes since the last version
+
+Yes.
+
+### Packages and Installation
+
+Myrddin 0.1 has been packaged for supported systems. It is also easy to
+install from source.
+
+#### From Git
+
+Myrddin is a young language. There are regular fixes to the language and
+libraries.,Therefore, it's probably a good idea to install it from git. To
+install Myrddin from source:
+
+	git clone git://git.eigenstate.org/git/ori/mc.git
+	cd mc
+	./configure --prefix=/usr
+	make	# gmake on BSD systems
+	sudo make install
+
+#### Debian and Ubuntu
+
+Myrddin has been put into a `deb` package. Here is how you can install
+it on any Debian based distro:
+
+	wget https://myrlang.org/pkg/myrddin_0.1.0_amd64.deb
+	dpkg -i myrddin_0.1.0_amd64.deb
+
+#### OSX
+
+There is a brew tap for OSX. If you have Homebrew installed,
+here is how you can use it to install Myrddin:
+
+	brew install oridb/myrddin/myrddin
+
+#### FreeBSD
+
+There is an external makefile for the ports tree. Here is how you
+can use it to install Myrddin via the FreeBSD package system:
+
+	git clone git://git.eigenstate.org/git/ori/freebsd-myrddin
+	cd freebsd-myrddin/myrddin
+	make install
+
+#### OpenBSD
+
+The port for Myrddin is in the OpenBSD ports tree. You can install it
+using:
+
+	pkg_add myrddin
+
+#### Plan 9
+
+Because mercurial is the preferred distribution mechanism for Plan 9, there
+is a mirror of the repository on Bitbucket. To install it:
+
+	hg clone https://bitbucket.org/oridb/mc
+	cd mc
+	mk
+	mk install
+
+This release has been tested on 9front. In theory it should work on
+any amd64 version of Plan 9 out of the box.
+
+### Future Releases
+
+Myrddin is aiming to have releases every 6 months. Whatever features
+are ready by then will be shipped.
+
+For 0.2, one major goal is to have a [QBE](https://c9x.me/compile/)
+backend. This will significantly improve the performance of our generated
+code, and make it easier to interface with C.
+
+Libraries will continue to be an ongoing theme. Having libraries is often
+the difference between feasibly using a language for a project, or picking
+something with fewer wheels to reinvent.
