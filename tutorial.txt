@@ -1105,7 +1105,7 @@ do.
 	</p></dd>
 	<dt>x >> y</dt>
 	<dd>
-		<p>The left shift operator shifts <code>x/code> right by
+		<p>The left shift operator shifts <code>x</code> right by
 		<code>y</code> bits. Shifting by more than the number of bits
 		in <code>x</code> can lead to strange results.</p>
 
