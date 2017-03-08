@@ -267,17 +267,18 @@ Myrddin has a simple package system, doing away with headers. Myrddin source
 files can define the functions they export by including a package section,
 which lists the exported symbols.
 
-To use a package installed into the compiler search path, add use package_name
-statement to your code. This will allow you to access 'package_name.symbol'.
+To use a package installed into the compiler search path, add a `use`
+statement, like `use package_name`, to your code. This will allow you to access
+`package_name.symbol`.
 
 To import symbols from a file within the same directory as your source code,
-add use "filename.use". The package name that is brought in to your namespace
-is determined by the 'pkg' spec within the source file being imported.
+add `use "filename.use"`. The package name that is brought in to your namespace
+is determined by the `pkg` spec within the source file being imported.
 
 If two use statements load the same package (e.g., two local files export symbols
-for the 'foo' package), then the packages will be merged.
+for the `foo` package), then the packages will be merged.
 
-To create your own package, add a pkg block to it. While it's not necessarily,
+To create your own package, add a `pkg` block to it. While it's not necessarily,
 stylistically, the exported symbols should have their types fully specified.
 
 An example of a 3 source file program that uses a system import is given here.
