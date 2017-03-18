@@ -4,6 +4,12 @@
 	date: March 5 2017
 }
 
+Myrddin 0.1.1: "Shame. Shame. Shame."
+-------------------------------------
+
+Myrddin 0.1.1 has been released. It is nearly identical, but compiles
+problem-free on all tested systems.
+
 Myrddin 0.1: "The Sobbing Never Ends"
 -------------------------------------
 

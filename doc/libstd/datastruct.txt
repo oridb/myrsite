@@ -36,6 +36,7 @@ Data Structures
             const bsintersect	: (a : bitset#, b : bitset# -> void)
             const bsunion	: (a : bitset#, b : bitset# -> void)
             const bseq	: (a : bitset#, b : bitset# -> bool)
+            const bshash	: (a : bitset# -> uint32)
             const bsissubset	: (a : bitset#, b : bitset# -> bool)
             const bsclear	: (bs : bitset# -> bitset#)
 
@@ -169,6 +170,12 @@ Takes the set union between `a` and `b`, storing the result back into `a`.
 
 Tests whether the bitsets `a` and `b` contain the same elements, returning
 `true` if they are equivalent and `false` otherwise.
+
+    const bshash	: (a : bitset# -> uint32)
+
+Returns a hash of bitset `a`. The hash is identical for two bitsets that
+compare equal with `std.bseq`. This hash function is suitable for use
+with libstd hash tables.
 
     const bsissubset	: (a : bitset#, b : bitset# -> bool)
 
