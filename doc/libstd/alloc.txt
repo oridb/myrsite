@@ -90,7 +90,7 @@ use std
 type mytype =
 	a : int
 	b : char
-	c : byte[:[
+	c : byte[:]
 ;;
 
 const main = {
