@@ -97,7 +97,7 @@ It contains the following fields:
     <p><code>"output inputs..."</code></p>
 
     <p>When the help string is generated, the output would look like:</p>
-    <p><code>myprog [-o option] output inputs...</code></p>
+    <p><code>myprog [-h?] [-o option] output inputs...</code></p>
     </dd>
 
     <dt><code>minargs</code></dt>
@@ -113,8 +113,8 @@ It contains the following fields:
     <dd>
     <p>This argument limits the maximum number of arguments that the program
     will accept without error. If the program takes at most 1 argument, for
-    example, example, then this value should be set to 3. Just like
-    <code>maxargs</code>, this does not count flags or the program name.
+    example, example, then this value should be set to 1. Just like
+    <code>minargs</code>, this does not count flags or the program name.
     </p>
     <p> If set to 0, this value is ignored. This is the default value.</p>
     </dd>
