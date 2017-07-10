@@ -93,8 +93,8 @@ The directory struct represents the current state of a directory walk.
 These are a set of values which describe from where to seek within the file.
 
     /* open options */
-    const Oread  	: fdopt 
-    const Owrite  	: fdopt 
+    const Ordonly  	: fdopt
+    const Owronly  	: fdopt
     const Ordwr    	: fdopt 
     const Otrunc   	: fdopt 
     const Ocreat   	: fdopt 
@@ -103,8 +103,8 @@ These are a set of options that are passed to the open variants describing
 what mode to open the file in. These are bit masks which be OR'ed together to
 combine them.
 
-`Oread` and `Owrite` request permission to read and write the file, respectively.
-`Ordwr` is a convenience flag which ors read and write together. `Otrunc`
+`Ordonly` and `Owronly` request permission to read and write the file,
+respectively. `Ordwr` requests both read and write permissions. `Otrunc`
 indicates that the file should be truncated to zero bytes in length before it
 is opened. `Ocreat` indicates that the file should be created if it does not
 exist instead of returning an error. `Odir` indicates that this file should
@@ -184,7 +184,7 @@ Files
 
 Open opens the file `path` for I/O according to the flags reqeusted in `opts`,
 and returns a result containing the file descriptor or error. The mode is a
-combination of the modes specified above: `Oread`,   `Owrite`, `Ordwr`,
+combination of the modes specified above: `Ordonly`,   `Owronly`, `Ordwr`,
 `Otrunc`, or `Ocreat`.
 
 Openmode is similar to open, however, if Ocreate is passed, it the file
