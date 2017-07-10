@@ -70,8 +70,8 @@ from the original ini file are not currently preserved.
 Get and getv act like `std.hget` and `std.htgetv`. They will retrieve an entry
 from the ini file.
 
-Htget will return `\`std.Some val` if the key is present in the given section,
-or `\`std.None` if there is no value present in the ini file. Htgetv will
+Htget will return `` `std.Some val`` if the key is present in the given section,
+or `` `std.None`` if there is no value present in the ini file. Htgetv will
 return the default value `val` passed to it if the key is not found.
 
 For a key that is outside of a section, the empty string (`""`) should be

@@ -163,8 +163,8 @@ Returns: Errno on failure. On success, the function does not return.
 
 The `getenv` function looks up a variable from the process environment.
 
-Returns: `\`Some env\_val` for an environment variable that is present in the
-environment, or `\`None` if it is not present.
+Returns: `` `Some env_val`` for an environment variable that is present in the
+environment, or `` `None`` if it is not present.
 
     const getenvv :	(name : byte[:], default : byte[:] -> byte[:])
 
@@ -197,7 +197,7 @@ been called on the process id of the child process, then this function
 will return a status immediately.
 
 If the child process has already been waited on, calling this function is
-invalid, and it should return a `\`Waiterror`.
+invalid, and it should return a `` `Waiterror``.
 
 Returns: A waitstatus, telling you if the process crashed, exited with
 failure, exited with success, or whether the wait call was invalid.

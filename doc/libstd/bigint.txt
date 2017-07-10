@@ -109,7 +109,7 @@ No new values are allocated.
     const bigparse	: (s : byte[:] -> option(bigint#))
 
 Bigparse converts a string representation of an integer into a bigint,
-returning `\`Some val` if the string is a valid bigint, or `\`None` otherwise.
+returning `` `Some val`` if the string is a valid bigint, or `` `None`` otherwise.
 
 Decimal, hex, octal, and binary biginteger strings are recognized. Decimal
 is the default, and is recognized unprefixed. Hex must be prefixed with `0x`,
@@ -143,7 +143,7 @@ Bigeq compares whether two integers are equal.
     const bigcmp	: (a : bigint#, b : bigint# -> order)
 
 Bigcmp compares two big integers, and returns the ordering between them.
-`\`Before` if a < b, `\`After` if a > b, and `\`Equal` if the two values
+`` `Before`` if a < b, `` `After`` if a > b, and `` `Equal`` if the two values
 are equal.
 
     const bigadd	: (a : bigint#, b : bigint# -> bigint#)

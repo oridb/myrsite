@@ -253,7 +253,7 @@ struct literal notation `[.memb=val, .other=val]`
                              
 Unions in Myrddin are closer to algebraic data types in ML than they are to C unions.
 The union knows the value that is currently being held in it, and is constructed
-and matched with a tag. To construct a union, the `\`Tag val` syntax is used
+and matched with a tag. To construct a union, the `` `Tag val`` syntax is used
 
     union
            `Tag1 t1

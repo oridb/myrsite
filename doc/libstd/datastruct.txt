@@ -83,8 +83,8 @@ Removes a key value pair from the hash table `ht`.
 
     generic htget	: (ht : htab(@k, @v)#, k : @k -> option(@v))
 
-Looks up a value from a hash table, returning `\`Some v` if the key is
-present, or `\`None` if the value is not present.
+Looks up a value from a hash table, returning `` `Some v`` if the key is
+present, or `` `None`` if the value is not present.
 
     generic htgetv	: (ht : htab(@k, @v)#, k : @k, fallback : @v-> @v)
 
@@ -94,7 +94,7 @@ present, or `fallback` if it is not present.
     generic hthas	: (ht : htab(@k, @v)#, k : @k -> bool)
 
 Looks up a value from a hash table, returning `true` if the key is
-present, or `falase` if the value is not present.
+present, or `false` if the value is not present.
 
     generic htkeys	: (ht : htab(@k, @v)# -> @k[:])
 

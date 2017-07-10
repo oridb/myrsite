@@ -143,7 +143,7 @@ Strfind finds the first occurrence of the string `needle` within the string
 `haystack`.Strrfind is similar, but it finds the last occurrence of `needle`
 within `haystack`.
 
-Returns: `\`std.Some index` if needle is found within haystack, or `\`None`
+Returns: `` `std.Some index`` if needle is found within haystack, or `` `None``
 otherwise.
 
     const strhas	: (haystack : byte[:], needle : byte[:]	-> bool)

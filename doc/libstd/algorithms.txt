@@ -71,21 +71,21 @@ moved.
     generic lsearch	: (sl : @t[:], val : @t, cmp : (a : @t, b : @t -> order) -> option(@idx::(integral,numeric)))
 
 Performs a linear search for a value using the comparison predicate `cmp`. The
-slice is walked in order until the first value where `cmp` returns `\`Equal`.
+slice is walked in order until the first value where `cmp` returns `` `Equal``.
 
-Returns: `\`Some idx`, or `\`None` if the value is not present.
+Returns: `` `Some idx``, or `` `None`` if the value is not present.
 
     generic bsearch	: (sl : @t[:], val : @t, cmp : (a : @t, b : @t -> order) -> option(@idx::(integral,numeric)))
 
 Performs a binary search for a value using the comparison predicate `cmp`. The
 input slice `sl` must be sorted according to the comparsion function `cmp`
 such that for a value at index `idx`, the comparison `cmp(sl[idx - 1],
-sl[idx])` must return either `\`Before` or `\`Equal`.
+sl[idx])` must return either `` `Before`` or `` `Equal``.
 
 If there are multiple equal copies value within a list, the index retuned is
 not defined.
 
-Returns: `\`Some idx`, or `\`None` if the value is not present.
+Returns: `` `Some idx``, or `` `None`` if the value is not present.
 
     generic swap	: (a : @a#, b : @a# -> void)
 

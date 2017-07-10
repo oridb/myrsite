@@ -123,15 +123,15 @@ The `diropen` function opens a path as a directory, and returns a pointer
 to an object which tracks the state of the directory, allowing for reading
 file names one by one from this directory.
 
-Returns: Either a directory wrapped up in the `\`Ok` branch of the result,
-or a string describing the failure reason in the `\`Err` branch.
+Returns: Either a directory wrapped up in the `` `Ok`` branch of the result,
+or a string describing the failure reason in the `` `Err`` branch.
 
     const dirread	: (d : dir# -> std.option(byte[:]))
 
 The `dirread` reads a single entry from the directory, opened with `diropen`,
 returning it as a string. The returned string must be freed by the caller.
 
-Returns `\`Some entry`, or `\`None` at the end of the directory.
+Returns `` `Some entry``, or `` `None`` at the end of the directory.
 
     const dirclose	: (d : dir# -> void)
 

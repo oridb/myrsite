@@ -89,19 +89,19 @@ IP Parsing
     const ipparse	: (ip : byte[:]	-> option(netaddr))
 
 Ipparse will parse an IP address. This will recognize either V4 or V6
-addresses, and `\`Some \`Ipv4 bits or `\`Some \`Ipv6 bits` as appropriate, or
-`\`None` if the address can't be parsed.
+addresses, and `` `Some `Ipv4 bits`` or `` `Some `Ipv6 bits`` as appropriate, or
+`` `None`` if the address can't be parsed.
 
     const ip4parse	: (ip : byte[:] -> option(netaddr))
 
 Parses an Ipv4 address from the string `ip`. The syntax expected is dotted
-quad notation. Returns `\` Some \`Ipv4 bits` if the address parses successfully, or
-`\`None` if parsing fails.
+quad notation. Returns `` `Some `Ipv4 bits`` if the address parses successfully, or
+`` `None`` if parsing fails.
 
     const ip6parse	: (ip : byte[:] -> option(netaddr))
 
-Parses an Ipv6 address from the string `ip`. Returns `\` Some \`Ipv4 bits` if
-the address parses successfully, or `\`None` if parsing fails. Zones are
+Parses an Ipv6 address from the string `ip`. Returns `` `Some `Ipv4 bits`` if
+the address parses successfully, or `` `None`` if parsing fails. Zones are
 currently not supported. This is a bug.
 
 

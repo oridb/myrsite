@@ -98,8 +98,8 @@ program goes away.
     generic get : (v : option(@a) -> @a)
 
 Try and get both return the value from the successful branch of their type:
-`try` returns the value contained in `\`std.Ok`, and `get` returns the value
-in `\`std.Some`.
+`try` returns the value contained in `` `std.Ok``, and `get` returns the value
+in `` `std.Some``.
 
 If this does not match the union, a diagnostic message is printed and the
 program is aborted.
@@ -108,9 +108,9 @@ program is aborted.
     generic getv : (v : option(@a), default : @a -> @a)
 
 Try and get both return the value from the successful branch of their type:
-`try` returns the value contained in `\`std.Ok`, and `get` returns the value
-in `\`std.Some`.
+`try` returns the value contained in `` `std.Ok``, and `get` returns the value
+in `` `std.Some``.
 
 If this does not match the union, the default value is returned to the
-caller, as though the type had contained `\`Some default` or `\`Ok default` 
+caller, as though the type had contained `` `Some default`` or `` `Ok default``.
 
