@@ -217,7 +217,7 @@ errors if given any.
         cmd = std.optparse(args, &[
                 .argdesc = "vals",
         ])
-        for arg in cmd.args
+        for arg : cmd.args
                 std.put("arg: {}\n", arg)
         ;;
     }
@@ -250,7 +250,7 @@ mbld.
 	])
 	targname = ""
 	tags = [][:]
-	for opt in cmd.opts
+	for opt : cmd.opts
 		match opt
 		| ('t', ""):	dumponly = true
 		| ('S', ""):	bld.opt_genasm = true
@@ -281,7 +281,7 @@ mbld.
 		;;
 	;;
 
-        for arg in cmd.args
+        for arg : cmd.args
                 /* build stuff */
         ;;
     }

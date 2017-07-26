@@ -9,7 +9,7 @@ Myrddin
 ```{runmyr introloop}
 use std
 const main = {
-        for x in [(1, "let's"), (2, "get"), (3, "started")]
+        for x : [(1, "let's"), (2, "get"), (3, "started")]
                 std.put("{}\n", x)
         ;;
 }
@@ -106,7 +106,7 @@ use std
 
 const main = {args : byte[:][:] /* a slice of byte slices */
         std.put("Hello-世界\n")     /* prints to stdout */
-        for a in args
+        for a : args
                 std.put("arg = {}\n", a)
         ;;
 } 
@@ -159,7 +159,7 @@ Semicolons and newlines are interchangeable through all Myrddin code.
 Invokes the function 'std.put', which came from the 'std' package, printing to
 standard output. The string is encoded in utf8.
 
-        for a in args
+        for a : args
                 std.put("arg {} = {}\n", i, args[i])
         ;;
 

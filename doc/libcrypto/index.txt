@@ -98,7 +98,7 @@ const main = {
 
         /* basic hashing of a buffer */
         hash = crypto.md5("hello world!\n")
-        for b in hash
+        for b : hash
                 std.put("{x}", b)
         ;;
         std.put("\n")
@@ -122,7 +122,7 @@ const main = {
         crypto.sha256add(&st, "even more bytes!")
         hash = crypto.sha256fin(&st)
 
-        for b in hash
+        for b : hash
                 std.put("{x}", b)
         ;;
         std.put("\n")
