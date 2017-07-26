@@ -39,6 +39,7 @@ Data Structures
             const bshash	: (a : bitset# -> uint32)
             const bsissubset	: (a : bitset#, b : bitset# -> bool)
             const bsclear	: (bs : bitset# -> bitset#)
+	    const bscount	: (a : bitset# -> size)
 
             /* prepackaged hashing and equality tests */
             const strhash	: (s : byte[:]	-> uint32)
@@ -48,6 +49,10 @@ Data Structures
             generic inthash	: (v : @a::(integral,numeric)	-> uint32)
             generic inteq	: (a : @a::(integral,numeric), b : @a::(integral,numeric) -> bool)
             generic slhash	: (sl : @a[:] -> uint32)
+	    
+	    type bsiter
+	    impl iterable bsiter -> size
+	    const bybsvalue	: (bs : bitset# -> bsiter)
     ;;
 
 Hash Tables
@@ -186,3 +191,7 @@ Tests whether every element of `b` is also within `a`, returning `true` if
 
 Zeros every value within the bitset `bs`. This is equivalent to iterating
 through it and deleting every element.
+
+    const bybsiter	: (bs : bitset -> bsiter)
+
+Returns a bitset iterator that can be used in for loops.
