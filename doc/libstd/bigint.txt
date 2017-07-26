@@ -183,7 +183,6 @@ Examples
 --------
 
 ```{runmyr bigcmp}
-
 use std
 use bio
 
@@ -194,9 +193,9 @@ const main = {args : byte[:][:]
         b = try(std.bigparse("0x75f3_fffc_1123_5ce4"))
 
         match std.bigcmp(a, b)
-        | `std.Equal:   "{} is equal to {}\n", a, b)
-        | `std.Before:  "{} is less than {}\n", a, b)
-        | `std.After:  "{} is greater than {}\n", a, b)
+        | `std.Equal:	std.put("{} is equal to {}\n", a, b)
+        | `std.Before:	std.put("{} is less than {}\n", a, b)
+        | `std.After:	std.put("{} is greater than {}\n", a, b)
         ;;
 
         std.bigmul(a, b)
