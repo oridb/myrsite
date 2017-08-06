@@ -33,6 +33,7 @@ categorized into the following subsections:
 - [String Manipulation](libstd/strings): Some Unicode-aware string poking.
 - [Unicode](libstd/unicode): Wait a second, all languages aren't English?
 - [Pervasive Data Structures](libstd/datastruct): At least, I use them a lot.
+- [Big Integers](libstd/bigint): Big integers. They're useful for some things.
   If you use them too, we've got you covered.
 - [Misc](libstd/misc): Random crap that doesn't really fit into a category.
 
