@@ -39,6 +39,7 @@ File Handling
             const open	: (path : byte[:], opts : fdopt -> std.result(fd, errno))
             const openmode	: (path : byte[:], opts : fdopt, mode : int64 -> std.result(fd, errno))
             const mktemp	: (base : byte[:], opts : fdopt, mode : int64 -> std.result((fd, byte[:]), errno)
+            const mkdtemp	: (base : byte[:], mode : int64 -> std.result(byte[:], errno)
             const close		: (fd : fd -> int64)
             const creat		: (path : byte[:], mode : int64 -> fd)
             const read		: (fd : fd, buf : byte[:] -> std.result(size, errno))
@@ -205,6 +206,15 @@ opened and path generated, or an error describing the failure. The path
 is allocated with `std.slalloc`, and must be freed by the caller using
 `std.slfree`. The file descriptor must be closed as ususal.
 
+    const mkdtemp : (base : byte[:], mode : int64 -> std.result(byte[:], errno)
+
+`mkdtemp` is to `mkdir` as `mktemp` is to `openmode`. Like `mktemp`, it
+generates a unique name for a new directory in temporary storage by
+appending a random string to the base name `base`.
+
+Returns: Either a successful result containing the path generated (in this case,
+the directory now exists), or an error describing the failure. The path is
+allocated with `std.slalloc`, and must be freed by the caller using `std.slfree`.
 
     const close	: (fd : fd -> void)
 
