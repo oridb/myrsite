@@ -6,18 +6,22 @@
 Libtestr
 ---------
 
-    pkg testr =
-            type ctx
-            
-            type spec = struct
-            	name	: byte[:]
-            	fn	: (ctx : ctx# -> void)
-            ;;
-            
-            const run	: (specs : spec[:] -> void)
-            const ok	: (ctx : ctx# -> void)
-            const fail	: (ctx : ctx#, msg : byte[:] -> void)
-    ;;
+	pkg testr =
+		type ctx
+		
+		type spec = struct
+		name	: byte[:]
+		fn	: (ctx : ctx# -> void)
+		;;
+		
+		/* test runner */
+		const run	: (specs : spec[:] -> void)
+
+		/* assertions */
+		const ok	: (ctx : ctx# -> void)
+		const fail	: (ctx : ctx#, msg : byte[:], args : ... -> void)
+		const check	: (ctx : ctx#, cond : bool, msg : byte[:], args : ... -> void)
+	;;
 
 Overview
 --------
@@ -41,24 +45,58 @@ of the set of tests currently running.
 
 The specification for a single test. Contains the name
 of the test being run, and the code used to execute it.
+The function takes a context, which is used to 
 
-Mutex.
-
-Functions: Mutexes
-------------------
+Runner
+------
             
     const run	: (specs : spec[:] -> void)
 
 Runs a sequence of tests, recording the state of the test
 and outputting an appropriate log for mtest to consume.
 
+Aserts
+------
+
     const ok	: (ctx : ctx# -> void)
 
 Records a test success. It does not leave the current
 scope.
 
-    const fail	: (ctx : ctx#, msg : byte[:] -> void)
+    const fail	: (ctx : ctx#, msg : byte[:] args : ... -> void)
 
 Records a test failure. It does not leave the current
-scope.
+scope. The message is used as the failure reason.
+
+    const check	: (ctx : ctx#, cond : bool, msg : byte[:], args : ... -> void)
+
+Records a test result. If `cond` is true, a success is recorded,
+otherwise a failure with the messsage `msg` is recorded.
+
+Example
+-------
+
+	use std
+	use testr
+
+	const main = {
+		testr.run([
+			/* 64 bit tests */
+			[.name="nop", .fn={ctx; testr.ok(ctx)}],
+			[.name="alwaysfail", .fn={ctx; testr.fail(ctx, "I was always a failure")}],
+			[.name="inteq", .fn={ctx; testr.check(ctx, 1 == 1, "identity is identity")}],
+			[.name="intneq", .fn={ctx; testr.check(ctx, 1 != 2, "nonidentity isn't identity")}],
+			[.name="flt64-exptoobig", .fn={ctx; floatparse(ctx, "1.7976931348623157e309", std.flt64inf())}],
+		][:])
+	}
+
+	const floatparse = {ctx, str, expectval
+		match std.flt64parse(str)
+		| `std.Some f:
+			testr.check(ctx, f == expectval, \
+				"mismatch: {} (from {}) != {}\n", f, str, expectval)
+		| `std.None:	
+			testr.fail(ctx, "unable to parse float from {}\n", str)
+		;;
+	}
 
