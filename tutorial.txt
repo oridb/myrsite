@@ -1147,7 +1147,7 @@ do.
 	</p></dd>
 	<dt>x - y</dt>
 	<dd><p>
-		The subtraction operator adds two values using the appropriate
+		The subtraction operator subtracts two values using the appropriate
 		kind of arithmetic.
 	</p></dd>
 </dl>
