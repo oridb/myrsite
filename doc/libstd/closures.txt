@@ -5,6 +5,8 @@
 
 pkg std =
         generic fndup   : (fn : @fn::function -> @fn::function)
+	generic fnbdup  : (fn : @fn::function, buf : byte[:] -> @fn::function)
+	generic fenvsz	: (fn : @fn::function -> size)
         generic fnfree  : (fn : @fn::function -> void)
 ;;
 
@@ -28,6 +30,17 @@ Functions
 
 Takes any function, and copies the captured environment to the heap, if there
 is an environment to copy.
+
+	generic fnbdup  : (fn : @fn::function, buf : byte[:] -> @fn::function)
+
+Takes any function, and copies the captured environment to the buffer
+provided. The buffer must be at least as big as the value reported by
+`fenvsz`.
+
+	generic fenvsz	: (fn : @fn::function -> size)
+
+Returns the size in bytes of the environment referenced by the closure `fn`.
+If there is no environment, then this function returns `0`.
 
 	generic fnfree  : (fn : @fn::function -> void)
 
