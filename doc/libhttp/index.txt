@@ -6,6 +6,8 @@
 Summary
 -------
 
+The http package implements code for a simple HTTP client and server. There 
+
 	pkg http =
 		type status = int
 		type session

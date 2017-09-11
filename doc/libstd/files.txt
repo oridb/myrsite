@@ -22,6 +22,7 @@ File Handling
             const Ordwr    	: fdopt 
             const Otrunc   	: fdopt 
             const Ocreat   	: fdopt 
+            const Ocexec   	: fdopt 
             const Oappend  	: fdopt 
             const Odir	: fdopt 
 
