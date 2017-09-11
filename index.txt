@@ -47,10 +47,13 @@ Myrddin currently compiles for x86-64. It runs on five OSes at the moment:
 - Plan 9 (9front)
 - FreeBSD
 - OpenBSD
+- NetBSD (preliminary)
 
 It has proved relatively easy to port between these
 systems, needing only a few system calls, and a couple of hundred lines of
 code to get the bootstrap working.
+
+NetBSD currently does not support libthread.
 
 Major Features
 --------------
