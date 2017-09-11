@@ -4,11 +4,11 @@
 }
 
 
+Summary
+-------
+
 Libcrypto contains a set of implementations of common hash functions. It
 supports taking the hash of an entire string, as well as a streaming API.
-
-API Reference
--------------
 
     pkg crypto =
             /* state types */

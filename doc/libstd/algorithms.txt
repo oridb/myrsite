@@ -3,8 +3,14 @@
         description:    libstd: Algorithms
 }
 
-Algorithms
-----------
+Summary: Algorithms
+-------------------
+
+There are a number of algorithms that are pervasive through many programs.
+These include sorting, searching, and similar
+
+We only cover sorting and searching here, although more would be a good
+addition. Maybe in a separate library.
 
     pkg std =
             /* the result of a comparison */
@@ -31,15 +37,6 @@ Algorithms
             generic clamp	: (a : @a::numeric, min : @a::numeric, max : @a::numeric -> @a::numeric)
             generic abs	: (a : @a::numeric -> @a::numeric)
     ;;
-
-Overview
---------
-
-There are a number of algorithms that are pervasive through many programs.
-These include sorting, searching, and similar
-
-We only cover sorting and searching here, although more would be a good
-addition. Maybe in a separate library.
 
 Types
 -----

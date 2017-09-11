@@ -3,7 +3,7 @@
         description:    libstd: Unicode
 }
 
-Unicode
+Summary: Unicode
 --------
 
     pkg std =

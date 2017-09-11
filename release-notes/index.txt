@@ -1,113 +1,105 @@
 {
 	title: Releases
 	description: Releases
-	date: March 5 2017
+	date: Sept 15 2017
 }
 
-Myrddin 0.1.1: "Shame. Shame. Shame."
--------------------------------------
+Myrddin 0.2: "9 out of 10 cats agree"
+=====================================
 
-Myrddin 0.1.1 has been released. It is nearly identical, but compiles
-problem-free on all tested systems.
+Myrddin 0.2 has been released. This release was focused on filing off
+the sharp edges shipped with 0.1, e
+stabilization, and polish.
 
-Myrddin 0.1: "The Sobbing Never Ends"
--------------------------------------
+![9 out of 10 cats](9of10cats.gif)
 
-Myrddin 0.1 has been released. It's full of sharp edges and bugs. It's
-targeted towards people with a larger than average amount of self loathing.
-All parts of the language and libraries are subject to change, breakage, and
-unbreakage.
+Myrcon
+-------
 
-The 0.1 release comes with an amd64 compiler. The supported platforms are
-Linux, OSX, FreeBSD, OpenBSD, and Plan9front.
+Since there are a number of people interested in Myrddin planning on
+showing up at EuroBSD, there's an informal meetup happening. If you're
+showing up to a useful conference, why not balance it out with a useless
+one?
 
-To get started, check out the [tutorial](../tutorial). The [language
-spec](../spec) has also been revised and updated. It now has fewer lies.
+![Myrcon](myrcon.jpg)
 
-Additionally, our [library documentation](../doc/) has been fixed and updated,
-and should reflect the state of our libraries.
+Major highlights since 0.1
+---------------
 
-### Changes since the last version
+    $ git diff --stat r0.1.1..HEAD | tail -n 1
+     239 files changed, 21168 insertions(+), 7016 deletions(-)
+    $ git log --pretty=oneline r0.1.1..HEAD | wc -l
+     286
 
-Yes.
+Since the last release, there have been 280 commits. In those commits,
+238 files were changed, changed, with 21143 insertions and 7008 deletions
 
-### Tarballs
+- Rudimentary GDB line number support.
+- Rudimentary Plan 9 Acid debugger support.
+- Type errors now come with sources.
+- Performance improvements for many common operations
+- An initial look at scoped resoure management, via `auto`.
+- The ability to request a function by trait using `impl` statements.
+- A complete rewrite of trait resolution, which fixes many known bugs.
+- Full system call coverage on Linux, FreeBSD, OpenBSD, and Plan 9.
+- Mbld is now competitive in speed with ninja.
+- Buffered IO now supports non-file I/O
+- For loops now use `:` in place of `in`
+- signal() is no longer flaky on linux.
+- Asserts are cheaper.
+- DNS resolution now times out
+- Partial NetBSD support
+- Fix several instances of miscompilation.
+- Allow duping closures without memory allocations.
+- Allow race-free access to the environment within thread spawning
+- Build tags may now be versioned.
+- Fix DNS for cname records.
+- Murmurhash has been replaced with siphash
 
-The release tarballs are on
-[https://myrlang.org/releases](https://myrlang.org/releases). The
-tag for the release is `r0.1.0`.
+New Libraries and Programs
+--------------------------
+
+- [Libtermdraw](https://git.eigenstate.org/git/ori/libtermdraw.git)
+- [Libhttp](https://git.eigenstate.org/git/ori/libhttp.git)
+- [irc.myr](https://git.eigenstate.org/git/ori/irc.myr.git)
+- [Libwl](https://github.com/michaelforney/libwl)
+- [ddmin](https://github.com/andrewchambers/ddmin)
 
 
-### Packages and Installation
+Breaking Changes
+----------------
 
-Myrddin 0.1 has been packaged for supported systems. It is also easy to
-install from source.
+- std.Ordonly and std.Owronly have been named to std.Oread and std.Owrite.
+- `for x in y` became `for x : y`. It's only a warning right now, but it will
+  break your code soon.
+- Sigpipe is no longer handled by default.
+- readv and writev now use iovec structs instead of slices.
+- Solsock is now called Solsocket, and it's type changed to match getsockopt.
+- Output no longer clutters the source directory, but instead goes into
+  `obj/`.
+- `mbld test` no longer impliciltly adds files to the test build.
+- Custom hash functions return int64, not int32.
+- Several unnecessary options (`-d`, `-l`, `-C`, `-M`) were removed from mbld.
 
-#### From Git
+Thanks to the contributors
+--------------------------
 
-Myrddin is a young language. There are regular fixes to the language and
-libraries. Therefore, it's probably a good idea to install it from Git. To
-install Myrddin from source:
+In no particular order:
 
-	git clone git://git.eigenstate.org/git/ori/mc.git
-	cd mc
-	./configure --prefix=/usr
-	make	# gmake on BSD systems
-	sudo make install
+- Quentin Carbonneaux, for good discussion and implementing auto.
+- Michael Forney, for bug fixes, code cleanup, and impl statements.
+- Andrew Chambers, for testing, bug reports, and ddmin.
+- Lucas Gabriel Vuotto, for bug fixes, testing, and siphash.
+- Ryan Gonzalez, for bug fixes and code cleanup.
+- Carlin Bingham, for fixing some OpenBSD system calls.
+- Kamil Rytarowski, for the initial work on NetBSD.
 
-#### Debian and Ubuntu
+Supported Platforms
+-------------------
 
-Myrddin has been put into a `deb` package. Here is how you can install
-it on any Debian based distro:
+The 0.2 release comes with an amd64 compiler. The supported platforms are
+Linux, OSX, FreeBSD, OpenBSD, and Plan9. There is partial support
+for NetBSD.
 
-	wget https://myrlang.org/pkg/myrddin_0.1.0_amd64.deb
-	dpkg -i myrddin_0.1.0_amd64.deb
+[Older Releases](old)
 
-#### Mac OSX
-
-There is a brew tap for OSX. If you have Homebrew installed,
-here is how you can use it to install Myrddin:
-
-	brew install oridb/myrddin/myrddin
-
-#### FreeBSD
-
-There is an external makefile for the ports tree. Here is how you
-can use it to install Myrddin via the FreeBSD package system:
-
-	git clone git://git.eigenstate.org/git/ori/freebsd-myrddin
-	cd freebsd-myrddin/myrddin
-	make install
-
-#### OpenBSD
-
-The port for Myrddin is in the OpenBSD ports tree. You can install it
-using:
-
-	pkg_add myrddin
-
-#### Plan 9
-
-Because Mercurial is the preferred distribution mechanism for Plan 9, there
-is a mirror of the repository on Bitbucket. To install it:
-
-	hg clone https://bitbucket.org/oridb/mc
-	cd mc
-	mk
-	mk install
-
-This release has been tested on 9front. In theory it should work on
-any amd64 version of Plan 9 out of the box.
-
-### Future Releases
-
-Myrddin is aiming to have releases every 6 months. Whatever features
-are ready by then will be shipped.
-
-For 0.2, one major goal is to have a [QBE](https://c9x.me/compile/)
-backend. This will significantly improve the performance of our generated
-code, and make it easier to interface with C.
-
-Libraries will continue to be an ongoing theme. Having libraries is often
-the difference between feasibly using a language for a project, or picking
-something with fewer wheels to reinvent.

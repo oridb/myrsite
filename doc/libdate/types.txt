@@ -3,8 +3,10 @@
 	description: Libdate API documentation.
 }
 
-Contents
+Summary: Types
 --------
+
+The types provided here are used throughout libdate.
 
     pkg date = 
             type instant = struct

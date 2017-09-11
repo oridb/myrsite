@@ -3,6 +3,9 @@
         description:    BIO library description
 }
 
+Summary
+-------
+
 Myrddin's BIO library is used for buffered input and output. It is a fairly
 simple library that handles reading and writing from file descriptors.
 
@@ -15,8 +18,6 @@ One thing to keep in mind with libbio that it does not attempt to flush
 buffers on program exit, which means that any unwritten, unflushed data
 will be lost. Closing the bio files will prevent this issue.
 
-Summary
--------
 
     pkg bio =
             type mode

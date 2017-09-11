@@ -3,8 +3,8 @@
 	    description:    Myrddin Thread Library
 }
 
-Libthread
-=========
+Summary
+-------
 
 	pkg thread =
 		/* types */

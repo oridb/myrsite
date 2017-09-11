@@ -1,10 +1,13 @@
 {
-	title: Date Parsing
+	title: Parsing
 	description: Libdate API documentation.
 }
 
-Date and time parsing
----------------------
+Summary: Parsing
+-------
+
+Date parsing functions are modeled on strptime, allowing for a large amount
+of flexibility in how date formats are parsed.
 
     type parsefail = union
             `Doublefmt char

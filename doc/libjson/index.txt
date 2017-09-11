@@ -6,6 +6,9 @@
 Summary
 -------
 
+Json is a common format, used for many web services. This package
+implements well tested parsing and formatting routines for it.
+
 	pkg json =
 		type elt = union
 			`Null

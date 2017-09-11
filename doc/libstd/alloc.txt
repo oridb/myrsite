@@ -3,7 +3,7 @@
         description:  libstd: Allocation
 }
 
-Memory Allocation
+Summary: Memory Allocation
 -----------------
 
     pkg std =

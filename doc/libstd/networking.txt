@@ -2,30 +2,66 @@
         title: Networking
         description:    libstd: Networking
 }
+
 Networking
 ----------
 
-    pkg std =
-            type netaddr = union
-                    `Ipv4	byte[4]
-                    `Ipv6	byte[16]
-            ;;
+	pkg std =
+		/* general networking */
+		type netaddr = union
+			`Ipv4	byte[4]
+			`Ipv6	byte[16]
+		;;
 
 
-            /* network connections */
-            const dial	: (dialstr : byte[:] -> result(fd, byte[:]))
-            const announce	: (ds : byte[:] -> result(fd, byte[:]))
-            const listen	: (sock : fd -> result(fd, byte[:]))
-            const accept	: (lfd : fd -> result(fd, byte[:]))
+		/* network connections */
+		const dial	: (dialstr : byte[:] -> result(fd, byte[:]))
+		const announce	: (ds : byte[:] -> result(fd, byte[:]))
+		const listen	: (sock : fd -> result(fd, byte[:]))
+		const accept	: (lfd : fd -> result(fd, byte[:]))
 
-            /* ip parsing */
-            const ipparse	: (ip : byte[:]	-> option(netaddr))
-            const ip4parse	: (ip : byte[:] -> option(netaddr))
-            const ip6parse	: (ip : byte[:] -> option(netaddr))
+		/* ip parsing */
+		const ipparse	: (ip : byte[:]	-> option(netaddr))
+		const ip4parse	: (ip : byte[:] -> option(netaddr))
+		const ip6parse	: (ip : byte[:] -> option(netaddr))
 
-            generic hosttonet	: (v : @a -> @a)
-            generic nettohost	: (v : @a -> @a)
-    ;;
+		generic hosttonet	: (v : @a -> @a)
+		generic nettohost	: (v : @a -> @a)
+
+		/* DNS */
+
+		type rectype = union
+			`DnsA	/* host address */
+			`DnsNS	/* authoritative name server */
+			`DnsCNAME	/* canonical name for an alias */
+			`DnsSOA	/* marks the start of a zone of authority */
+			`DnsWKS	/* well known service description */
+			`DnsPTR	/* domain name pointer */
+			`DnsHINFO	/* host information */
+			`DnsMINFO	/* mailbox or mail list information */
+			`DnsMX	/* mail exchange */
+			`DnsTXT	/* text strings */
+			`DnsAAAA	/* ipv6 host address */
+		;;
+
+		type resolveerr = union
+			`Badhost
+			`Badsrv
+			`Badquery
+			`Badresp
+		;;
+
+		type hostinfo = struct
+			fam	: sys.sockfam
+			stype	: sys.socktype
+			ttl	: uint32
+			addr	: netaddr
+		;;
+
+		const resolve	: (host : byte[:]	-> result(hostinfo[:], resolveerr))
+		const resolvemx	: (host : byte[:]	-> result(hostinfo[:], resolveerr))
+		const resolverec	: (host : byte[:], t : rectype	-> result(hostinfo[:], resolveerr))
+	;;
 
 Summary
 -------
@@ -114,6 +150,66 @@ Endian flipping
 
 Flips the bits in an integer to match the expected. These functions should be
 avoided in favor of explicit packing functions.
+
+DNS Types
+----------
+
+    type rectype = union
+            `DnsA	/* host address */
+            `DnsNS	/* authoritative name server */
+            `DnsCNAME	/* canonical name for an alias */
+            `DnsSOA	/* marks the start of a zone of authority */
+            `DnsWKS	/* well known service description */
+            `DnsPTR	/* domain name pointer */
+            `DnsHINFO	/* host information */
+            `DnsMINFO	/* mailbox or mail list information */
+            `DnsMX	/* mail exchange */
+            `DnsTXT	/* text strings */
+            `DnsAAAA	/* ipv6 host address */
+    ;;
+
+This union contains all of the record types that we claim to know how to
+resolve. At the moment, few of them have been tested sufficiently (only A
+records can reasonably be said to be exercised).
+
+    type resolveerr = union
+            `Badhost
+            `Badsrv
+            `Badquery
+            `Badresp
+    ;;
+
+This union contains the errors that we can encounter when trying to resolve a
+host.
+
+    type hostinfo = struct
+            fam	: sys.sockfam
+            stype	: sys.socktype
+            ttl	: uint32
+            addr	: netaddr
+    ;;
+
+DNS Resolution
+--------------
+
+    const resolve	: (host : byte[:]	-> result(hostinfo[:], resolveerr))
+
+Resolves the A or AAAA record for the host `host` using DNS. This function
+does caching, expiring based on the TTL. Returns all of the host info entries sent
+back by DNS or found in the cache on success, or a resolve error on failure.
+
+    const resolvemx	: (host : byte[:]	-> result(hostinfo[:], resolveerr))
+
+Resolves the MX record for the host `host` using DNS. This function does
+caching, expiring based on the TTL. Returns all of the host info entries sent
+back by DNS or found in the cache on success, or a resolve error on failure.
+
+    const resolverec	: (host : byte[:], t : rectype	-> result(hostinfo[:], resolveerr))
+
+Resolves a record from DNS. This function's interface is slightly broken, as
+it will never work for TXT or CNAME records.
+
+
 
 Examples
 --------

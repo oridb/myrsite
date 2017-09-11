@@ -3,7 +3,7 @@
         description:  libstd: Strings
 }
 
-Summary
+Summary: Strings
 -------
 
     pkg std =

@@ -3,18 +3,22 @@
         description:    A collection of utility functions for files
 }
 
-Libfileutil
----------
+Summary
+-------
+
+Libfileutil is a collection of common functions that people use
+for handling files.
 
 	pkg fileutil =
 		/* File walking */
 		type walkiter
 
 		impl iterable walkiter -> byte[:]
-		const bywalk    : (dir : std.dir# -> walkiter)
+		const bywalk	: (dir : std.dir# -> walkiter)
 
 		/* information about files */
-		const homedir   : (-> byte[:])
+		const homedir	: (-> byte[:])
+		const tmpdir	: (-> byte[:])
 	;;
 
 Overview
@@ -38,6 +42,10 @@ Functions: File info
 
 	const homedir   : (-> byte[:])
 
-Returns the current user's home directory. Does not require
-the home directory to be freed.
+Returns the current user's home directory. The returned path
+should not be freed.
 
+	const tmpdir   : (-> byte[:])
+
+Returns the tmp directory that should be used. The returned path
+should not be freed.

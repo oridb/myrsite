@@ -6,6 +6,10 @@
 Summary
 -------
 
+Regexes are useful tools for parsing and matching text. This library
+implements a simple but powerful regex variant, which executes in
+`O(text*pat)`.
+
 	pkg regex =
                 type ast = union
                         /* basic string building */
@@ -82,6 +86,8 @@ The grammar for regexes that are accepted is sketched out below.
                        | '.'
                        | '^'
                        | '$'
+                       | '\<'
+                       | '\>'
                        | '(' regex ')'
            charclass   : see below
            charrange   : '[' (literal('-' literal)?)+']'
@@ -92,6 +98,8 @@ Matches a single unicode character
 
 <table>
 	<tr><tr><th>Metachar</th>        <th>Description</th></tr>
+	<tr><td><code>\&lt;</td></code>      <td>Matches the beginning of a word. Does not consume any characters.</td></tr>
+	<tr><td><code>\&gt;</td></code>      <td>Matches the end of a word. Does not consume any characters.</td></tr>
 	<tr><td><code>^</td></code>      <td>Matches the beginning of a line. Does not consume any characters.</td></tr>
 	<tr><td><code>$</td></code>      <td>Matches the end of a line. Does not consume any characters.</td></tr>
 	<tr><td><code>*</td></code>      <td>Matches any number of repetitions of the preceding regex fragment.</td></tr>

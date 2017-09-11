@@ -1,5 +1,5 @@
 {
-	title: libdate
+	title: Overview
 	description: Libdate API documentation.
 }
 

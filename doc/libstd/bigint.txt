@@ -3,7 +3,7 @@
         description:  libstd: Bigints
 }
 
-Bigints
+Summary: Bigints
 -------
 
   pkg std =

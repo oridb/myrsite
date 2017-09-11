@@ -6,6 +6,9 @@
 Summary
 -------
 
+Ini files are a common, simple, well known format. They are restrictive,
+but in many cases a complicated configuration is overkill.
+
 	pkg inifile =
 		type error = union
 			`Fileerr

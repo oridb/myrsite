@@ -3,7 +3,7 @@
 	description: Libihttp API documentation.
 }
 
-Common Types
+Summary
 -------
 
 	pkg http =

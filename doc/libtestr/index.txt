@@ -3,8 +3,12 @@
         description:    Myrddin Test Library
 }
 
-Libtestr
+Summary
 ---------
+
+Libtestr is a library that makes mbld subtests easy to write. All it does
+is produce specifically formatted test log output which meshes well with
+mbld.
 
 	pkg testr =
 		type ctx
