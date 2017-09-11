@@ -292,7 +292,7 @@ provide the demo package, `say-hello.use` and `say-goodbye.use`
 Unfortunately, since the runner that I have does not support multiple files,
 this code will not build or run online. Sorry.
 
-```{runmyr pkg1}
+```
 /* This is in main.myr */
 use std
 use "say-hello.use"
@@ -309,7 +309,7 @@ const main = {
 `say-hello.myr` defines a package block that exports the function
 `sayhello`, into the package `demo`, as well as providing the definition
 
-```{runmyr pkg2}
+```
 /* This code is in say-hello.myr */
 use std
 
@@ -325,7 +325,7 @@ const sayhello = {
 `say-goodbye.myr` defines a package block that exports the function
 `saygoodbye`, into the package `demo`, as well as providing the definition
 
-```{runmyr pkg3}
+```
 /* This code is in say-goodbye.myr */
 use std
 
