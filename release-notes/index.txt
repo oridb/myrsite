@@ -7,35 +7,27 @@
 Myrddin 0.2: "9 out of 10 cats agree"
 =====================================
 
-Myrddin 0.2 has been released. This release was focused on filing off
-the sharp edges shipped with 0.1, e
-stabilization, and polish.
+Myrddin 0.2 has been released. This release was focused on filing off the
+sharp edges shipped with the previous release. But not to worry, there are
+still plenty of stabby bits left for the masochists.
 
 ![9 out of 10 cats](9of10cats.gif)
 
-Myrcon
--------
-
-Since there are a number of people interested in Myrddin planning on
-showing up at EuroBSD, there's an informal meetup happening. If you're
-showing up to a useful conference, why not balance it out with a useless
-one?
-
-![Myrcon](myrcon.jpg)
-
-Major highlights since 0.1
+Major highlights since 0.2
 ---------------
 
-    $ git diff --stat r0.1.1..HEAD | tail -n 1
-     239 files changed, 21168 insertions(+), 7016 deletions(-)
-    $ git log --pretty=oneline r0.1.1..HEAD | wc -l
-     286
+Churn, like you were an 18th century housewife making butter.
 
-Since the last release, there have been 280 commits. In those commits,
-238 files were changed, changed, with 21143 insertions and 7008 deletions
+	$ git diff --stat r0.2.0..HEAD | tail -n 1
+	253 files changed, 22508 insertions(+), 7016 deletions(-)
+	$ git log --pretty=oneline r0.2.1..HEAD | wc -l
+	311	
 
 - Rudimentary GDB line number support.
 - Rudimentary Plan 9 Acid debugger support.
+- Libhttp is now shipped by default
+- Mbld is now parallel. And competitive with ninja.
+- Mbld now supports benchmarking via `mbld bench`.
 - Type errors now come with sources.
 - Performance improvements for many common operations
 - An initial look at scoped resoure management, via `auto`.
@@ -56,16 +48,6 @@ Since the last release, there have been 280 commits. In those commits,
 - Fix DNS for cname records.
 - Murmurhash has been replaced with siphash
 
-New Libraries and Programs
---------------------------
-
-- [Libtermdraw](https://git.eigenstate.org/git/ori/libtermdraw.git)
-- [Libhttp](https://git.eigenstate.org/git/ori/libhttp.git)
-- [irc.myr](https://git.eigenstate.org/git/ori/irc.myr.git)
-- [Libwl](https://github.com/michaelforney/libwl)
-- [ddmin](https://github.com/andrewchambers/ddmin)
-
-
 Breaking Changes
 ----------------
 
@@ -81,6 +63,24 @@ Breaking Changes
 - Custom hash functions return int64, not int32.
 - Several unnecessary options (`-d`, `-l`, `-C`, `-M`) were removed from mbld.
 
+New External Libraries and Programs
+--------------------------
+
+Yep, there's code thats not part of the main Myrddin distribution.
+
+- [Libtermdraw](https://git.eigenstate.org/git/ori/libtermdraw.git): A library
+  for doing curses-like drawing on the terminal.
+- [Mparse](https://git.eigenstate.org/git/ori/mparse.git): A library
+  written in Myrddin, that parses Myrddin.
+- [irc.myr](https://git.eigenstate.org/git/ori/irc.myr.git): A simple IRC
+  client, reminiscent of irssi.
+- [Sergen](https://git.eigenstate.org/git/ori/sergen.git): A crude reinvention
+  of protobufs/thrift.
+- [Libwl](https://github.com/michaelforney/libwl): A wayland client library.
+- [ddmin](https://github.com/andrewchambers/ddmin): A tool for paring down a
+  large testcase into a minimal one.
+
+
 Thanks to the contributors
 --------------------------
 
@@ -93,6 +93,8 @@ In no particular order:
 - Ryan Gonzalez, for bug fixes and code cleanup.
 - Carlin Bingham, for fixing some OpenBSD system calls.
 - Kamil Rytarowski, for the initial work on NetBSD.
+- Roberto E. Vargas Caballero, for ideas and discussion
+- Everyone else who complained about my incompetence.
 
 Supported Platforms
 -------------------
@@ -101,5 +103,65 @@ The 0.2 release comes with an amd64 compiler. The supported platforms are
 Linux, OSX, FreeBSD, OpenBSD, and Plan9. There is partial support
 for NetBSD.
 
-[Older Releases](old)
+Packages and Installation
+-------------------------
+
+Myrddin 0.2 has been packaged for supported systems. It is also easy to
+install from source.
+
+#### From Git
+
+Myrddin is a young language. There are regular fixes to the language and
+libraries. Therefore, it's probably a good idea to install it from Git. To
+install Myrddin from source:
+
+	git clone git://git.eigenstate.org/git/ori/mc.git
+	cd mc
+	./configure --prefix=/usr
+	make	# gmake on BSD systems
+	sudo make install
+
+#### Debian and Ubuntu
+
+Myrddin has been put into a `deb` package. Here is how you can install
+it on any Debian based distro:
+
+	wget https://myrlang.org/pkg/myrddin_0.2.0_amd64.deb
+	dpkg -i myrddin_0.2.0_amd64.deb
+
+#### Mac OSX
+
+There is a brew tap for OSX. If you have Homebrew installed,
+here is how you can use it to install Myrddin:
+
+	brew install oridb/myrddin/myrddin
+
+#### FreeBSD
+
+There is an external makefile for the ports tree. Here is how you
+can use it to install Myrddin via the FreeBSD package system:
+
+	git clone git://git.eigenstate.org/git/ori/freebsd-myrddin
+	cd freebsd-myrddin/myrddin
+	make install
+
+#### OpenBSD
+
+The port for Myrddin is in the OpenBSD ports tree. You can install it
+using:
+
+	pkg_add myrddin
+
+#### Plan 9
+
+Because Mercurial is the preferred distribution mechanism for Plan 9, there
+is a mirror of the repository on Bitbucket. To install it:
+
+	hg clone https://bitbucket.org/oridb/mc
+	cd mc
+	mk
+	mk install
+
+This release has been tested on 9front. In theory it should work on
+any amd64 version of Plan 9 out of the box.
 
