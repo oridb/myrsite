@@ -25,6 +25,9 @@ Networking
 		const ip4parse	: (ip : byte[:] -> option(netaddr))
 		const ip6parse	: (ip : byte[:] -> option(netaddr))
 
+		/* dialstring formatting */
+		const netaddr   : (addr : byte[:], net : byte[:], port : byte[:] -> byte[:]
+
 		generic hosttonet	: (v : @a -> @a)
 		generic nettohost	: (v : @a -> @a)
 
@@ -139,6 +142,25 @@ quad notation. Returns `` `Some `Ipv4 bits`` if the address parses successfully,
 Parses an Ipv6 address from the string `ip`. Returns `` `Some `Ipv4 bits`` if
 the address parses successfully, or `` `None`` if parsing fails. Zones are
 currently not supported. This is a bug.
+
+Network address formatting
+--------------------------
+
+    const netaddr   : (addr : byte[:], net : byte[:], port : byte[:] -> byte[:])
+
+Creates a string appropriate from `std.dial` or `std.announce` from a tuple of
+`addr`, `net`, and `port`. The `addr` parameter at minimum needs a host name,
+but may contain other dial string components. If there are other dial string
+components, they will not be overridden.
+
+For example:
+
+	std.netaddr("myrlang.org", "tcp", "80")
+		=> "tcp!myrlang.org!80"
+
+But
+	std.netaddr("udp!myrlang.org!999", "tcp", "80")
+		=> "udp!myrlang.org!999"
 
 
 Endian flipping

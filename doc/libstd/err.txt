@@ -26,8 +26,10 @@ Error Handling
 
             generic try : (v : result(@a, @b) -> @a)
             generic tryv : (v : result(@a, @b), d : @a -> @a)
+
             generic get : (v : option(@a) -> @a)
             generic getv : (v : option(@a), d : @a -> @a)
+            generic canget : (v : option(@a) -> bool)
     ;;
 
 Overview
@@ -114,3 +116,6 @@ in `` `std.Some``.
 If this does not match the union, the default value is returned to the
 caller, as though the type had contained `` `Some default`` or `` `Ok default``.
 
+    generic canget	: (v : option(@a) -> @a)
+
+Canget is a predicate returning true if the option matches `\`Some _`

@@ -44,7 +44,8 @@ The MTEST protocol
 
 The mtest protocol is a simple test protocol inspired by
 [TAP](https://testanything.org/tap-specification.html), although it is
-designed to solve a few problems I had with tap.
+designed to solve a number of difficulties with TAP, as well as allowing
+for benchmark statistics to be transmitted.
 
 An MTEST test starts with a test plan, which looks something like this:
 
@@ -68,16 +69,15 @@ This is then followed by `ntest` test outputs. A test output looks like
 
 This specifies the test name. After this come any number of lines of log
 output, which may be preserved by the framework for later analysis. Finally,
-this is followed by the test ending:
+this is followed by the test ending. The test ending is one of:
 
 	!}>> ok
+	!}>> fail <reason>
+	!}>> timing <niter> <mean> <stddev>
 
-for a successful test, and
-
-	!}>> fail [reason]
-
-for an unsuccessful test. The reason `reason` is shown in the `mbld` log
-output.
+which, respectively, indicate a pass, a fail, or a benchmark result.
+The failure message is shown to the user by the test runner, and the
+timing is tabulated and summarized by the test runner.
 
 Writing your own provider
 -------------------------

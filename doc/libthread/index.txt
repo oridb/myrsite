@@ -46,6 +46,9 @@ Summary
 		const condwait	: (cond : cond# -> void)
 		const condsignal	: (cond : cond# -> void)
 		const condbroadcast	: (cond : cond# -> void)
+
+		/* misc */
+		const ncpu	: (-> int)
 	;;
 
 Types
@@ -81,7 +84,7 @@ of the created thread. Otherwise, it returns a string describing the
 error.
 
 The environment of the closure is duplicated before the thread is
-spawend, allowing for safe access.
+spawend, allowing for safe access to the variables copied by value.
 
 Functions: Mutexes
 ------------------
@@ -129,3 +132,11 @@ mutex.
 
 Wakes all waiters on the condition variable.
 
+
+Misc: Functions Useful for Threaded Programs
+--------------------------------------------
+
+	const ncpu : (-> int)
+
+Returns the number of CPUs available to run your code. On systems where this
+information is unavailable, `1` is returned as a safe default.

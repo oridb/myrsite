@@ -18,35 +18,37 @@ Major highlights since 0.2
 
 Churn, like you were an 18th century housewife making butter.
 
-	$ git diff --stat r0.2.0..HEAD | tail -n 1
-	253 files changed, 22508 insertions(+), 7016 deletions(-)
-	$ git log --pretty=oneline r0.2.1..HEAD | wc -l
-	311	
+	$ git diff --stat r0.1.1..HEAD | tail -n 1
+ 	265 files changed, 26195 insertions(+), 7080 deletions(-)
+	$ git log --pretty=oneline r0.1.1..HEAD | wc -l
+	332
 
+- Bug fixes and bug fixes and bug fixes.
+- Performance has improved overall.
 - Rudimentary GDB line number support.
 - Rudimentary Plan 9 Acid debugger support.
-- Libhttp is now shipped by default
-- Mbld is now parallel. And competitive with ninja.
-- Mbld now supports benchmarking via `mbld bench`.
-- Type errors now come with sources.
-- Performance improvements for many common operations
+- Murmurhash has been replaced with siphash
+- Libhttp is shipped by default
+- Libbio allows arbitrary, user-defined backing stores
+- Partial NetBSD support
+- Mbld builds are parallel, and performance is competitive with ninja.
+- Mbld supports benchmarking via `mbld bench`.
+- Mbld build tags may now be versioned.
+- Type errors indicate where the sources of the conflicting types.
 - An initial look at scoped resoure management, via `auto`.
 - The ability to request a function by trait using `impl` statements.
 - A complete rewrite of trait resolution, which fixes many known bugs.
 - Full system call coverage on Linux, FreeBSD, OpenBSD, and Plan 9.
-- Mbld is now competitive in speed with ninja.
 - Buffered IO now supports non-file I/O
 - For loops now use `:` in place of `in`
 - signal() is no longer flaky on linux.
-- Asserts are cheaper.
-- DNS resolution now times out
-- Partial NetBSD support
+- DNS resolution is far more robust.
 - Fix several instances of miscompilation.
 - Allow duping closures without memory allocations.
 - Allow race-free access to the environment within thread spawning
-- Build tags may now be versioned.
 - Fix DNS for cname records.
-- Murmurhash has been replaced with siphash
+- Libthread uses futexes on OpenBSD 6.2
+
 
 Breaking Changes
 ----------------
@@ -59,6 +61,7 @@ Breaking Changes
 - Solsock is now called Solsocket, and it's type changed to match getsockopt.
 - Output no longer clutters the source directory, but instead goes into
   `obj/`.
+- The `std.listen` API has been merged with `std.accept`.
 - `mbld test` no longer impliciltly adds files to the test build.
 - Custom hash functions return int64, not int32.
 - Several unnecessary options (`-d`, `-l`, `-C`, `-M`) were removed from mbld.
@@ -80,6 +83,17 @@ Yep, there's code thats not part of the main Myrddin distribution.
 - [ddmin](https://github.com/andrewchambers/ddmin): A tool for paring down a
   large testcase into a minimal one.
 
+Endorsements
+------------
+
+"Fine, it's a good language. Now will you get out of the bathroom and let me
+shit in peace?" -- Charles Babbage
+
+"Make Programming Great Again" -- Barack Obama
+
+"I think it's gluten free" -- Rearendicus Bumblebutt
+
+"Back Off! Those are *MY* dentures!" -- Mom
 
 Thanks to the contributors
 --------------------------
@@ -93,7 +107,8 @@ In no particular order:
 - Ryan Gonzalez, for bug fixes and code cleanup.
 - Carlin Bingham, for fixing some OpenBSD system calls.
 - Kamil Rytarowski, for the initial work on NetBSD.
-- Roberto E. Vargas Caballero, for ideas and discussion
+- Roberto E. Vargas Caballero, for ideas, and collaboration on tools.
+- S. Gilles, for testing, bug reports, and patches.
 - Everyone else who complained about my incompetence.
 
 Supported Platforms
@@ -138,12 +153,10 @@ here is how you can use it to install Myrddin:
 
 #### FreeBSD
 
-There is an external makefile for the ports tree. Here is how you
-can use it to install Myrddin via the FreeBSD package system:
+The port for Myrddin is in the OpenBSD ports tree. You can install it
+using:
 
-	git clone git://git.eigenstate.org/git/ori/freebsd-myrddin
-	cd freebsd-myrddin/myrddin
-	make install
+	pkg install myrddin
 
 #### OpenBSD
 
@@ -152,9 +165,9 @@ using:
 
 	pkg_add myrddin
 
-#### Plan 9
+#### Plan 9 (9front)
 
-Because Mercurial is the preferred distribution mechanism for Plan 9, there
+Because Mercurial is the version control mechanism for Plan 9, there
 is a mirror of the repository on Bitbucket. To install it:
 
 	hg clone https://bitbucket.org/oridb/mc
@@ -162,6 +175,4 @@ is a mirror of the repository on Bitbucket. To install it:
 	mk
 	mk install
 
-This release has been tested on 9front. In theory it should work on
-any amd64 version of Plan 9 out of the box.
 
