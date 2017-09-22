@@ -18,8 +18,6 @@ still plenty of stabby bits left for the masochists.
 Major highlights since 0.2
 ---------------
 
-Churn, like you were an 18th century housewife making butter.
-
 	$ git diff --stat r0.1.1..HEAD | tail -n 1
  	265 files changed, 26195 insertions(+), 7080 deletions(-)
 	$ git log --pretty=oneline r0.1.1..HEAD | wc -l
