@@ -13,6 +13,8 @@ still plenty of stabby bits left for the masochists.
 
 ![9 out of 10 cats](9of10cats.gif)
 
+
+
 Major highlights since 0.2
 ---------------
 
@@ -111,18 +113,13 @@ In no particular order:
 - S. Gilles, for testing, bug reports, and patches.
 - Everyone else who complained about my incompetence.
 
-Supported Platforms
--------------------
-
-The 0.2 release comes with an amd64 compiler. The supported platforms are
-Linux, OSX, FreeBSD, OpenBSD, and Plan9. There is partial support
-for NetBSD.
-
 Packages and Installation
 -------------------------
 
-Myrddin 0.2 has been packaged for supported systems. It is also easy to
-install from source.
+Myrddin 0.2 is being packaged for supported systems. Some of them may
+be behind, as packagers finish putting together updated packages.
+
+It is also easy to install from source.
 
 #### From Git
 
@@ -130,49 +127,55 @@ Myrddin is a young language. There are regular fixes to the language and
 libraries. Therefore, it's probably a good idea to install it from Git. To
 install Myrddin from source:
 
-	git clone git://git.eigenstate.org/git/ori/mc.git
-	cd mc
-	./configure --prefix=/usr
-	make	# gmake on BSD systems
-	sudo make install
+	$ git clone git://git.eigenstate.org/git/ori/mc.git
+	$ cd mc
+	$ ./configure --prefix=/usr
+	# On BSD, use gmake
+	$ make
+	$ sudo make install
 
-#### Debian and Ubuntu
+### From Tarballs
 
-Myrddin has been put into a `deb` package. Here is how you can install
-it on any Debian based distro:
+Tarballs of this release are also available
 
-	wget https://myrlang.org/pkg/myrddin_0.2.0_amd64.deb
-	dpkg -i myrddin_0.2.0_amd64.deb
+- [myrddin-0.2.0.tar.bz2](/releases/myrddin-0.2.0.tar.bz2)
+- [myrddin-0.2.0.tar.gz](/releases/myrddin-0.2.0.tar.gz)
+- [myrddin-0.2.0.tar.xz](/releases/myrddin-0.2.0.tar.xz)
 
 #### Mac OSX
 
 There is a brew tap for OSX. If you have Homebrew installed,
 here is how you can use it to install Myrddin:
 
-	brew install oridb/myrddin/myrddin
+	$ brew install oridb/myrddin/myrddin
 
 #### FreeBSD
 
-The port for Myrddin is in the OpenBSD ports tree. You can install it
+The port for Myrddin is in the FreeBSD ports tree. You can install it
 using:
 
-	pkg install myrddin
+	# pkg install myrddin
 
 #### OpenBSD
 
 The port for Myrddin is in the OpenBSD ports tree. You can install it
 using:
 
-	pkg_add myrddin
+	# pkg_add myrddin
 
 #### Plan 9 (9front)
 
 Because Mercurial is the version control mechanism for Plan 9, there
 is a mirror of the repository on Bitbucket. To install it:
 
-	hg clone https://bitbucket.org/oridb/mc
-	cd mc
-	mk
-	mk install
+	% hg clone https://bitbucket.org/oridb/mc
+	% cd mc
+	% mk
+	% mk install
 
+Supported Platforms
+-------------------
 
+The 0.2 release comes with an amd64 compiler. The supported platforms are
+Linux, OSX, FreeBSD, OpenBSD, and Plan9. There is partial support
+for NetBSD.
