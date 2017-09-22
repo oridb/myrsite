@@ -73,13 +73,13 @@ New External Libraries and Programs
 
 Yep, there's code thats not part of the main Myrddin distribution.
 
-- [Libtermdraw](https://git.eigenstate.org/git/ori/libtermdraw.git): A library
+- [Libtermdraw](https://git.eigenstate.org/ori/libtermdraw.git): A library
   for doing curses-like drawing on the terminal.
-- [Mparse](https://git.eigenstate.org/git/ori/mparse.git): A library
+- [Mparse](https://git.eigenstate.org/ori/mparse.git): A library
   written in Myrddin, that parses Myrddin.
-- [irc.myr](https://git.eigenstate.org/git/ori/irc.myr.git): A simple IRC
+- [irc.myr](https://git.eigenstate.org/ori/irc.myr.git): A simple IRC
   client, reminiscent of irssi.
-- [Sergen](https://git.eigenstate.org/git/ori/sergen.git): A crude reinvention
+- [Sergen](https://git.eigenstate.org/ori/sergen.git): A crude reinvention
   of protobufs/thrift.
 - [Libwl](https://github.com/michaelforney/libwl): A wayland client library.
 - [ddmin](https://github.com/andrewchambers/ddmin): A tool for paring down a
@@ -127,7 +127,7 @@ Myrddin is a young language. There are regular fixes to the language and
 libraries. Therefore, it's probably a good idea to install it from Git. To
 install Myrddin from source:
 
-	$ git clone git://git.eigenstate.org/git/ori/mc.git
+	$ git clone git://git.eigenstate.org/ori/mc.git
 	$ cd mc
 	$ ./configure --prefix=/usr
 	# On BSD, use gmake
