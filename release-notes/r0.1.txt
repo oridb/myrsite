@@ -1,5 +1,5 @@
 {
-	title: Past Releases
+	title: 0.1
 	description: Releases
 	date: March 5 2017
 }
