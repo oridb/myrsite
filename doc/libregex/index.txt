@@ -242,7 +242,7 @@ const runwith = {re, txt
 	match regex.exec(re, txt)
 	| `std.Some matches:
 		std.put("matched {}, got {} matches\n", txt, matches.len)
-		for m in matches
+		for m : matches
 			std.put("Match: {}\n", m)
 		;;
 		regex.matchfree(matches)

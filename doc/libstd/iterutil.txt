@@ -84,7 +84,7 @@ This is a simple zip iterator:
 ```{runmyr zipiter}
 use std
 const main = {
-	for x in std.byzip([1,2,3][:], [4,5,6][:])
+	for x : std.byzip([1,2,3][:], [4,5,6][:])
 		std.put("{}\n", x)
 	;;
 }
@@ -95,7 +95,7 @@ This is a simple enum iterator:
 ```{runmyr enumiter}
 use std
 const main = {
-	for x in std.byenum(["hello", "world"][:])
+	for x : std.byenum(["hello", "world"][:])
 		std.put("{}\n", x)
 	;;
 }
@@ -104,7 +104,7 @@ const main = {
 ```{runmyr reverseiter}
 use std
 const main = {
-	for x in std.byreverse(["hello", "world"][:])
+	for x : std.byreverse(["hello", "world"][:])
 		std.put("{}\n", x)
 	;;
 }

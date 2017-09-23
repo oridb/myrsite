@@ -150,7 +150,7 @@ of each loop iteration, and the `incr` expression is run at the end of every
 loop iteration. The `test` expression is a boolean expression, and the loop is
 exited when it returns false.
 
-Iterator loops have the form `for pat in expr; body ;;`. These loops
+Iterator loops have the form `for pat : expr; body ;;`. These loops
 operate on an iterable expression such as an array or a slice. Each time
 that the loop runs, the next element in that iterable is stored into `pat`,
 and the body is run. This continues until all elements of the iterable are
@@ -660,7 +660,7 @@ care.
 
 	impl stringable roman =
 		stringify = {sb, n
-			for (i, s) in romanmap[:]
+			for (i, s) : romanmap[:]
 				while n >= i
 					std.sbputs(sb, s)
 					n -= i
