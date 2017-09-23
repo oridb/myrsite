@@ -98,10 +98,7 @@ const main = {
 
         /* basic hashing of a buffer */
         hash = crypto.md5("hello world!\n")
-        for b : hash
-                std.put("{x}", b)
-        ;;
-        std.put("\n")
+	std.put("{r}\n", hash[:])
 }
 ```
 
