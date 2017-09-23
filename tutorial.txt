@@ -279,7 +279,7 @@ match the pattern, the loop body is skipped.
 use std
 
 const main = {
-	for (1, x) in [(1,1), (2, 4), (1, 3), (2, 7)][:]
+	for (1, x) : [(1,1), (2, 4), (1, 3), (2, 7)][:]
 		std.put("x = {}\n", x)
 	;;
 }
@@ -726,7 +726,7 @@ line, it will echo all of the arguments given to it.
 use std
 
 const main = {args : byte[:][:]
-	for a in args[1:]
+	for a : args[1:]
 		std.put("{} ", a)
 	;;
 	std.put("\n")
@@ -775,7 +775,7 @@ const main = {args
 		][:]
 	])
 
-	for o in cmd.opts
+	for o : cmd.opts
 		match o
 		| ('n', ""):	printnl = false
 		| ('p', p):	pfx = p
@@ -783,7 +783,7 @@ const main = {args
 		;;
 	;;
 
-	for a in cmd.args
+	for a : cmd.args
 		std.put("{}{} ", pfx, a)
 	;;
 
@@ -1515,7 +1515,7 @@ Once a value is put into a union, extracting it requires checking the tag in
 a pattern match. This pattern match can come from either a match statement
 or a loop pattern:
 
-	for `std.Some val in iterable
+	for `std.Some val : iterable
 
 or 
 
