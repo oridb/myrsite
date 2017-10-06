@@ -299,6 +299,8 @@ The `bench` target is an explicit benchamrk. The only two ways that this differs
 from a test target is that it is run on `mbld bench`, and that it is expected
 to output subtests containing benchmark results.
 
+It behaves nearly identically to a test target.
+
 ####data####
 
 The `data` target lists a number of blobs to install. The default install

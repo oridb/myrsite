@@ -397,7 +397,9 @@ const main = {
         v = [.a = 123, .b=`Some 456, .c=(5, 10)]
         match v
         | [.a = 234]:              std.put("Should not be here\n")
-        | [.a = 123, .c=(x, y)]:   std.put("tuple is ({}, {})\n", x, y)
+        | [.a = 123, .c=(x, y)]:   std.put("extracted tuple is ({}, {})\n", x, y)
+        | [.a = 123, .c=(x, y)]:   std.put("extracted tuple is ({}, {})\n", x, y)
+        | [.a = other]:            std.put("got other value: {}\n", other)
         ;;
 }
 ```
