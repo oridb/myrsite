@@ -90,7 +90,7 @@ running `./configure --prefix=/path/to/wherever`. Just be sure to remember to
 add the prefix to $PATH before trying to run any commands, or your shell will
 not be able to find them.
 
-    git clone git://git.eigenstate.org/git/ori/mc.git
+    git clone git://git.eigenstate.org/ori/mc.git
     cd mc               # the directory you cloned into
     make                # build it
     sudo make install   # defaults to /usr/local

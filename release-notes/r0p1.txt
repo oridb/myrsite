@@ -49,7 +49,7 @@ Myrddin is a young language. There are regular fixes to the language and
 libraries. Therefore, it's probably a good idea to install it from Git. To
 install Myrddin from source:
 
-	git clone git://git.eigenstate.org/git/ori/mc.git
+	git clone git://git.eigenstate.org/ori/mc.git
 	cd mc
 	./configure --prefix=/usr
 	make	# gmake on BSD systems

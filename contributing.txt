@@ -43,7 +43,7 @@ This [website](http://git.eigenstate.org/ori/myrsite.git) is maintained using
 markdown, and is stored in git. We accept pull requests for it, and treat it
 like a wiki.
 
-	git clone git://git.eigenstate.org/git//ori/myrsite.git
+	git clone git://git.eigenstate.org/ori/myrsite.git
 
 Should you wish to generate the HTML locally, the site is generated using
 [USSM](http://loup-vaillant.fr/projects/ussm/), and compiled with a mildly
