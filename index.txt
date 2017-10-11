@@ -227,13 +227,11 @@ Type>            | Description
 `type[:]`        | A slice of type 
 `type[SIZE]`     | A type array of size SIZE. 
 
-Functions are specified with parentheses. The argument names are mandatory
+Function types are specified with parentheses. The argument names are mandatory
 in all type specifications, although the return type is optional. Tuples are
-specified with square brackets. A better, but still conflict-free syntax would
+specified with parentheses. A better, but still conflict-free syntax would
 be welcome.
 
-
-    
 Type                            | Description
 --------------------------------|------------------
 `(arg : t1, list : t2 -> ret)`  | Function with 2 args and a return type
