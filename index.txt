@@ -95,6 +95,11 @@ not be able to find them.
     make                # build it
     sudo make install   # defaults to /usr/local
 
+When running from git, you may need to first run `make bootstrap` on the
+first installation, or upon significant changes to mbld.
+
+    make bootstrap	# generate the bootstrap tools
+
 Compiling Hello World
 ---------------------
 
