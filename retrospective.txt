@@ -175,7 +175,7 @@ nearly all the functions I find myself wanting as I write programs.
   has landed. The API is shit, and needs to be reworked.
 
 - [Path manipulation](https://github.com/oridb/mc/blob/master/lib/std/pathjoin.myr)
-  is how shipped with libstd.
+  is now shipped with libstd.
 
 - And much much more.
 

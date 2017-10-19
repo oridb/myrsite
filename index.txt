@@ -20,7 +20,7 @@ features strong type checking, generics, type inference, closures, and traits.
 It aims to fit into a similar niche as C, but with fewer bullets in your feet.
 
 Myrddin does not aim to explore the forefront of type theory or compiler
-technology.  It does not focuse guaranteeing perfect safety. It is satisfied
+technology. It does not focus on guaranteeing perfect safety. It is satisfied
 to be a practical, small language.
 
 Code
@@ -143,7 +143,7 @@ and make the functions in it available to our code.
 
         const main = {args : byte[:][:];...}
 
-This is declaration where the anonymous function `{args; ...}` is assigned
+This is a declaration where the anonymous function `{args; ...}` is assigned
 the constant value 'main'.. All function declarations in Myrddin are done
 by assigning an anonymous function to a variable, generic, or constant.
 
