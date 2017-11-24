@@ -485,7 +485,7 @@ Myrddin ships with a number of useful libraries. The most common ones, and the
 ones that ship with the compiler, are libsys, libstd, libbio, libregex,
 libcrypto, and libdate. Other libraries are in the works.
 
-[Libstd](doc/libstd) handles functionality that most programs written
+[Libstd](doc/libstd/) handles functionality that most programs written
 would find useful.  It's a bit of a grab bag, but it's useful.
 
 [Libbio](doc/libbio/) handles buffered IO, allowing you to do fancy
