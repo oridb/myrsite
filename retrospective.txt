@@ -3,6 +3,11 @@
     description : What changed in Myrddin-land over 2016.
 }
 
+Retrospective 2017
+------------------
+
+The year sucked. But work got done.
+
 Retrospective 2016
 ------------------
 
