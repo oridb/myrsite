@@ -113,7 +113,7 @@ const main = {
 this to calulate the size to allocate:
 
 
-```{runmyr mk-example}
+```{runmyr alloc-example}
 use std
 
 const main = {
@@ -135,7 +135,7 @@ Thankfully, unlike C++ delete and delete[], it's impossible to pass a slice
 to the wrong free function.
 
 
-```{runmyr mk-example}
+```{runmyr slalloc-example}
 use std
 
 const main = {
@@ -148,7 +148,7 @@ const main = {
 
 Growing slices can be done using slgrow() and slzgrow():
 
-```{runmyr mk-example}
+```{runmyr slgrow-example}
 use std
 
 const main = {
