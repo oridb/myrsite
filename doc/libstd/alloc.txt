@@ -87,22 +87,23 @@ possible. The code for this looks like:
 ```{runmyr mk-example}
 use std
 
-type mytype =
+type mytype = struct
 	a : int
 	b : char
 	c : byte[:]
 ;;
 
 const main = {
-        var v
-
-        v = std.mk([
-            .a = 123
-            .b = 'x'
-            .c = "my string" /* this isn't heapified */
-        ])
-
-        std.free(v)
+	var v : mytype#
+	
+	v = std.mk([
+		.a = 123,
+		.b = 'x',
+		.c = "my string" /* this isn't heapified */
+	])
+	
+	std.put("{}\n", v#)
+	std.free(v)
 }
 ```
 

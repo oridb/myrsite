@@ -9,7 +9,7 @@ all the boring, dull details? Well, they're here.
 APIs
 ----
 
-### [Libstd](libstd/)
+### [Libstd](libstd)
 
 The standard library. You'll probably be using it in all your code, because
 it's the standard. It's intended to cover a good portion of the functionality
@@ -37,7 +37,7 @@ categorized into the following subsections:
   If you use them too, we've got you covered.
 - [Misc](libstd/misc): Random crap that doesn't really fit into a category.
 
-### [Libsys](libsys/)
+### [Libsys](libsys)
 
 Libsys is a direct interface to system calls provided by the platform. It is 
 a platform specific wrapper to the system. The documentation for the various
@@ -48,33 +48,33 @@ is the only way to access system specific functionality, which may not be
 implemented elsewhere.
 
 
-### [Libbio](libbio/)
+### [Libbio](libbio)
 
 This is a buffered IO library. It allows for many small reads and writes to be
 done with better performance than writing a system call for each one. On top
 of that, it allows for more convenient interfaces to handle linewise or
 delimited input, where peeking at the input stream may be necessary.
 
-### [Libregex](libregex/)
+### [Libregex](libregex)
 
 This is a regex library, as implied by the name. It implements a simple but
 powerful regex syntax, with full Unicode support. It also exposes the regex
 syntax tree if needed, which is useful for code that wants custom regex
 handling, but wants to remain consistent with the regexes in hairless.
 
-### [Libcrypto](libcrypto/)
+### [Libcrypto](libcrypto)
 
 This is a library that handles cryptographic functions. It aims to implement
 the most common cryptographic hashes and ciphers, and provides a fairly
 consistent interface to it.
 
-### [Libdate](libdate/)
+### [Libdate](libdate)
 
 Libdate provides a fairly complete interface for manipulating dates, times,
 and timezones. It handles adding durations and periods to dates, formatting
 and parsing dates.
 
-### [Libthread](libthread/)
+### [Libthread](libthread)
 
 Libthread is currently half-assed and broken, and it doesn't work very well
 with libstd, which is not yet thread aware. This needs work.
@@ -82,12 +82,12 @@ with libstd, which is not yet thread aware. This needs work.
 Utilities
 ---------
 
-### [Mbld](../mbld/)
+### [Mbld](../mbld)
 
 Mbld is the Myrddin build tool. It knows how to handle source and library
 dependencies, as well as build generated sources.
 
-### [Hairless](../hairless/)
+### [Hairless](../hairless)
 
 Hairless is the Myrddin parser generator. It's currently in a half-finished
 state, but is quit
