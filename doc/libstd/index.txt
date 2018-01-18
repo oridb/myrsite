@@ -12,7 +12,7 @@ functionality, but a good chunk of what is needed will be built in to
 the library.
 
 
-#### [Memory Allocation](alloc/)
+#### [Memory Allocation](alloc)
 
 Memory allocation is a function that nearly every program needs
 to be able to do. Myrddin's generics allow for relatively easy
@@ -33,7 +33,7 @@ to use and typesafe functions for this to be written.
             const bytefree	: (m:byte#, sz:size	-> void)
     ;;
 
-#### [Common Traits](traits/)
+#### [Common Traits](traits)
 
 Myrddin provides a number of common traits. These traits are implemented
 on several types in the standard library. They are also available for
@@ -58,7 +58,7 @@ implementation from outside the standard library.
     ;;
 
 
-#### [Error Handling](err/)
+#### [Error Handling](err)
 
 Myrddin provides a number of types and operations for propagating errors
 for later handling.
@@ -89,7 +89,7 @@ fire, and screaming, if that's more appropriate.
             generic getv : (v : option(@a), d : @a -> @a)
     ;;
 
-#### [OS Interfaces](os/)
+#### [OS Interfaces](os)
 
 The OS interfaces cover some portable primitives for handling processes
 and OS errors. It restricts itself to a set of portable wrappers for OS
@@ -139,7 +139,7 @@ all OS functionality that can be provided.
             const wait	: (pid : pid -> waitstatus)
     ;;
 
-#### [File Handling](files/)
+#### [File Handling](files)
 
 Many programs do file i/o by default. This package provides a portable
 interface to the common subset that most programs need and most OSes provide.
@@ -204,7 +204,7 @@ interface to the common subset that most programs need and most OSes provide.
             const fblat : (f : fd, buf : byte[:] -> bool)
     ;;
 
-#### [Networking](networking/)
+#### [Networking](networking)
 
 The networking related functionality in libstd provides the ability to
 quickly and easily open file descriptors to a server, as well as to 
@@ -263,7 +263,7 @@ from the `sys` library.
             generic nettohost	: (v : @a -> @a)
     ;;
 
-#### [Command Line Parsing](cli/)
+#### [Command Line Parsing](cli)
 
 Simple command line parsing is offered, designed to meet the needs of most
 programs quickly and easily. There isn't much to say here.
@@ -291,7 +291,7 @@ programs quickly and easily. There isn't much to say here.
             const optusage	: (prog : byte[:], def : optdef# -> void)
     ;;
 
-#### [Formatted Output](fmt/)
+#### [Formatted Output](fmt)
 
 libstd supports a number of simple, easy to use formatting functions,
 which can provide a sane format for any type out of the box, but also
@@ -324,7 +324,7 @@ formatters by default.
 		-> void)
     ;;
 
-#### [Iteration Utilities](iterutil/)
+#### [Iteration Utilities](iterutil)
 
 Support for some common iteration patterns is provided. There are many kinds
 of iteration that are done, and some of the most common ones are directly
@@ -352,7 +352,7 @@ restriction will be lifted.
 	;;
 
 
-#### [Variadic Arguments](varargs/)
+#### [Variadic Arguments](varargs)
 
 Myrddin supports variadic arguments for functions, and allows you
 to walk over them, similar to the varargs functions in C, but safer.
@@ -426,7 +426,7 @@ for iterating over them, and inspecting their values.
             generic vanext	: (ap : valist# -> @a)
     ;;
 
-#### [Slice manipulation](slices/)
+#### [Slice manipulation](slices)
 
 Slices are used everywhere within Myrddin code, so clearly we have
 some functions to manipulate them. They're listed here. Boopity boopity
@@ -442,7 +442,7 @@ boo.
             generic sljoin	: (dst : @a[:]#, src : @a[:]	-> @a[:])
     ;;
 
-#### [String Manipulation](strings/)
+#### [String Manipulation](strings)
 
 String manipulation also tends to show up in code sometimes. Here are some
 functions that do that. These are all unicode aware, and will not corrupt
@@ -492,7 +492,7 @@ utf8 data.
             generic charval : (c : char, base : int -> @a::(integral,numeric))
     ;;
 
-#### [Unicode](unicode/)
+#### [Unicode](unicode)
 
 A bunch of predicates and conversions to handle unicode. This only
 provides simple functionality. For canonicalization, collation, and
@@ -528,7 +528,7 @@ I haven't had a chance to write them yet.
             const totitle	: (c : char -> char)
     ;;
 
-#### [Pervasive Data Structures](datastruct/)
+#### [Pervasive Data Structures](datastruct)
 
 There are some data structures that basically every program seems to use:
 Sets, and hash tables. Libstd includes them for that reason.
@@ -585,7 +585,7 @@ Sets, and hash tables. Libstd includes them for that reason.
     ;;
 
 
-#### [Pervasive Algorithms](algorithms/)
+#### [Pervasive Algorithms](algorithms)
 
 Many programs also use sorting and searching, so this is also provided by
 libstd. In addition, we package some useful comparison and hashing functions
@@ -616,7 +616,7 @@ libstd. In addition, we package some useful comparison and hashing functions
             generic abs	: (a : @a::numeric -> @a::numeric)
     ;;
 
-#### [Randomness](randomness/)
+#### [Randomness](randomness)
     
 And of course, you can't go without being a little random at times.
 
@@ -629,7 +629,7 @@ And of course, you can't go without being a little random at times.
             const rngrandbytes	: (rng : rng#, buf : byte[:]	-> size)
     ;;
 
-#### [Bigint Operations](bigint/)
+#### [Bigint Operations](bigint)
 
 While bigint usage in most programs is relatively rare, libstd needs them
 internally for handling floats, and several other widely used pieces of
@@ -675,7 +675,7 @@ expose them in the public API.
     ;;
 
 
-#### [Closures](closures/)
+#### [Closures](closures)
 
 There are functions for heapifying closures, too.
 
@@ -684,7 +684,7 @@ There are functions for heapifying closures, too.
             generic fnfree	: (fn : @fn::function -> void)
     ;;
 
-#### [Misc](misc/)
+#### [Misc](misc)
 
 Well, I said it was a grab bag.  These don't really fit into any overarching
 category.
