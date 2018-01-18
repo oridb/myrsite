@@ -355,7 +355,7 @@ the end of the file. A value of `` `bio.Err bio.err`` indicates that the
 reader has encountered an error reading the file. And a value of `` `bio.Ok
 char`` indicates that a single character was successfully read from the file.
 
-Refer to the [API documentation](http://myrlang.org/doc/libbio/) for the full
+Refer to the [API documentation](http://myrlang.org/doc/libbio) for the full
 details of what the buffered I/O library provides.
 
 The main loop first checks for errors, bailing out of the program with a
