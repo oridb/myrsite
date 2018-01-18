@@ -10,20 +10,21 @@ The Myrddin hackers hang out in #myrddin on irc.eigenstate.org. Most
 design discussion happens there.  You can join using your favorite client, or
 online via [kiwi IRC](https://kiwiirc.com/client/irc.eigenstate.org/?nick=yournick#myrddin)
 
-We also have the [myrddin-dev](http://eigenstate.org/mail-lists)
+We also have the [myrddin-dev](http://eigenstate.org/mail-lists.html)
 mailing list on eigenstate.org, which is largely used for announcements
 and design summaries.
 
-- [Archives](http://eigenstate.org/mail-lists)
-- [Subscribe](http://eigenstate.org/mail-lists)
+- [Archives](http://eigenstate.org/archive/myrddin-dev/index.html)
+- [Subscribe](http://eigenstate.org/mail-lists.html)
 
 Submitting Code
 ---------------
 
 The canonical code repository is on
 [https://git.eigenstate.org](https://git.eigenstate.org), but is
-mirrored on GitHub. We will accept patches on the mailing lists,
-GitHub pull requests, or snail mail (Please inquire in IRC for the
+mirrored on GitHub. We prefer if you email patches on the mailing list,
+but alternatives are fine. We'll take GitHub pull requests, links to
+a repository with changes, or or snail mail (Please inquire in IRC for the
 address).
 
 Proposing Libraries for Inclusion
@@ -31,7 +32,7 @@ Proposing Libraries for Inclusion
 
 If you've written a library for Myrddin, and you feel like it can be merged
 with the current standard library, or it is generally useful enough to be
-shipped along with the compiler, feel free to contact us.
+shipped, linked or otherwise made public, feel free to contact us.
 
 Overall, Myrddin's plan is to ship with a wide variety of "batteries included"
 libraries, and we'd love to have your code be a part of that.

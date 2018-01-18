@@ -53,7 +53,7 @@ format string, that format string will be used. If there is no format, the
 timezone will be assumed to be UTC.
 
 The format string used is similar to strptime, and is documented fully in
-the [description of formatting](formatting)
+the [description of formatting](formatting.html)
 
 Returns: Either an instant representing the time parsed, or an error
 describing the failure.

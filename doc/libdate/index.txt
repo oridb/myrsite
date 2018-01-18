@@ -69,18 +69,18 @@ Functionality
 The functionality in libdate can be grouped into three main sections: Parsing,
 Manipulation, and Formatting.
 
-### [Types](types)
+### [Types](types.html)
 
 This covers the set of all types provided by, and used throughout, the API
 of libdate, including all public fields and types.
 
-### [Parsing](parsing)
+### [Parsing](parsing.html)
 
 This covers parse formatted dates in a manner similar to strptime. There are
 currently plans for an flexible parse() function, but this has not yet been
 implemented.
 
-### [Creation and Manipulation](manipulation)
+### [Creation and Manipulation](manipulation.html)
 
 Manipulation covers date and time creation, and transition aware APIs that
 will work for timezone crossings, daylight savings time, and so on.

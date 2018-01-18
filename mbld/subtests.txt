@@ -37,7 +37,8 @@ the output directly. Myrddin ships with one such library for Myrddin,
 		][:])
 	}
 
-For more information, take a look at [the testr documentation](/doc/libtestr/)
+For more information, take a look at [the testr documentation](
+/doc/libtestr/index.html)
 
 The MTEST protocol
 ------------------

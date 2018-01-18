@@ -9,35 +9,35 @@ all the boring, dull details? Well, they're here.
 APIs
 ----
 
-### [Libstd](libstd)
+### [Libstd](libstd/index.html)
 
 The standard library. You'll probably be using it in all your code, because
 it's the standard. It's intended to cover a good portion of the functionality
 that you'll need for any program. It's a bit of a grab bag, but can be roughly
 categorized into the following subsections:
 
-- [Memory Allocation](libstd/alloc): All of your memory allocation needs.
-- [Error Handling](libstd/err): Convenient utilities for aborting your program.
-- [OS Interfaces](libstd/os): Ask not what you can do for your OS, ask what
+- [Memory Allocation](libstd/alloc.html): All of your memory allocation needs.
+- [Error Handling](libstd/err.html): Convenient utilities for aborting your program.
+- [OS Interfaces](libstd/os.html): Ask not what you can do for your OS, ask what
   your OS can do for you.
-- [File Handling](libstd/files): Sometimes data just wants to persist.
-- [Networking](libstd/networking): Communicating with other systems isn't just
+- [File Handling](libstd/files.html): Sometimes data just wants to persist.
+- [Networking](libstd/networking.html): Communicating with other systems isn't just
   a fad.
-- [Command Line Parsing](libstd/cli): Makes it easy to parse options from the
+- [Command Line Parsing](libstd/cli.html): Makes it easy to parse options from the
   command line.
-- [Formatted Output](libstd/fmt): I/O. Without monads.
-- [Variadic Arguments](libstd/varargs): If you want ugly APIs, we've got you
+- [Formatted Output](libstd/fmt.html): I/O. Without monads.
+- [Variadic Arguments](libstd/varargs.html): If you want ugly APIs, we've got you
   covered.
-- [Slice manipulation](libstd/slices): Some generic functions. Easy to write
+- [Slice manipulation](libstd/slices.html): Some generic functions. Easy to write
   yourself, but a bit tedious.
-- [String Manipulation](libstd/strings): Some Unicode-aware string poking.
-- [Unicode](libstd/unicode): Wait a second, all languages aren't English?
-- [Pervasive Data Structures](libstd/datastruct): At least, I use them a lot.
-- [Big Integers](libstd/bigint): Big integers. They're useful for some things.
+- [String Manipulation](libstd/strings.html): Some Unicode-aware string poking.
+- [Unicode](libstd/unicode.html): Wait a second, all languages aren't English?
+- [Pervasive Data Structures](libstd/datastruct.html): At least, I use them a lot.
+- [Big Integers](libstd/bigint.html): Big integers. They're useful for some things.
   If you use them too, we've got you covered.
-- [Misc](libstd/misc): Random crap that doesn't really fit into a category.
+- [Misc](libstd/misc.html): Random crap that doesn't really fit into a category.
 
-### [Libsys](libsys)
+### [Libsys](libsys/index.html)
 
 Libsys is a direct interface to system calls provided by the platform. It is 
 a platform specific wrapper to the system. The documentation for the various
@@ -48,33 +48,33 @@ is the only way to access system specific functionality, which may not be
 implemented elsewhere.
 
 
-### [Libbio](libbio)
+### [Libbio](libbio/index.html)
 
 This is a buffered IO library. It allows for many small reads and writes to be
 done with better performance than writing a system call for each one. On top
 of that, it allows for more convenient interfaces to handle linewise or
 delimited input, where peeking at the input stream may be necessary.
 
-### [Libregex](libregex)
+### [Libregex](libregex/index.html)
 
 This is a regex library, as implied by the name. It implements a simple but
 powerful regex syntax, with full Unicode support. It also exposes the regex
 syntax tree if needed, which is useful for code that wants custom regex
-handling, but wants to remain consistent with the regexes in hairless.
+handling, but wants to remain consistent with the myrddin regex syntax.
 
-### [Libcrypto](libcrypto)
+### [Libcrypto](libcrypto/index.html)
 
 This is a library that handles cryptographic functions. It aims to implement
 the most common cryptographic hashes and ciphers, and provides a fairly
 consistent interface to it.
 
-### [Libdate](libdate)
+### [Libdate](libdate/index.html)
 
 Libdate provides a fairly complete interface for manipulating dates, times,
 and timezones. It handles adding durations and periods to dates, formatting
 and parsing dates.
 
-### [Libthread](libthread)
+### [Libthread](libthread/index.html)
 
 Libthread is currently half-assed and broken, and it doesn't work very well
 with libstd, which is not yet thread aware. This needs work.
@@ -87,8 +87,4 @@ Utilities
 Mbld is the Myrddin build tool. It knows how to handle source and library
 dependencies, as well as build generated sources.
 
-### [Hairless](../hairless)
-
-Hairless is the Myrddin parser generator. It's currently in a half-finished
-state, but is quit
 

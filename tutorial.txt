@@ -15,12 +15,12 @@ This tutorial will get a new user up to speed with Myrddin quickly. This
 tutorial comes in three parts. The first will discuss key concepts via several
 example programs, the second will cover parts of the language in more detail,
 and the third will give an idea of what libraries exist and how to use them.
-For deeper coverage, look at the [language specification](spec) and the
-[library reference manual](doc).
+For deeper coverage, look at the [language specification](spec.html) and the
+[library reference manual](doc/index.html).
 
 We assume that you are already familiar with programming, and have installed
 Myrddin on your machine already, following the instructions on the
-[Environment Setup](setup) page.
+[Environment Setup](setup.html) page.
 
 A Simple Program
 ---------------
@@ -53,7 +53,7 @@ For example,
 
 would output the string `2 + 2 = 5`.  Additional parameters for specifying
 the formatting can be passed between the `{` and `}`. These vary by type,
-and are fully documented in the [library documentation](doc/libstd/fmt).
+and are fully documented in the [library documentation](doc/libstd/fmt.html).
 
 The `std.put` function comes from the `std` library, loaded via `use std` on
 the first line of the program. Use statements will import a library, allowing
@@ -355,7 +355,7 @@ the end of the file. A value of `` `bio.Err bio.err`` indicates that the
 reader has encountered an error reading the file. And a value of `` `bio.Ok
 char`` indicates that a single character was successfully read from the file.
 
-Refer to the [API documentation](http://myrlang.org/doc/libbio) for the full
+Refer to the [API documentation](http://myrlang.org/doc/libbio/index.html) for the full
 details of what the buffered I/O library provides.
 
 The main loop first checks for errors, bailing out of the program with a
@@ -626,7 +626,7 @@ used for dependencies within a single package, while the unquoted form
 is used for dependencies between different packages.
 
 There's a lot more to mbld, and the full documentation is available
-in the [mbld tutorial](mbld).
+in the [mbld tutorial](mbld.html).
 
 Printing Roman Numerals
 -----------------------
@@ -810,7 +810,7 @@ Once the options are parsed, the program loops over them and processes them,
 storing the prefix and recording whether to print newlines.
 
 This program only exercises a small portion of the command line parser.
-The [API reference](doc/libstd/cli) covers the rest of the capabilities
+The [API reference](doc/libstd/cli.html) covers the rest of the capabilities
 in detail.
 
 Declarations in Detail
@@ -1568,7 +1568,7 @@ and call it as:
 	put("{}, {}\n", 123, 456)
 
 The variadic arguments can be extracted and manipulated through the std.va*
-functions in libstd. These are [documented here](doc/libstd/varargs).
+functions in libstd. These are [documented here](doc/libstd/varargs.html).
 
 
 Style
@@ -1681,5 +1681,5 @@ hearts, and would be made more usable through the act of implementation.
 Most discussion is on IRC, in #myrddin on irc.eigenstate.org. You can join
 using your favorite client, or online via [kiwi IRC](https://kiwiirc.com/client/irc.eigenstate.org/?nick=yournick#myrddin)
 
-We are also responsive on the [mailing list](list-subscribe).
+We are also responsive on the [mailing list](list-subscribe.html).
 

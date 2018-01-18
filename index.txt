@@ -73,7 +73,7 @@ use to experiment with code. It's fairly restrictive, and prevents you from
 using the vast majority of system calls, but it's enough to get a feel for
 things.
 
-[So, give it a shot.](http://myrlang.org/playground)
+[So, give it a shot.](https://myrlang.org/playground)
 
 Installing The Compiler
 -----------------------
@@ -485,20 +485,20 @@ Myrddin ships with a number of useful libraries. The most common ones, and the
 ones that ship with the compiler, are libsys, libstd, libbio, libregex,
 libcrypto, and libdate. Other libraries are in the works.
 
-[Libstd](doc/libstd/) handles functionality that most programs written
+[Libstd](doc/libstd/index.html) handles functionality that most programs written
 would find useful.  It's a bit of a grab bag, but it's useful.
 
-[Libbio](doc/libbio/) handles buffered IO, allowing you to do fancy
+[Libbio](doc/libbio/index.html) handles buffered IO, allowing you to do fancy
 things with input and output, line reading linewise, or reading up to
 delimiters.
 
-[Libregex](doc/libregex/) handles regexes. It implements a simple but powerful regex syntax,
+[Libregex](doc/libregex/index.html) handles regexes. It implements a simple but powerful regex syntax,
 and has working Unicode support.
 
-[Libcrypto](doc/libcrypto/) provides cryptographic functions. It
+[Libcrypto](doc/libcrypto/index.html) provides cryptographic functions. It
 implements many of the most common ones.
 
-[Libdate](doc/libdate/) provides a fairly complete interface for
+[Libdate](doc/libdate/index.html) provides a fairly complete interface for
 manipulating dates, times, and timezones.
 
 C Binding
@@ -512,15 +512,15 @@ system, but automated binding generation has only been started on.
 Further Reading
 ----------------
 
-- [Language Specification](http://git.eigenstate.org/ori/mc.git/tree/doc/lang.txt)`
-- [Library source](http://git.eigenstate.org/ori/mc.git/tree/lib/)`
-- [Standard library API docs](doc/libstd)`
-- [Compiler Internals Documentation](http://git.eigenstate.org/ori/mc.git/tree/doc/compiler.txt)`
+- [Language Specification](https://git.eigenstate.org/ori/mc.git/tree/doc/lang.txt)`
+- [Library source](https://git.eigenstate.org/ori/mc.git/tree/lib/)`
+- [Standard library API docs](doc/libstd/index.html)`
+- [Compiler Internals Documentation](https://git.eigenstate.org/ori/mc.git/tree/doc/compiler.txt)`
 
 Mailing List
 ------------
 
-[Subscribe to the Mailing List](list-subscribe)
+[Subscribe to the Mailing List](list-subscribe.html)
 
 IRC: irc.eigenstate.org, in #myrddin. You can get there using your favorite
 client, or with [kiwi IRC](https://kiwiirc.com/client/irc.eigenstate.org/?nick=yournick#myrddin)

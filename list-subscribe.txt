@@ -8,7 +8,7 @@ List Archives
 
 Development discussion, 
 
-[Myrddin-dev archives](https://eigenstate.org/archive/myrddin-dev/)
+[Myrddin-dev archives](https://eigenstate.org/archive/myrddin-dev/index.html)
 
 
 Subscribe: myrddin-dev@eigenstate.org

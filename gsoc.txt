@@ -6,9 +6,9 @@
 Getting in Contact
 ------------------
 
-The Myrddin hackers hang out in #myrddin on irc.eigenstate.org. We also
-ocasionallyl talk on the Myrddin mailing list, which you can join from
-here: https://myrlang.org/list-subscribe
+The Myrddin hackers hang out in #myrddin on irc.eigenstate.org. We also talk
+on the Myrddin mailing list, which you can join from here:
+https://myrlang.org/list-subscribe.html
 
 Here are the screen names of your potential mentors:
 
@@ -17,6 +17,17 @@ Andrew Chambers: ac
 Quentin Carbonneaux: mpu  
 Roberto Vargas: k0ga  
 Michanel Forney: tridactyla  
+
+Getting Started
+---------------
+
+- Read this page. We tell you what you should do if you want to get accepted
+  here.
+- Introduce yourself on IRC, and ping the listed mentors for the projects you
+  will be interested in. Stick around, we're usually online but not always at
+  the keyboard.
+- Introduce yourself on the mailing list.
+- Read the [Contributing](contributing.html) page.
 
 How to get Selected
 -------------------
@@ -30,7 +41,7 @@ such thing as cheating: Putting together a proposal is a collaboration, and a
 chance for us to get to know you.
 
 In order to get in contact with the community, read the
-[contributing](/contributing) page.
+[contributing](/contributing.html) page.
 
 When we evaluate a proposal, we are trying to decide two things. First, we are
 trying to understand whether the project will be useful to us. If the end
@@ -38,7 +49,7 @@ product doesn't solve a problem or improve the project, then we are unlikely
 to accept the proposal. Second, we are looking for evidence that indicates that
 you, the applicant, will successfully complete the project.
 
-Therefore, a good proposal will hit all of the following points:
+A good proposal will hit all of the following points:
 
 - An introduction.
 	- Who are you?
@@ -61,12 +72,6 @@ Therefore, a good proposal will hit all of the following points:
 	- Why are you the right person to do the project?
 	- Why do you find the project interesting?
 
-
-How Succeed after You Have Been Accepted
-------------------------------------------
-
-Follow the Summer of Code [checklist](. Keep in touch, join the community, and
-ask for help from everyone, not just the mentors. 
 
 
 Summer of Code Project Ideas
