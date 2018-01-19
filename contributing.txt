@@ -3,12 +3,15 @@
     description : How to Contribute
 }
 
-Contact Info
-------------
+IRC
+----
 
 The Myrddin hackers hang out in #myrddin on irc.eigenstate.org. Most
-design discussion happens there.  You can join using your favorite client, or
+of our discussion happens there.  You can join using your favorite client, or
 online via [kiwi IRC](https://kiwiirc.com/client/irc.eigenstate.org/?nick=yournick#myrddin)
+
+Mailing Lists
+-------------
 
 We also have the [myrddin-dev](http://eigenstate.org/mail-lists.html)
 mailing list on eigenstate.org, which is largely used for announcements
