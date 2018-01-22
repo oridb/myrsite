@@ -188,6 +188,17 @@ the initial work to fix this. You will pick the most important and commonly
 used numeric functions, and implement them in a way that is correct, clean,
 and reasonably fast.
 
+#### Expected results
+
+Implementations of common mathematical functions, including trigonometric
+and transcendental functions.
+
+#### Difficulty Level
+Very hard.
+
+#### Mentor
+Ori Bernstein
+
 Implement DWARF debug information
 ---------------------------
 
@@ -202,13 +213,32 @@ to QBE, and possibly even our assemblers.
 
 #### Expected results
 `gdb obj/foo` will work. I will be able to print the values of variables, show
-data strucutres, and generally work as expected.
+data structures, and generally work as expected.
 
 #### Difficulty Level
 Very hard.
 
 #### Mentor
 Ori Bernstein, Quentin Carbonneaux
+
+Implement Thread Local Storage
+---------------------------
+
+Curently, Myrddin does not have thread local storage. This is a useful feature
+to have.
+
+This would involve learning how thread local storage is implemented across
+several different platforms, hooking into those mechanisms, and adding the
+ability to generate code that will reference thread local variables.
+
+#### Expected results
+It will be possible to refer to thread locals in a cross platform manner.
+
+#### Difficulty Level
+Hard
+
+#### Mentor
+Ori Bernstein
 
 Implement New Optimizations for QBE
 ----------------------------------
@@ -227,14 +257,18 @@ Variable.
 #### Mentor
 Ori Bernstein, Quentin Carbonneaux
 
-Implement new backend for QBE
+Implement new ARM backend for QBE
 ----------------------------------
 
-QBE currently supports x86-64 and arm-64. This project would add a new
-supported target architecture, ideally 32 bit arm. This would involve
-refactoring the middle end to make sure that there are no target
-architectures, and adding the code to emit assembly for this new system. Of
-particular interest is one of the various ARM platforms, including Armv8.
+QBE currently supports x86-64 and arm-64. This project would add a new target
+architecture, 32 bit arm. This would involve refactoring the middle end to
+remove any target dependencies and bit size assumptions, and adding the code
+to emit assembly for this new system. Of particular interest is one of the
+various ARM platforms.
+
+#### Required Knowledge
+
+C, Compilers
 
 #### Expected results
 QBE will be able to emit code for the selected target architecture by the
@@ -245,6 +279,71 @@ Medium
 
 #### Mentor
 Ori Bernstein, Quentin Carbonneaux
+
+Implement webassembly backend for QBE
+----------------------------------
+
+QBE currently supports x86-64 and arm-64. This project would add a web
+target for QBE. This would involve refactoring the middle end to make sure
+that target architecture dependencies are removed, and adding the code to
+emit and assemble web assembly. A wasm assembler would have to be written,
+since we do not believe that pulling in the giant web assembly toolchains
+that currently exist is a good tradeoff.
+
+#### Expected results
+QBE will be able to emit code for the selected target architecture by the
+end of the summer.
+
+#### Difficulty Level
+Hard
+
+#### Mentor
+Ori Bernstein, Quentin Carbonneaux
+
+Add output formats to cross-linker
+----------------------------------
+
+Both Myrddin and SCC are in the process of migrating to our own toolchain,
+and removing the overly complex binutils, and instead moving to a linker and
+assmebler designed for cross compilation.
+
+As part of the work to do this, we've started to implement a cross-linker,
+which can take object files in the Myro format, and turn it into a binary
+for any of our supported target architectures.
+
+If you take on this project, you will be adding more supported target
+architectures, such as Mach-O or ELF. Dynamic linking to existing shared
+objects should be supported.
+
+#### Expected Results:
+
+#### Difficulty Level
+Medium
+
+#### Mentor
+Roberto Vargas, Ori Bernstein
+
+
+Add a new platform to the SCC Assemblers
+---------------------------------------
+
+As mentioned above, both Myrddin and SCC are in the process of migrating to our
+own toolchain. We've got an assembler for several platforms, but we will need
+a few more added in. Arm64, Arm32, MIPS, and many others are desired.
+
+#### Expected Results:
+
+We will be able to assemble code for the platform of your choice.
+
+#### Required Knowledge
+
+Assembly programming for your target architecture, C
+
+#### Difficulty Level
+Medium
+
+#### Mentor
+Roberto Vargas, Ori Bernstein
 
 
 Implement a DFA cache for libregex
@@ -263,6 +362,35 @@ Medium to hard.
 
 #### Required knowledge
 
+DFAs, regex
+
 #### Mentor
 Ori Bernstein, Quentin Carbonneaux
 
+Implement a Documentation Generator
+----------------------------------
+
+Currently, library documentation is maintained by hand. It would be nice
+to have some tools in Myrddin to generate documentation automatically,
+stitching together code, external documents, and cross referencing things
+appropriately.
+
+This could be done by either adapting an existing documentation generator,
+or writing one from scratch.
+
+Ideally, this generator would be able to output both manpages and
+HTML.
+
+#### Expected Results
+
+The ability to automatically create documentation from source code
+and side-text. It should check and warn (or error) if the documentation
+is incomplete.
+
+#### Required Knowledge
+
+HTML, Troff, basic parsing
+
+#### Mentor
+
+Ori Bernstein
