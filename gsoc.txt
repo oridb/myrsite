@@ -394,3 +394,26 @@ HTML, Troff, basic parsing
 #### Mentor
 
 Ori Bernstein
+
+Improve Cross Compilation
+---------------------------
+
+Currently, it's fairly painful to cross compile Myrddin. There's no
+reason for this, since we can know how to invoke the appropriate toolchains,
+and have no external dependencies that are difficult to set up. At this
+point, the bulk of the work is teaching mbld to invoke the appropriate
+non-native toolchains.
+
+
+#### Expected Results
+
+We should be able to painlessly build for any system from any other system,
+without trouble, assuming an appropriate toolchain is available.
+
+#### Required Knowledge
+
+Compilers, assembly, Unix.
+
+#### Mentor
+
+Ori Bernstein, Andrew Chambers, Roberto Vargas
