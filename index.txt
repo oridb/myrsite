@@ -501,6 +501,23 @@ implements many of the most common ones.
 [Libdate](doc/libdate/index.html) provides a fairly complete interface for
 manipulating dates, times, and timezones.
 
+[Libhtml](doc/libhtml/index.html) allows for HTTP serving and handling.
+
+[Libescfmt](doc/libescfmt/index.html) escapes and unescapes various input and
+output formats.
+
+[Libfileutil](doc/libfileutil/index.html) handles a variety of less common but
+still useful file manipulation functions: directory tree walks, recursive
+deletion, temporary file support, and other similar things are included.
+
+[Libiter](doc/libiter/index.html) provides a number of iteration utilities
+in a generic form, allowing for reverse iteration, zipping, cartesian
+products, and a number of other things.
+
+[Libinitile](doc/libinifile/index.html) handles parsing ini files.
+
+[Libtestr](doc/libtestr/index.html) facilitates writing unit tests.
+
 C Binding
 ---------
 
