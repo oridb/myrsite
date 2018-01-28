@@ -418,41 +418,40 @@ writes to it. It creates it with 0o644 permissions (ie, rw-r--r--), and then
 immediately closes it. The result of this program should be a file called
 `create-example` containing the words.
 
-    use std
-    use bio
+	use std
+	use bio
 
-    const main = {
-            var f
+	const main = {
+		var f
 
-            match bio.create("create-example", bio.Wr, 0o644)
-            | `std.Some bio:    f = bio
-            | `std.None:        std.fatal(1, "Failed to open file\n")
-            ;;
-            bio.write(f, "Hello user\n")
-            bio.close(f)
-    }
+		match bio.create("create-example", bio.Wr, 0o644)
+		| `std.Ok bio:    f = bio
+		| `std.Err e:        std.fatal("Failed to open file: {}\n", e)
+		;;
+		bio.write(f, "Hello user\n")
+		bio.close(f)
+	}
 
 The next example shows reading from a file called "lines", line by line. It
 should echo the lines, numbering them as it prints them:
 
-    use std
-    use bio
+	use std
+	use bio
 
-    const main = {
-            var f
-            var i
+	const main = {
+		var f, i
 
-            match bio.open("lines", bio.Rd)
-            | `std.Some bio:        f = bio
-            | `std.None:    std.fatal(1, "Unable to open data file\n")
-            ;;
+		match bio.open("lines", bio.Rd)
+		| `std.Ok bio:        f = bio
+		| `std.Err e:    std.fatal("Unable to open data file: {}\n", e)
+		;;
 
-            while true
-                    match bio.readlin(f)
-                    | `std.Some ln:
-                            std.put("line %i: %s\n", i, ln)
-                    | `std.None:
-                            break;
-                    ;;
-            ;;
-    }
+		i = 0
+		while true
+			match bio.readln(f)
+			| `std.Err `bio.Eof: 	break;
+			| `std.Err e: 		std.fatal("err: {}\n", e)
+			| `std.Ok ln:		std.put("line {}: {}\n", i++, ln)
+			;;
+		;;
+	}
