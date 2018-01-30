@@ -171,8 +171,8 @@ At the end of the summer, I will be able to run commands such as `mbld fetch`,
 which will get all dependent packages needed for building a piece of code,
 install them, and handle versioning and updating them.
 
-#### Knowledge Prerequisite
-Depends on final design. Basic HTTP, SSH, and git is needed.
+#### Suggested Knowledge
+Depends on final design. Basic HTTP, SSH, and git are likely to be necessary.
 
 #### Difficulty Level
 Easy to Medium, depending on design.
@@ -192,6 +192,11 @@ and reasonably fast.
 
 Implementations of common mathematical functions, including trigonometric
 and transcendental functions.
+
+#### Suggested Knowledge
+
+- Numerical methods
+- floating point error analysis.
 
 #### Difficulty Level
 Very hard.
@@ -215,6 +220,12 @@ to QBE, and possibly even our assemblers.
 `gdb obj/foo` will work. I will be able to print the values of variables, show
 data structures, and generally work as expected.
 
+#### Suggested Knowledge
+
+- Assembly
+- DWARF debugging
+- GDB
+
 #### Difficulty Level
 Very hard.
 
@@ -234,6 +245,12 @@ ability to generate code that will reference thread local variables.
 #### Expected results
 It will be possible to refer to thread locals in a cross platform manner.
 
+#### Suggested Knowledge
+
+- Assembly
+- x86-64 ABI
+- Threading
+
 #### Difficulty Level
 Hard
 
@@ -250,6 +267,12 @@ implemnt, and write code to implmeent it.
 
 #### Expected results
 QBE will have a new optimization that makes many benchmarks run faster.
+
+#### Suggested Knowledge
+
+- Assembly
+- SSA
+- Compilers
 
 #### Difficulty Level
 Variable.
@@ -274,6 +297,12 @@ C, Compilers
 QBE will be able to emit code for the selected target architecture by the
 end of the summer.
 
+#### Suggested Knowledge
+
+- Assembly
+- SSA
+- Compilers
+
 #### Difficulty Level
 Medium
 
@@ -293,6 +322,12 @@ that currently exist is a good tradeoff.
 #### Expected results
 QBE will be able to emit code for the selected target architecture by the
 end of the summer.
+
+#### Suggested Knowledge
+
+- Assembly
+- SSA
+- Compilers
 
 #### Difficulty Level
 Hard
@@ -315,7 +350,15 @@ If you take on this project, you will be adding more supported target
 architectures, such as Mach-O or ELF. Dynamic linking to existing shared
 objects should be supported.
 
-#### Expected Results:
+#### Expected Results
+
+Being able to link for any supported platform from any supported platform.
+
+#### Suggested Knowledge
+
+- Various binary formats:
+  - ELF, a.out, mach-o, ...
+- Assembly
 
 #### Difficulty Level
 Medium
@@ -337,7 +380,9 @@ We will be able to assemble code for the platform of your choice.
 
 #### Required Knowledge
 
-Assembly programming for your target architecture, C
+- Assembly 
+- C
+- Linking process
 
 #### Difficulty Level
 Medium
@@ -362,7 +407,8 @@ Medium to hard.
 
 #### Required knowledge
 
-DFAs, regex
+- DFAs
+- Regex
 
 #### Mentor
 Ori Bernstein, Quentin Carbonneaux
@@ -389,7 +435,9 @@ is incomplete.
 
 #### Required Knowledge
 
-HTML, Troff, basic parsing
+- HTML
+- Troff
+- Parsers
 
 #### Mentor
 
@@ -412,8 +460,12 @@ without trouble, assuming an appropriate toolchain is available.
 
 #### Required Knowledge
 
-Compilers, assembly, Unix.
+- Compilers
+- Assembly
+- Unix.
 
 #### Mentor
 
 Ori Bernstein, Andrew Chambers, Roberto Vargas
+
+
