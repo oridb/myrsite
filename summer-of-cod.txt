@@ -49,8 +49,8 @@ Send an email to the [mailing list](https://myrlang.org/list-subscribe),
 or ping us on IRC. If your idea sounds interesting, and you seem like
 yu will be able to execute, we'll put your name down as a participant.
 
-Because there's only so much fish I'm willing to have shipped, there is
-a limited number of slots, so let us know you're planning to work on something
+Because there's only so much fish I'm willing to have shipped, there is a
+limited number of slots, so let us know you're planning to work on something
 in advance.
 
 At the end of the summer, if you've produced code, we ship cod.
@@ -67,7 +67,8 @@ When can I get my fish?
 
 What projects are eligible?
 
-- Myrddin, SCC, QBE.
+- [Myrddin](https://myrlang.org), [SCC](http://simple-cc.org/),
+  [QBE](http://c9x.me/compile).
 
 What fishmonger does GARGLE SUMMER OF COD use?
 
