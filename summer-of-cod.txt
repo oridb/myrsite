@@ -21,7 +21,10 @@ Eligibility:
 
 In order to qualify for GARGLE SUMMER OF COD, we will need to be able
 to ship you cod. If we can figure out how to ship your sea-stipend, you are
-elegible to apply. Talk to us for shipping details. 
+elegible to apply. Talk to us for shipping details.
+
+If you've got a completed project, we'll be shipping the fish out on
+August 31st. Let us know in advance, so we can 
 
 Stipend:
 ========
@@ -46,13 +49,17 @@ Send an email to the [mailing list](https://myrlang.org/list-subscribe),
 or ping us on IRC. If your idea sounds interesting, and you seem like
 yu will be able to execute, we'll put your name down as a participant.
 
+Because there's only so much fish I'm willing to have shipped, there is
+a limited number of slots, so let us know you're planning to work on something
+in advance.
+
 At the end of the summer, if you've produced code, we ship cod.
 
 FAQ:
 ====
 Are you serious?
 
-- We never take ourselves that seriously. But we will ship you fish.
+- We never take ourselves that seriously. But we promise you'll get your cod.
 
 When can I get my fish?
 
