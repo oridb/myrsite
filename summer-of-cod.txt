@@ -37,7 +37,7 @@ Project ideas:
 
 We have the Google Summer of Code page up. Use it for ideas.
 
-https://myrlang.org/gsoc.html
+[https://myrlang.org/gsoc.html](https://myrlang.org/gsoc.html)
 
 How To Apply
 ============
@@ -65,7 +65,7 @@ What projects are eligible?
 What fishmonger does GARGLE SUMMER OF COD use?
 
 - We're open to suggestions, but if you are in the USA, we will
-  default to Pike Place: https://www.pikeplacefish.com/pages/shipping
+  default to [Pike Place](https://www.pikeplacefish.com/pages/shipping)
 
 Is GARGLE SUMMER OF COD considered an internship, a job, or any form of
 employment?
