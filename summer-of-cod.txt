@@ -11,7 +11,7 @@ code, in spite of our organization vitality and clear leadership in the 'wheel
 reinvention' domain. However, we've got a backup plan.
 
 Today I'm pleased to announce that I am announcing the GARGLE SUMMER OF COD.
-This program is smaller program than 'Summer of Code'. Precisely one letter
+This program is smaller than 'Summer of Code'. Precisely one letter
 smaller, in fact.
 
 ![Cod](cod.jpg "Cod")
