@@ -180,6 +180,29 @@ Easy to Medium, depending on design.
 #### Mentor
 Ori Bernstein, Andrew Chambers 
 
+Implement a Compression Library
+------------------------
+
+Right now, Myrddin does not ship with a compression library. You would do some
+of the initial work to fix this. You will pick the most important and commonly
+used compression algorithms, starting with flate, and implement them in a way
+that is correct, clean, and reasonably fast. For bonus points, start working
+on others.
+
+#### Expected results
+
+A usable flate implementation.
+
+#### Suggested Knowledge
+
+- Compression algorithms
+
+#### Difficulty Level
+Hard.
+
+#### Mentor
+Ori Bernstein
+
 Implement a Math Library
 ------------------------
 
