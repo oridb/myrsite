@@ -17,7 +17,7 @@ smaller, in fact.
 ![Cod](cod.jpg "Cod")
 
 Eligibility:
-============
+------------------------
 
 In order to qualify for GARGLE SUMMER OF COD, we will need to be able
 to ship you cod. If we can figure out how to ship your sea-stipend, you are
@@ -27,7 +27,7 @@ If you've got a completed project, we'll be shipping the fish out on
 August 31st. Let us know in advance, so we can 
 
 Stipend:
-========
+------------------------
 
 Of course, good work should be rewarded. And, since we all know that
 sea lions love fish, we'll be rewarding you in cod.
@@ -36,14 +36,14 @@ A successful project will be rewarded several pounds of cod. Vegetarian
 substitutes are available. (Are sea cucumbers vegetables?)
 
 Project ideas:
-==============
+------------------------
 
 We have the Google Summer of Code page up. Use it for ideas.
 
 [https://myrlang.org/gsoc.html](https://myrlang.org/gsoc.html)
 
 How To Apply
-============
+------------------------
 
 Send an email to the [mailing list](https://myrlang.org/list-subscribe),
 or ping us on IRC. If your idea sounds interesting, and you seem like
@@ -55,8 +55,20 @@ in advance.
 
 At the end of the summer, if you've produced code, we ship cod.
 
+Current Participants
+------------------------
+
+###npnth
+
+libmath: Implementing a basic floating point math library for Myrddin.
+
+###fsx
+
+Automatic C bindings. Generating headers and glue code from a header
+and a module specification.
+
 FAQ:
-====
+------------------------
 Are you serious?
 
 - We never take ourselves that seriously. But we promise you'll get your cod.
