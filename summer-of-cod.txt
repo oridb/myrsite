@@ -120,6 +120,22 @@ Will there be T-Shirts?
 - We'll be trying to arrange artwork for shirts. We make no
   promises on the quality.
 
+You must be really bitter about getting rejected Google Summer of Code.
+
+- That's not a question. But more seriously, Summer of code was always a long
+  shot. We're a tiny organization, we have no alignment with Google’s vision,
+  and no connections with the selection committee. There’s no surprise that we
+  were rejected, and if we were running Summer of Code I’d probably have
+  rejected us too.
+
+  This... program... actually started off as a typo -- but we were amused by the
+  idea of people getting cod, so we decided to run with it. It’s a joke carried
+  through to ridiculousness. There's no bigger commentary.
+
+  We thought it would be funny to be the kind of project that ships fish
+  to people as a ‘thank you’. Getting rejected from Summer of Code was an
+  excuse.
+
 What if I have more questions?
 
 - NO MORE QUESTIONS ARE ALLOWED.
