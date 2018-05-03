@@ -4,6 +4,43 @@
 	date: Sept 15 2017
 }
 
+Myrddin 0.2.1: "Works for Me"
+=====================================
+
+Myrddin 0.2.1 has been relesed. This release adds support for OpenBSD
+6.3.
+
+Packages and Installation
+-------------------------
+
+Myrddin 0.2 is being packaged for supported systems. Some of them may
+be behind, as packagers finish putting together updated packages.
+
+It is also easy to install from source.
+
+#### From Git
+
+Myrddin is a young language. There are regular fixes to the language and
+libraries. Therefore, it's probably a good idea to install it from Git. To
+install Myrddin from source:
+
+	$ git clone git://git.eigenstate.org/ori/mc.git
+	$ cd mc
+	$ git checkout r0.2.1
+	$ ./configure --prefix=/usr
+	# On BSD, use gmake
+	$ make
+	$ sudo make install
+
+### From Tarballs
+
+Tarballs of this release are also available
+
+- [myrddin-0.2.1.tar.bz2](/releases/myrddin-0.2.1.tar.bz2)
+- [myrddin-0.2.1.tar.gz](/releases/myrddin-0.2.1.tar.gz)
+- [myrddin-0.2.1.tar.xz](/releases/myrddin-0.2.1.tar.xz)
+
+
 Myrddin 0.2: "9 out of 10 cats agree"
 =====================================
 
