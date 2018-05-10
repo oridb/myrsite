@@ -4,6 +4,27 @@
 	date: Sept 15 2017
 }
 
+Myrddin 0.2.2
+=============
+
+This release solves build issues when using llvm linker (lld). It fixes
+alignment so that the linker will accept the assembly that we generate.
+
+Myrddin 0.2.1
+=============
+
+This is a point release. It should have no user-visible changes on existing
+platforms, but it brings in full OpenBSD 6.3 support. This consists of two
+major things:
+
+	- Generating the system call tables for sys+openbsd:6.3-x64.myr. Not
+	  too much changed (mostly pledge stuff, as far as I can tell), but
+	  it's worth doing.
+
+	- Adding support for MAP_STACK mmap flags in libthread. For the sake
+	  of security, OpenBSD is starting to require that the stack pointer
+	  point to memory that is mapped with MAP_STACK.
+
 Myrddin 0.2: "9 out of 10 cats agree"
 =====================================
 
