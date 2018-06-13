@@ -94,28 +94,28 @@ will be lost. Closing the bio files will prevent this issue.
 		const put	: (f : file#, fmt : byte[:], args : ... -> status(std.size))
 
 		/* unsigned big endian reads */
-		generic getbe8	: (f : file# -> status(@a::(numeric,integral)))
-		generic getbe16	: (f : file# -> status(@a::(numeric,integral)))
-		generic getbe32	: (f : file# -> status(@a::(numeric,integral)))
-		generic getbe64	: (f : file# -> status(@a::(numeric,integral)))
+		generic getbe8	: (f : file# -> status(@a)) :: numeric,integral @a
+		generic getbe16	: (f : file# -> status(@a)) :: numeric,integral @a
+		generic getbe32	: (f : file# -> status(@a)) :: numeric,integral @a
+		generic getbe64	: (f : file# -> status(@a)) :: numeric,integral @a
 
 		/* signed big endian reads */
-		generic getle8	: (f : file# -> status(@a::(numeric,integral)))
-		generic getle16	: (f : file# -> status(@a::(numeric,integral)))
-		generic getle32	: (f : file# -> status(@a::(numeric,integral)))
-		generic getle64	: (f : file# -> status(@a::(numeric,integral)))
+		generic getle8	: (f : file# -> status(@a)) :: numeric,integral @a
+		generic getle16	: (f : file# -> status(@a)) :: numeric,integral @a
+		generic getle32	: (f : file# -> status(@a)) :: numeric,integral @a
+		generic getle64	: (f : file# -> status(@a)) :: numeric,integral @a
 
 		/* unsigned big endian */
-		generic putbe8	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-		generic putbe16	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-		generic putbe32	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-		generic putbe64	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
+		generic putbe8	: (f : file#, v : @a -> status(std.size)) :: numeric,integral @a
+		generic putbe16	: (f : file#, v : @a -> status(std.size)) :: numeric,integral @a
+		generic putbe32	: (f : file#, v : @a -> status(std.size)) :: numeric,integral @a
+		generic putbe64	: (f : file#, v : @a -> status(std.size)) :: numeric,integral @a
 
 		/* unsigned little endian */
-		generic putle8	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-		generic putle16	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-		generic putle32	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-		generic putle64	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
+		generic putle8	: (f : file#, v : @a -> status(std.size)) :: numeric,integral @a
+		generic putle16	: (f : file#, v : @a -> status(std.size)) :: numeric,integral @a
+		generic putle32	: (f : file#, v : @a -> status(std.size)) :: numeric,integral @a
+		generic putle64	: (f : file#, v : @a -> status(std.size)) :: numeric,integral @a
 	;;
 
 The Data Structures
@@ -369,15 +369,15 @@ This call returns the number of bytes written on success.
 Endian Aware Reads
 ------------------
 
-    generic getbe8	: (f : file# -> status(@a::(numeric,integral)))
-    generic getbe16	: (f : file# -> status(@a::(numeric,integral)))
-    generic getbe32	: (f : file# -> status(@a::(numeric,integral)))
-    generic getbe64	: (f : file# -> status(@a::(numeric,integral)))
+    generic getbe8	: (f : file# -> status(@a)) :: numeric,integral @a
+    generic getbe16	: (f : file# -> status(@a)) :: numeric,integral @a
+    generic getbe32	: (f : file# -> status(@a)) :: numeric,integral @a
+    generic getbe64	: (f : file# -> status(@a)) :: numeric,integral @a
 
-    generic getle8	: (f : file# -> status(@a::(numeric,integral)))
-    generic getle16	: (f : file# -> status(@a::(numeric,integral)))
-    generic getle32	: (f : file# -> status(@a::(numeric,integral)))
-    generic getle64	: (f : file# -> status(@a::(numeric,integral)))
+    generic getle8	: (f : file# -> status(@a)) :: numeric,integral @a
+    generic getle16	: (f : file# -> status(@a)) :: numeric,integral @a
+    generic getle32	: (f : file# -> status(@a)) :: numeric,integral @a
+    generic getle64	: (f : file# -> status(@a)) :: numeric,integral @a
 
 The functions above all read from a bio file, and return the value read on
 success. The 'be' variants read big endian values, and the `le' variants
@@ -390,15 +390,15 @@ function call. For eample, `getbe8()` will read 8 bits, or one byte from the
 stream. `getle64` will get a 64 bit, or 8 byte, value. The number of bytes
 consumed is independent of the size of the type being assigned to.
 
-    generic putbe8	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-    generic putbe16	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-    generic putbe32	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-    generic putbe64	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
+    generic putbe8	: (f : file#, v : @a -> status(std.size)) :: numeric,integral @a
+    generic putbe16	: (f : file#, v : @a -> status(std.size)) :: numeric,integral @a
+    generic putbe32	: (f : file#, v : @a -> status(std.size)) :: numeric,integral @a
+    generic putbe64	: (f : file#, v : @a -> status(std.size)) :: numeric,integral @a
 
-    generic putle8	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-    generic putle16	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-    generic putle32	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-    generic putle64	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
+    generic putle8	: (f : file#, v : @a -> status(std.size)) :: numeric,integral @a
+    generic putle16	: (f : file#, v : @a -> status(std.size)) :: numeric,integral @a
+    generic putle32	: (f : file#, v : @a -> status(std.size)) :: numeric,integral @a
+    generic putle64	: (f : file#, v : @a -> status(std.size)) :: numeric,integral @a
 
 The functions above all write to a bio file, and return the number of bytes
 written on success. The number of bytes written will always be the size of the

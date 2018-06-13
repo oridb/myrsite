@@ -212,11 +212,11 @@ other type on invocation or use of a type.
 When traits are specified, all traits must be present on the
 substituted type in order for the substitution to proceed.
 
-Type               | Description
--------------------|-------------------
-`@t`               | A type parameter
-`@t::trait`        | A type parameter with a trait
-`@t::(trait,list)` | A type parameter with a list of traits.
+Type                  | Description
+----------------------|-------------------
+`@t`                  | A type parameter
+`@t :: trait @t`      | A type parameter with a trait
+`@t :: trait,list @t` | A type parameter with a list of traits.
 
 
 Composite types are composed of primitive types, or other composite types.
@@ -447,7 +447,7 @@ parameter is then given in the place of a concrete type, and you're off.
 
 For the trivial example, here's a generic sizeof function
 
-        generic gsizeof = {val : @a;
+        generic gsizeof = {val : @a
                 -> sizeof(@a)
         }
 
@@ -456,7 +456,7 @@ to be able to use the > operator on the arguments of the function, we will need
 to use a trait on the generic parameter. The trait that provides the comparison
 operators is numeric
 
-        generic max = {x : @a::numeric, y : @a::numeric
+        generic max = {x : @a, y : @a :: numeric @a
                 if x > y
                         -> x
                 else

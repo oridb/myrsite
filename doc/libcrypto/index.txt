@@ -69,8 +69,8 @@ supports taking the hash of an entire string, as well as a streaming API.
 
             /* Randomness */
             const randbytes	: (buf : byte[:] -> void)
-            generic rand	: (lo : @a::(integral,numeric), hi : @a::(integral,numeric) -> @a::(numeric,integral))
-            generic randnum	: (-> @a::(numeric,integral))
+            generic rand	: (lo : @a, hi : @a -> @a) :: numeric,integral @a
+            generic randnum	: (-> @a) :: numeric,integral @a
     ;;
 
 The `hashtype` functions (eg, `md5()`, `sha1()`, etc) all compute and

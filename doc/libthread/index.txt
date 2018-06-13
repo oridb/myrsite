@@ -10,7 +10,7 @@ Summary
 		/* types */
 		type tid
 
-		trait atomic @a::(integral,numeric) =
+		trait atomic @a :: integral,numeric @a =
 			xget	: (p : @a# -> @a)
 			xset	: (p : @a#, v : @a -> void)
 			xadd	: (p : @a#, v : @a -> @a)
@@ -64,7 +64,7 @@ Condition variable.
 	        ...
 	;;	
 
-	trait atomic @a::(integral,numeric) =
+	trait atomic @a :: integral,numeric @a =
 	        xget	: (p : @a# -> @a)
 	        xset	: (p : @a#, v : @a -> void)
 	        xadd	: (p : @a#, v : @a -> @a)

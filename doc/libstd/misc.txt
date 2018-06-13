@@ -9,37 +9,37 @@ Misc
 The mongrels and mutts of libstd.
 
     pkg std =
-            generic KiB	: @a::(integral,numeric)	
-            generic MiB	: @a::(integral,numeric)	
-            generic GiB	: @a::(integral,numeric)	
-            generic TiB	: @a::(integral,numeric)	
-            generic PiB	: @a::(integral,numeric)	
-            generic EiB	: @a::(integral,numeric)	
-            generic ZiB	: @a::(integral,numeric)	
-            generic YiB	: @a::(integral,numeric)	
+            generic KiB	: @a :: integral,numeric @a
+            generic MiB	: @a :: integral,numeric @a
+            generic GiB	: @a :: integral,numeric @a
+            generic TiB	: @a :: integral,numeric @a
+            generic PiB	: @a :: integral,numeric @a
+            generic EiB	: @a :: integral,numeric @a
+            generic ZiB	: @a :: integral,numeric @a
+            generic YiB	: @a :: integral,numeric @a
 
             /* time */
             const now	: (-> time)
 
             /* packing integers */
-            generic putle64	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-            generic putbe64	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-            generic putle32	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-            generic putbe32	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-            generic putle16	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-            generic putbe16	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-            generic putle8	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-            generic putbe8	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
+            generic putle64	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+            generic putbe64	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+            generic putle32	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+            generic putbe32	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+            generic putle16	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+            generic putbe16	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+            generic putle8	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+            generic putbe8	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
 
             /* unpacking integers */
-            generic getle64	: (buf : byte[:]	-> @a::(numeric,integral))
-            generic getbe64	: (buf : byte[:]	-> @a::(numeric,integral))
-            generic getle32	: (buf : byte[:]	-> @a::(numeric,integral))
-            generic getbe32	: (buf : byte[:]	-> @a::(numeric,integral))
-            generic getle16	: (buf : byte[:]	-> @a::(numeric,integral))
-            generic getbe16	: (buf : byte[:]	-> @a::(numeric,integral))
-            generic getle8	: (buf : byte[:]	-> @a::(numeric,integral))
-            generic getbe8	: (buf : byte[:]	-> @a::(numeric,integral))
+            generic getle64	: (buf : byte[:] -> @a) :: numeric,integral @a
+            generic getbe64	: (buf : byte[:] -> @a) :: numeric,integral @a
+            generic getle32	: (buf : byte[:] -> @a) :: numeric,integral @a
+            generic getbe32	: (buf : byte[:] -> @a) :: numeric,integral @a
+            generic getle16	: (buf : byte[:] -> @a) :: numeric,integral @a
+            generic getbe16	: (buf : byte[:] -> @a) :: numeric,integral @a
+            generic getle8	: (buf : byte[:] -> @a) :: numeric,integral @a
+            generic getbe8	: (buf : byte[:] -> @a) :: numeric,integral @a
 
             /* exploding and stitching floats */
             const flt64bits	: (flt : flt64 -> int64)
@@ -56,14 +56,14 @@ The mongrels and mutts of libstd.
 Constants
 ----------
 
-    generic KiB	: @a::(integral,numeric)	
-    generic MiB	: @a::(integral,numeric)	
-    generic GiB	: @a::(integral,numeric)	
-    generic TiB	: @a::(integral,numeric)	
-    generic PiB	: @a::(integral,numeric)	
-    generic EiB	: @a::(integral,numeric)	
-    generic ZiB	: @a::(integral,numeric)	
-    generic YiB	: @a::(integral,numeric)	
+    generic KiB	: @a :: integral,numeric @a
+    generic MiB	: @a :: integral,numeric @a
+    generic GiB	: @a :: integral,numeric @a
+    generic TiB	: @a :: integral,numeric @a
+    generic PiB	: @a :: integral,numeric @a
+    generic EiB	: @a :: integral,numeric @a
+    generic ZiB	: @a :: integral,numeric @a
+    generic YiB	: @a :: integral,numeric @a
 
     generic Sec	: time
     generic Msec : time
@@ -78,28 +78,28 @@ Returns the current time in signed microseconds since the Unix epoch. Can
 represent dates approximatelyl 70,000 years in either direction from the
 present.
 
-    generic putle64	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-    generic putbe64	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-    generic putle32	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-    generic putbe32	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-    generic putle16	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-    generic putbe16	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-    generic putle8	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-    generic putbe8	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
+    generic putle64	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+    generic putbe64	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+    generic putle32	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+    generic putbe32	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+    generic putle16	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+    generic putbe16	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+    generic putle8	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+    generic putbe8	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
 
 These functions pack integers into buffers. The suffix describes the number of
 bits that will be packed -- the values will be implicitly converted to an
 integer that is `nbits` long before packing into the buffer. Signed integers
 will be sign extended, and unsigned ones will be zero extended.
 
-    generic getle64	: (buf : byte[:]	-> @a::(numeric,integral))
-    generic getbe64	: (buf : byte[:]	-> @a::(numeric,integral))
-    generic getle32	: (buf : byte[:]	-> @a::(numeric,integral))
-    generic getbe32	: (buf : byte[:]	-> @a::(numeric,integral))
-    generic getle16	: (buf : byte[:]	-> @a::(numeric,integral))
-    generic getbe16	: (buf : byte[:]	-> @a::(numeric,integral))
-    generic getle8	: (buf : byte[:]	-> @a::(numeric,integral))
-    generic getbe8	: (buf : byte[:]	-> @a::(numeric,integral))
+    generic getle64	: (buf : byte[:] -> @a) :: numeric,integral @a
+    generic getbe64	: (buf : byte[:] -> @a) :: numeric,integral @a
+    generic getle32	: (buf : byte[:] -> @a) :: numeric,integral @a
+    generic getbe32	: (buf : byte[:] -> @a) :: numeric,integral @a
+    generic getle16	: (buf : byte[:] -> @a) :: numeric,integral @a
+    generic getbe16	: (buf : byte[:] -> @a) :: numeric,integral @a
+    generic getle8	: (buf : byte[:] -> @a) :: numeric,integral @a
+    generic getbe8	: (buf : byte[:] -> @a) :: numeric,integral @a
 
 These functions unpack integers from buffers. The numeric suffix describes how
 many bits will be extracted from the buffer. The value will implicitly be

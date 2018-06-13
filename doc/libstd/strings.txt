@@ -47,9 +47,9 @@ Summary: Strings
             const strrstrip	: (str : byte[:] -> byte[:])
 
             /* parsing numbers out of strings */
-            generic intparsebase	: (s : byte[:], base : int -> option(@a::(integral,numeric)))
-            generic intparse	: (s : byte[:]	-> option(@a::(integral,numeric)))
-            generic charval : (c : char, base : int -> @a::(integral,numeric))
+            generic intparsebase	: (s : byte[:], base : int -> option(@a)) :: integral,numeric @a
+            generic intparse	: (s : byte[:]	-> option(@a)) :: integral,numeric @a
+            generic charval : (c : char, base : int -> @a) :: integral,numeric @a
     ;;
 
 

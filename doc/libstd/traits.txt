@@ -17,11 +17,11 @@ Summary: Traits
             ;;
 
             impl equatable @a[:]
-            impl equatable @a::(integral,numeric)
+            impl equatable @a :: integral,numeric @a
             impl equatable @a#
 
             impl hashable @a[:]
-            impl hashable @a::(integral,numeric)
+            impl hashable @a :: integral,numeric @a
             impl hashable @a#
     ;;
 
@@ -48,7 +48,7 @@ common cases.
 The `equatable` implementation for generic slices does
 a shallow, byte for byte comparison of each slice element.
 
-    impl equatable @a::(integral,numeric)
+    impl equatable @a :: integral,numeric @a
 
 The `equatable` implementation for integral types uses
 the `==` comparison to check whether two integral values
@@ -83,7 +83,7 @@ hash function.
 The `hashable` impl for slices hashes does a shallow
 hash of each byte of the slice.
 
-    impl hashable @a::(integral,numeric)
+    impl hashable @a :: integral,numeric @a
 
 The `hashable` impl for integral types hashes a single integer,
 scrambling its bits.

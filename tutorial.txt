@@ -479,7 +479,7 @@ Similarly, when called with `fixstack(byte[:])`, `@a` is substituted with
 context, so if we defined a `max` function, we would not be able to mix
 arguments:
 
-	generic max = {a : @t::numeric, b : @t::numeric
+	generic max = {a : @t, b : @t :: numeric @t
 		if a > b
 			-> a
 		else
@@ -1299,8 +1299,8 @@ types by the compiler as part of the compilation process. They are written
 `@t`, and may specify traits:
 
 	@a
-	@a::trait
-	@a::(trait,list)
+	@a :: trait @a
+	@a :: trait,list @a
 
 Generic types can be substituted with any type, and therefore, cannot rely
 on any internal details of the type. You cannot access members of a generic
@@ -1320,7 +1320,7 @@ Users may also define traits:
 In this case, if I had a function that required a generic type with the
 `foo` trait, then I would be able to call the `double` function on it:
 
-	generic f = {x : @a::foo
+	generic f = {x : @a :: foo @a
 		-> double(x)
 	}
 
