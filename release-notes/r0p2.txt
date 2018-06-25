@@ -35,9 +35,8 @@ still plenty of stabby bits left for the masochists.
 ![9 out of 10 cats](9of10cats.gif)
 
 
-
-Major highlights since 0.2
----------------
+Major highlights since 0.1
+--------------------------
 
 	$ git diff --stat r0.1.1..HEAD | tail -n 1
  	265 files changed, 26195 insertions(+), 7080 deletions(-)
