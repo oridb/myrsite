@@ -17,7 +17,7 @@ success, right?
 Endorsements
 ------------
 
-"Wait, we're using this?" -- CTO of Markov Corporation
+"Wait, we're using this?" -- CTO, Markov Corporation
 
 
 Major Highlights since 0.2
@@ -70,9 +70,10 @@ tests for many of our libraries.
 	  around forking and execing in a threaded program.
 	- Pledge has been added to libstd. It's invokes pledge on OpenBSD,
 	  and is a no-op on deficient platforms.
-	- Constant time RSA has been implemented, following the lead of
+	- Constant time RSA has been implemented in libcrypto, following the lead of
 	  BearSSL
-	- AES GCM mode is now supported in libcrypto.
+	- AES GCM mode is now implemented in libcrypto.
+	- SHA HMAC functions are now implemented in libcrypto.
 	- Libbio now has a vtable, and therefore can be used to buffer any
 	  stream of data.
 - Others have been less significantly improved.
@@ -83,6 +84,8 @@ tests for many of our libraries.
 	  when outputting text.
 	- Libtermdraw also counts graphemes instead of codepoints.
 	- Regex has been sped up by several times.
+	- libfileutil has had several API signatures changed, and now
+	  has code to remove file trees recursively.
 - IPv6 is now fully supported.
 - The size of generated binaries is now smaller, thanks to enabling
   `--gc-sections` by default on platforms that support it.
