@@ -1,0 +1,16 @@
+{
+        title:  libflate
+        description:  Libflate API  
+}
+
+Summary
+-------
+	
+    pkg flate =
+        const decode : (outf : bio.file#, inf : bio.file# -> std.result(void, err))
+    ;;
+
+Libflate decodes one bio file into another bio file. The decode function
+guarantees that it will not read more than necessary from inf to either,
+figure out that the stream is bogus, or fully uncompress the stream.
+

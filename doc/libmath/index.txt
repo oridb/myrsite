@@ -1,0 +1,115 @@
+{
+        title:  libbio
+        description:    BIO library description
+}
+
+Summary
+-------
+
+Math is hard, let's go shopping.
+
+	pkg math =
+		trait fpmath @f =
+			exp : (f : @f -> @f)
+			expm1 : (f : @f -> @f)
+
+			fma : (x : @f, y : @f, z : @f -> @f)
+
+			horner_poly : (x : @f, a : @f[:] -> @f)
+			horner_polyu : (x : @f, a : @u[:] -> @f)
+
+			scale2 : (f : @f, m : @i -> @f)
+
+			sqrt : (f : @f -> @f)
+
+			kahan_sum : (a : @f[:] -> @f)
+			priest_sum : (a : @f[:] -> @f)
+
+			trunc : (f : @f -> @f)
+			ceil  : (f : @f -> @f)
+			floor : (f : @f -> @f)
+		;;
+
+		trait roundable @f -> @i =
+			/* round-impl */
+			rn : (f : @f -> @i)
+		;;
+
+		impl std.equatable flt32
+		impl std.equatable flt64
+		impl roundable flt64 -> int64
+		impl roundable flt32 -> int32
+		impl fpmath flt32
+		impl fpmath flt64
+	;;
+
+
+
+Exponentiation
+--------------
+
+	const exp : (f : @f -> @f)
+	const expm1 : (f : @f -> @f)
+
+The `exp` function computes the base *e* exponential
+e^f. `expm1` computes e^f-1. `expm1` is accurate even
+for small values of `f`.
+
+Fused-mul-add
+-------------
+
+	const fma : (x : @f, y : @f, z : @f -> @f)
+
+The `fma` function computes `x*y+z` as a single operation,
+avoiding a rounding error on the intermediate value.
+
+Horner Polynomials
+------------------
+
+	const horner_poly : (x : @f, a : @f[:] -> @f)
+	const horner_polyu : (x : @f, a : @u[:] -> @f)
+
+Evaluates a polynomial represented by the coefficients `a` at
+`x`.
+
+Scaling
+-------
+
+	scale2 : (f : @f, m : @i -> @f)
+	
+Sqrt
+----
+
+	sqrt : (f : @f -> @f)
+
+Computes the square root of `f`.
+
+Summation
+---------
+
+	kahan_sum : (a : @f[:] -> @f)
+	priest_sum : (a : @f[:] -> @f)
+
+Implements Kahan and Priest summation, respectively. These
+functions provide more accurate summation than simply adding
+each number in the sequence naively.
+
+Each function sums a sequence of floats, returning the computed
+sum.
+
+Rounding
+--------
+
+	trunc : (f : @f -> @f)
+	ceil  : (f : @f -> @f)
+	floor : (f : @f -> @f)
+	rn : (f : @f -> @i)
+
+Trunc truncates its argument, or equivalently, rounds it's argument downwards
+towards zero.
+
+Floor and ceil compute the floor and ceiling of their argument, rounding
+towards negative infinity and infinity, respectively.
+
+Rn rounds its argument to the nearest integer, rounding towards even numbers
+in order to break ties.

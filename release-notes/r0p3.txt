@@ -17,7 +17,7 @@ success, right?
 Endorsements
 ------------
 
-"Wait, we're using this?" -- CTO, Markov Corporation
+"Wait, we're using this garbage? Why?" -- CTO, Markov Corporation
 
 
 Major Highlights since 0.2
@@ -109,6 +109,16 @@ Breaking changes
 - The various equality checking functions have been removed in favor
   of trait overloading `std.eq`.
 - Several iterators have been moved out of libstd and into libiter
+
+Other Developments
+----------------------
+
+- Irc.myr has been my primary client for a while.
+- Libtermdraw has stabilized, and is in a mostly finished state.
+- Libxmyrb has working X bindings, although I've got some API changes on the
+  way.
+- Libdraw is working and more or less complete
+- And a few more.
 
 Feature Descriptions
 --------------------
