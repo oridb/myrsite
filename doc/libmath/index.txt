@@ -43,7 +43,7 @@ Math is hard, let's go shopping.
 		impl fpmath flt64
 	;;
 
-
+Libmath currently does not raise floating point exceptions.
 
 Exponentiation
 --------------
