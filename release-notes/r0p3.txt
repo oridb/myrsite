@@ -4,7 +4,7 @@
 	date: Jun 23 2018
 }
 
-Myrddin 0.3.0: "Trust Us, We're Proffessionals"
+Myrddin 0.3.0: "Stand Back, We're Proffessionals"
 ===============================================
 
 Myrddin 0.3 has been released. This is the first Myrddin release that is being
@@ -12,13 +12,22 @@ used in a commercial setting. Sure, it's a continuous build system, and one
 day we'll outgrow it within the org, but for now, that makes us a commercial
 success, right?
 
-![Trust Us, We're Proffesional](proffesional.jpg)
+![Stand Back, We're Proffesionals](proffesional.jpg)
 
 Endorsements
 ------------
 
 "Wait, we're using this garbage? Why?" -- CTO, Markov Corporation
 
+
+Reporting Bugs, Getting Help
+----------------------------
+
+Most discussion is on IRC, in #myrddin on irc.eigenstate.org. You can join
+using your favorite client, or through a web browser via something like [kiwi
+IRC](https://kiwiirc.com/client/irc.eigenstate.org/?nick=yournick#myrddin)
+
+We are also responsive on the [mailing list](list-subscribe.html).
 
 Major Highlights since 0.2
 --------------------------

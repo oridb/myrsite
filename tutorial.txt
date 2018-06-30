@@ -309,14 +309,14 @@ const main = {
 	inword = false
 	while true
 		match bio.getc(f)
-		| `bio.Err e:	std.fatal("error reading file: {}\n", e)
-		| `bio.Eof:	break
-		| `bio.Ok ' ':	inword = false
-		| `bio.Ok '\t':	inword = false
-		| `bio.Ok '\n':
+		| `std.Err `bio.Eof:	break
+		| `std.Err e:	std.fatal("error reading file: {}\n", e)
+		| `std.Ok ' ':	inword = false
+		| `std.Ok '\t':	inword = false
+		| `std.Ok '\n':
 			lines++
 			inword = false
-		| `bio.Ok c:
+		| `std.Ok c:
 			if !inword
 				words++
 			;;
@@ -341,18 +341,17 @@ buffered wrapper around the `std.In` input stream. This buffered reader is
 used to efficiently read and decode whole Unicode codepoints.
 
 The main loop of the `wc` program matches over the result of `bio.getc`. The
-bio result type is generic, but for our purposes right now we can assume it is
+std result type is generic, but for our purposes right now we can assume it is
 defined as:
 
-	type bio.result = union
-		`Eof
+	type std.result = union
 		`Err bio.err
 		`Ok char
 	;;
 
-A value of `` `bio.Eof `` indicates that the reader has successfully reached
-the end of the file. A value of `` `bio.Err bio.err`` indicates that the
-reader has encountered an error reading the file. And a value of `` `bio.Ok
+A value of `` `std.Err `bio.Eof `` indicates that the reader has successfully reached
+the end of the file. A value of `` `std.Err bio.err`` indicates that the
+reader has encountered an error reading the file. And a value of `` `std.Ok
 char`` indicates that a single character was successfully read from the file.
 
 Refer to the [API documentation](http://myrlang.org/doc/libbio/index.html) for the full
@@ -367,8 +366,8 @@ to count up the lines, words, and characters.
 There are four patterns that match on the `bio.Ok` union tag. The first two
 match on spaces and tabs.
 
-	| `bio.Ok ' ':	inword = false
-	| `bio.Ok '\t':	inword = false
+	| `std.Ok ' ':	inword = false
+	| `std.Ok '\t':	inword = false
 
 These patterns simply set the `inword` state variable to false. If we are in a
 word, this records that we have left the word. Otherwise, the state is
@@ -377,7 +376,7 @@ unchanged.
 The next pattern matches on `bio.Ok \n`. Here, in addition to recording the
 end of a word, the program increments the line count.
 
-	| `bio.Ok '\n':
+	| `std.Ok '\n':
 		lines++
 		inword = false
 
@@ -387,7 +386,7 @@ a word character. If we are not currently in a word, then this must mark the
 start of a new word, so we increment the word count. Finally, the fact that
 the program is scanning along a word is recorded.
 
-	| `bio.Ok c:
+	| `std.Ok c:
 		if !inword
 			words++
 		;;
