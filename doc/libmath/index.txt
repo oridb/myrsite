@@ -1,6 +1,6 @@
 {
-        title:  libbio
-        description:    BIO library description
+        title:  libmath
+        description:    Math Library
 }
 
 Summary
