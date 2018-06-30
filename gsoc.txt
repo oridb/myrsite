@@ -1,7 +1,14 @@
 {
-    title       : Summer of Code 2018
-    description : Summer of Code 2018
+    title       : Summer of Cod 2018
+    description : Summer of Cod 2018
 }
+
+
+Updates
+-------
+
+Myrddin was rejected for Summer of Code. As a result, this has become
+the Summer of Cod.
 
 Getting in Contact
 ------------------

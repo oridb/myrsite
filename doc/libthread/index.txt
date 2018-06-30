@@ -47,6 +47,12 @@ Summary
 		const condsignal	: (cond : cond# -> void)
 		const condbroadcast	: (cond : cond# -> void)
 
+		/* semaphores */
+		const mksem : (v : uint32 -> sem)
+		const semwait : (s : sem# -> void)
+		const semtrywait : (s : sem# -> bool)
+		const sempost : (s : sem# -> void)
+
 		/* misc */
 		const ncpu	: (-> int)
 	;;
@@ -54,15 +60,10 @@ Summary
 Types
 -----
 
-	type cond = struct
-	        ...
-	;;
+	type cond = struct ... ;;
+	type mutex = struct ... ;;
+	type sem = struct ... ;;
 
-Condition variable.
-
-	type mutex = struct
-	        ...
-	;;	
 
 	trait atomic @a::(integral,numeric) =
 	        xget	: (p : @a# -> @a)
@@ -86,8 +87,8 @@ error.
 The environment of the closure is duplicated before the thread is
 spawend, allowing for safe access to the variables copied by value.
 
-Functions: Mutexes
-------------------
+Mutexes
+-------
 
 	const mkmtx	: (-> mutex)
 
@@ -109,8 +110,29 @@ This call does not block.
 Unlocks a mutex that is taken. It is a bug to call this on a mutex that you
 have not successfully locked.
 
-Functions: Condition Variables.
-------------------------------
+Semaphores
+----------
+
+	const mksem : (v : uint32 -> sem)
+
+Creates a semaphore with the initial value `v`.
+
+	const semwait : (s : sem# -> void)
+
+Decrements a semaphore, blocking if its value is less than or equal to 0.
+
+	const semtrywait : (s : sem# -> bool)
+
+Attempts to decrement a semaphore. If the value is zero, this function returns false
+and leaves the value of the semaphore unchanged, otherwise it decrements it
+and returns true.
+
+	const sempost : (s : sem# -> void)
+
+Increments a semaphore, waking at least one waiter, if any exist.
+
+Condition Variables
+-------------------
 
 	const mkcond	: (mtx : mutex# -> cond)
 
@@ -133,8 +155,8 @@ mutex.
 Wakes all waiters on the condition variable.
 
 
-Misc: Functions Useful for Threaded Programs
---------------------------------------------
+Misc
+----
 
 	const ncpu : (-> int)
 

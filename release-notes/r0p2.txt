@@ -4,42 +4,26 @@
 	date: Sept 15 2017
 }
 
-Myrddin 0.2.1: "Works for Me"
-=====================================
+Myrddin 0.2.2
+=============
 
-Myrddin 0.2.1 has been relesed. This release adds support for OpenBSD
-6.3.
+This release solves build issues when using llvm linker (lld). It fixes
+alignment so that the linker will accept the assembly that we generate.
 
-Packages and Installation
--------------------------
+Myrddin 0.2.1
+=============
 
-Myrddin 0.2 is being packaged for supported systems. Some of them may
-be behind, as packagers finish putting together updated packages.
+This is a point release. It should have no user-visible changes on existing
+platforms, but it brings in full OpenBSD 6.3 support. This consists of two
+major things:
 
-It is also easy to install from source.
+	- Generating the system call tables for sys+openbsd:6.3-x64.myr. Not
+	  too much changed (mostly pledge stuff, as far as I can tell), but
+	  it's worth doing.
 
-#### From Git
-
-Myrddin is a young language. There are regular fixes to the language and
-libraries. Therefore, it's probably a good idea to install it from Git. To
-install Myrddin from source:
-
-	$ git clone git://git.eigenstate.org/ori/mc.git
-	$ cd mc
-	$ git checkout r0.2.1
-	$ ./configure --prefix=/usr
-	# On BSD, use gmake
-	$ make
-	$ sudo make install
-
-### From Tarballs
-
-Tarballs of this release are also available
-
-- [myrddin-0.2.1.tar.bz2](/releases/myrddin-0.2.1.tar.bz2)
-- [myrddin-0.2.1.tar.gz](/releases/myrddin-0.2.1.tar.gz)
-- [myrddin-0.2.1.tar.xz](/releases/myrddin-0.2.1.tar.xz)
-
+	- Adding support for MAP_STACK mmap flags in libthread. For the sake
+	  of security, OpenBSD is starting to require that the stack pointer
+	  point to memory that is mapped with MAP_STACK.
 
 Myrddin 0.2: "9 out of 10 cats agree"
 =====================================
@@ -51,9 +35,8 @@ still plenty of stabby bits left for the masochists.
 ![9 out of 10 cats](9of10cats.gif)
 
 
-
-Major highlights since 0.2
----------------
+Major highlights since 0.1
+--------------------------
 
 	$ git diff --stat r0.1.1..HEAD | tail -n 1
  	265 files changed, 26195 insertions(+), 7080 deletions(-)

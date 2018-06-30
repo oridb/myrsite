@@ -21,6 +21,10 @@ The mongrels and mutts of libstd.
             /* time */
             const now	: (-> time)
 
+	    /* host to network conversion */
+            generic hosttonet	: (v : @a -> @a) :: integral,numeric @a
+            generic nettohost	: (v : @a -> @a) :: integral,numeric @a
+
             /* packing integers */
             generic putle64	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
             generic putbe64	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
@@ -73,11 +77,18 @@ These are just constants that you can multiply things by in order to scale
 units. If you want to get a 
 
     const now	: (-> time)
-
 Returns the current time in signed microseconds since the Unix epoch. Can
 represent dates approximatelyl 70,000 years in either direction from the
 present.
 
+
+    generic hosttonet	: (v : @a -> @a) :: integral,numeric @a
+    generic nettohost	: (v : @a -> @a) :: integral,numeric @a
+
+Converts a value to and from big endian byte order, respectively. These
+functions are useful for some poorly designed protocols, but should be
+avoided when possible.
+    
     generic putle64	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
     generic putbe64	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
     generic putle32	: (buf : byte[:], v :  @a::(numeric,integral) -> size)

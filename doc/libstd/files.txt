@@ -48,6 +48,7 @@ File Handling
             const readall       : (fd : fd, buf : byte[:] -> std.result(size, errno))
             const write         : (fd : fd, buf : byte[:] -> std.result(size, errno))
             const pwrite        : (fd : fd, buf : byte[:], off : off -> std.result(size, errno))
+	    const writeall	: (fd : fd, buf : byte[:] -> std.result(size, errno))
             const seek          : (fd : fd, delta : off, whence : whence -> off)
             const pipe          : (fds : fd[2]# -> int64)
             const dup2		: (ofd : fd, nfd : fd -> fd)

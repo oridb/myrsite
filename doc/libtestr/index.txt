@@ -25,6 +25,9 @@ mbld.
 		const ok	: (ctx : ctx# -> void)
 		const fail	: (ctx : ctx#, msg : byte[:], args : ... -> void)
 		const check	: (ctx : ctx#, cond : bool, msg : byte[:], args : ... -> void)
+
+		generic eq	: (ctx : ctx#, a : @t, b : @t -> void) :: std.equatable @t
+		generic neq	: (ctx : ctx#, a : @t, b : @t -> void) :: std.equatable @t
 	;;
 
 Overview
@@ -76,6 +79,11 @@ scope. The message is used as the failure reason.
 
 Records a test result. If `cond` is true, a success is recorded,
 otherwise a failure with the messsage `msg` is recorded.
+
+	generic eq	: (ctx : ctx#, a : @t, b : @t -> void) :: std.equatable @t
+	generic neq	: (ctx : ctx#, a : @t, b : @t -> void) :: std.equatable @t
+
+Asserts that two values are equal or unequal, respectively.
 
 Example
 -------

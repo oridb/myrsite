@@ -18,6 +18,7 @@ supports taking the hash of an entire string, as well as a streaming API.
             type sha224
             type sha512
             type aesctx
+	    type aesgcmctx
             type chacha20ctx
 
             /* md5 funtions */
@@ -62,6 +63,15 @@ supports taking the hash of an entire string, as well as a streaming API.
             const aesencrypt	: (x : aesctx#, m : byte[:], c : byte[:] -> void)
             const aesdecrypt	: (x : aesctx#, c : byte[:], m : byte[:] -> void)
 
+            /* AES GCM functions */
+            const aesgcminit	: (c : aesgcmctx#, key : byte[:], iv : byte[:] -> void)
+            const aesgcmfin		: (c : aesgcmctx# -> void)
+            const aesgcmencrypt	: (c : aesgcmctx#, buf : byte[:], aad : byte[:], tag : byte[:] -> void)
+            const aesgcmdecrypt	: (c : aesgcmctx#, buf : byte[:], aad : byte[:], tag : byte[:] -> bool)
+
+	    /* RSA functions */
+	    const rsapub_pkcs15	: (msg : byte[:], exp : byte[:], mod : byte[:] -> byte[:])
+
             /* Chacha20 functions */
             const chacha20keysetup	: (x : chacha20ctx#, k : byte[:] -> void) 
             const chacha20ivsetup	: (x : chacha20ctx#, iv : byte[:] -> void)
@@ -69,8 +79,27 @@ supports taking the hash of an entire string, as well as a streaming API.
 
             /* Randomness */
             const randbytes	: (buf : byte[:] -> void)
-            generic rand	: (lo : @a::(integral,numeric), hi : @a::(integral,numeric) -> @a::(numeric,integral))
-            generic randnum	: (-> @a::(numeric,integral))
+            generic rand	: (lo : @a, hi : @a -> @a) :: numeric,integral @a
+            generic randnum	: (-> @a) :: numeric,integral @a
+
+            /* secure clearing */
+            generic clear	: (p : @a# -> void)
+            generic slclear	: (sl : @a[:] -> void)
+            generic free	: (p : @a# -> void)
+            generic slfree	: (sl : @a[:] -> void)
+
+	    /* constant time operations */
+            generic not	: (a : @t -> @t)	:: integral,numeric @t
+            generic eq	: (a : @t, b : @t -> @t)	:: integral,numeric @t
+            generic ne	: (a : @t, b : @t -> @t)	:: integral,numeric @t
+            generic gt	: (a : @t, b : @t -> @t)	:: integral,numeric @t
+            generic lt	: (a : @t, b : @t -> @t)	:: integral,numeric @t
+            generic ge	: (a : @t, b : @t -> @t)	:: integral,numeric @t
+            generic le	: (a : @t, b : @t -> @t)	:: integral,numeric @t
+            generic mux	: (x : @t, a : @t, b : @t ->@t)	:: integral,numeric @t
+            generic min	: (a : @t, b : @t -> @t)	:: integral,numeric @t
+            generic max	: (a : @t, b : @t -> @t)	:: integral,numeric @t
+            const bufeq	: (a : byte[:], b : byte[:] -> bool)
     ;;
 
 The `hashtype` functions (eg, `md5()`, `sha1()`, etc) all compute and

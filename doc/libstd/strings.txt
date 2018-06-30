@@ -38,6 +38,7 @@ Summary: Strings
             const bstrsplit	: (sp : byte[:][:], s : byte[:], delim : byte[:] -> byte[:][:])
             const strtok	: (s : byte[:] -> byte[:][:])
             const bstrtok	: (sp : byte[:][:], s : byte[:] -> byte[:][:])
+	    const bytok		: (str : byte[:] -> tokiter)
 
             /* string joining and stripping */
             const strcat	: (a : byte[:], b : byte[:] -> byte[:])
@@ -47,9 +48,9 @@ Summary: Strings
             const strrstrip	: (str : byte[:] -> byte[:])
 
             /* parsing numbers out of strings */
-            generic intparsebase	: (s : byte[:], base : int -> option(@a::(integral,numeric)))
-            generic intparse	: (s : byte[:]	-> option(@a::(integral,numeric)))
-            generic charval : (c : char, base : int -> @a::(integral,numeric))
+            generic intparsebase	: (s : byte[:], base : int -> option(@a)) :: integral,numeric @a
+            generic intparse	: (s : byte[:]	-> option(@a)) :: integral,numeric @a
+            generic charval : (c : char, base : int -> @a) :: integral,numeric @a
     ;;
 
 
@@ -158,6 +159,11 @@ hasprefix returns `true` if the string `pre` is found at the start of `s`.
 
 hassuffix returns `true` if the string `pre` is found at the end of `s`.
 
+     const strreplace	: (haystack : byte[:], needle : byte[:], repl : byte[:] -> byte[:])
+
+Strreplace replaces all instances of `needle` in `haystack`, returning
+a newly allocated string.
+
 
 Functions: Splitting and joining
 --------------------------------
@@ -203,3 +209,8 @@ between them.
 Strstrip will remove all whitespace characters from both ends of the string.
 Strfstrip and strrstrip will strip all whitespace characters from the start or
 end of the of the string, respectively.
+
+     const bytok	: (str : byte[:] -> tokiter)
+
+Bytok iterates over a string token by token.
+

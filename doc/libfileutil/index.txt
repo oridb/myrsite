@@ -14,7 +14,8 @@ for handling files.
 		type walkiter
 
 		impl iterable walkiter -> byte[:]
-		const bywalk	: (dir : std.dir# -> walkiter)
+		const bywalk	: (dir : byte[:] -> walkiter)
+		const rmrf	: (dir : byte[:] -> bool)
 
 		/* information about files */
 		const homedir	: (-> byte[:])
@@ -36,6 +37,13 @@ Functions: file walking
 Walks through all files and subdirectories of the directory
 `dir`.
 
+    const rmrf	: (dir : byte[:] -> bool)
+
+Attempts to delete all files within a directory `dir`. Returns
+true if all files are removed, false otherwise. If a file cannot
+be removed, `rmrf` will continue to attempt file removal.
+
+Returns true if all files could be removed, false otherwise.
 
 Functions: File info
 ------------------
