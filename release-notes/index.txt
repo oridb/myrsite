@@ -271,8 +271,10 @@ install Myrddin from source:
 	$ cd mc
 	$ ./configure --prefix=/usr
 	# On BSD, use gmake
-	$ make
+	$ make bootstrap
 	$ sudo make install
+
+The `make bootstrap` step should only be needed on the first build.
 
 ### From Tarballs
 
