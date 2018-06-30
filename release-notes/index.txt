@@ -1,5 +1,5 @@
 {
-	title: 0.3
+	title: Releases: 0.3
 	description: Releases
 	date: Jun 23 2018
 }
@@ -14,10 +14,15 @@ success, right?
 
 ![Stand Back, We're Proffesionals](proffesional.jpg)
 
-Endorsements
-------------
+Downloading
+-----------
 
-"Wait, we're using this garbage? Why?" -- CTO, Markov Corporation
+The release has been tagged with r0.3.0 in git. If you want a
+tarball, you can get it from here:
+
+- [myrddin-0.3.0.tar.bz2](/releases/myrddin-0.3.0.tar.bz2)
+- [myrddin-0.3.0.tar.gz](/releases/myrddin-0.3.0.tar.gz)
+- [myrddin-0.3.0.tar.xz](/releases/myrddin-0.3.0.tar.xz)
 
 
 Reporting Bugs, Getting Help
@@ -28,6 +33,11 @@ using your favorite client, or through a web browser via something like [kiwi
 IRC](https://kiwiirc.com/client/irc.eigenstate.org/?nick=yournick#myrddin)
 
 We are also responsive on the [mailing list](list-subscribe.html).
+
+Endorsements
+------------
+
+"Wait, we're using this garbage? Why?" -- CTO, Markov Corporation
 
 Major Highlights since 0.2
 --------------------------
