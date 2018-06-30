@@ -67,6 +67,12 @@ libmath: Implementing a basic floating point math library for Myrddin.
 Automatic C bindings. Generating headers and glue code from a header
 and a module specification.
 
+(Dropped out due to lack of time, up for grabs)
+
+###mpu
+
+Compression library
+
 FAQ:
 ------------------------
 Are you serious?
