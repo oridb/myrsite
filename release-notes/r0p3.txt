@@ -4,6 +4,22 @@
 	date: Jun 23 2018
 }
 
+Myrddin 0.3.1: "My Face is Made of Shame"
+===============================================
+
+This release includes a commit that I forgot to push, which fixes
+the build on OSX.
+
+Downloading
+-----------
+
+The release has been tagged with r0.3.1 in git. If you want a
+tarball, you can get it from here:
+
+- [myrddin-0.3.1.tar.bz2](/releases/myrddin-0.3.1.tar.bz2)
+- [myrddin-0.3.1.tar.gz](/releases/myrddin-0.3.1.tar.gz)
+- [myrddin-0.3.1.tar.xz](/releases/myrddin-0.3.1.tar.xz)
+
 Myrddin 0.3.0: "Stand Back, We're Proffessionals"
 ===============================================
 
