@@ -155,7 +155,7 @@ const main = {
         var x : int[:]
 
         x = std.slalloc(10)     /* slice of 10 ints */
-        x = std.slzgrow(x, 20)     /* x[10:20] are guaranteed to be zeroed.*/
+        std.slzgrow(&x, 20)     /* x[10:20] are guaranteed to be zeroed.*/
         std.slfree(x)
 }
 ```
