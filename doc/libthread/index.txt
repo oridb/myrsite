@@ -31,6 +31,10 @@ Summary
 			...
 		;;
 
+		type rwlock = struct
+			...
+		;;
+
 		type waitgrp = struct
 			...
 		;;
@@ -50,16 +54,25 @@ Summary
 		const mtxunlock	: (mtx : mutex# -> void)
 
 		/* semaphores */
-		const mksem : (v : uint32 -> sem)
-		const semwait : (s : sem# -> void)
+		const mksem      : (v : uint32 -> sem)
+		const semwait    : (s : sem# -> void)
 		const semtrywait : (s : sem# -> bool)
-		const sempost : (s : sem# -> void)
+		const sempost    : (s : sem# -> void)
 
 		/* condition variables */
 		const mkcond	: (mtx : mutex# -> cond)
 		const condwait	: (cond : cond# -> void)
 		const condsignal	: (cond : cond# -> void)
 		const condbroadcast	: (cond : cond# -> void)
+
+		/* reader-writer locks */
+		const mkrwlock  : (-> rwlock)
+		const rdlock    : (rw : rwlock# -> void)
+		const wrlock    : (rw : rwlock# -> void)
+		const tryrdlock : (rw : rwlock# -> bool)
+		const trywrlock : (rw : rwlock# -> bool)
+		const rdunlock  : (rw : rwlock# -> void)
+		const wrunlock  : (rw : rwlock# -> void)
 
 		/* wait groups */
 		const mkwg : (v : uint32 -> waitgrp)
@@ -160,11 +173,11 @@ have not successfully locked.
 Semaphores
 ----------
 
-	const mksem : (v : uint32 -> sem)
+	const mksem      : (v : uint32 -> sem)
 
 Creates a semaphore with the initial value `v`.
 
-	const semwait : (s : sem# -> void)
+	const semwait    : (s : sem# -> void)
 
 Decrements a semaphore, blocking if its value is less than or equal to 0.
 
@@ -174,7 +187,7 @@ Attempts to decrement a semaphore. If the value is zero, this function returns f
 and leaves the value of the semaphore unchanged, otherwise it decrements it
 and returns true.
 
-	const sempost : (s : sem# -> void)
+	const sempost    : (s : sem# -> void)
 
 Increments a semaphore, waking at least one waiter, if any exist.
 
@@ -199,6 +212,43 @@ Wakes one waiter on the condition variable, allowing them to take the mutex.
 	const condbroadcast	: (cond : cond# -> void)
 
 Wakes all waiters on the condition variable.
+
+Reader-Writer Locks
+-------------------
+
+	const mkrwlock  : (-> rwlock)
+
+Creates a new reader-writer lock in the unlocked state.
+
+	const rdlock    : (rw : rwlock# -> void)
+
+Acquires the rwlock as a reader. Any number of readers may concurrently hold
+the lock but no writer may acquire the lock while it is held by a reader.
+
+	const wrlock    : (rw : rwlock# -> void)
+
+Acquires the rwlock as a writer. Only one writer may concurrently hold the lock
+and no reader may acquire the lock while it is held by a writer.
+
+	const tryrdlock : (rw : rwlock# -> bool)
+
+Attempts to acquire the rwlock as a reader and returns true if successful or
+false if unsuccessful.
+
+	const trywrlock : (rw : rwlock# -> bool)
+
+Attempts to acquire the rwlock as a writer and returns true if successful or
+false if unsuccessful.
+
+	const rdunlock  : (rw : rwlock# -> void)
+
+Releases the rwlock as a reader. It is a bug to call this if you acquired the
+lock as a writer or if you don't hold the lock at all.
+
+	const wrunlock  : (rw : rwlock# -> void)
+
+Releases the rwlock as a writer. It is a bug to call this if you acquired the
+lock as a reader or if you don't hold the lock at all.
 
 Wait Groups
 -----------
