@@ -148,6 +148,12 @@ interface to the common subset that most programs need and most OSes provide.
             type dir = struct
             ;;
 
+	    /* well-known file descriptors */
+	    const In
+	    const Out
+	    const Err
+
+
             /* seek options */
             const Seekset	: whence 
             const Seekcur	: whence 

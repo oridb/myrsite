@@ -11,7 +11,7 @@ File Handling
             type dir
 	    type diriter
 
-	    /* constants */
+	    /* well-known file descriptors */
 	    const In
 	    const Out
 	    const Err
