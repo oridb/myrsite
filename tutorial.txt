@@ -279,7 +279,7 @@ match the pattern, the loop body is skipped.
 use std
 
 const main = {
-	for (1, x) : [(1,1), (2, 4), (1, 3), (2, 7)][:]
+	for (1, x) : [(1,1), (2, 4), (1, 3), (2, 7)]
 		std.put("x = {}\n", x)
 	;;
 }
@@ -659,7 +659,7 @@ care.
 
 	impl stringable roman =
 		stringify = {sb, n
-			for (i, s) : romanmap[:]
+			for (i, s) : romanmap
 				while n >= i
 					std.sbputs(sb, s)
 					n -= i
