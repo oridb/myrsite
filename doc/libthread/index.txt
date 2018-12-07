@@ -39,6 +39,8 @@ Summary
 			...
 		;;
 
+		type tlskey(@a#)
+
 		impl atomic int32
 		impl atomic int64
 		impl atomic uint32
@@ -85,8 +87,14 @@ Summary
 		generic xcasptr : (p : @a##, old : std.option(@a#), new : std.option(@a#) -> std.option(@a#))
 		generic xchgptr : (p : @a##, new : std.option(@a#) -> std.option(@a#))
 
+		/* thread local storage */
+		generic tlsalloc : (-> tlskey(@a#))
+		generic tlsset   : (k : tlskey(@a#), v : @a# -> void)
+		generic tlsget   : (k : tlskey(@a#) -> @a#)
+
 		/* misc */
 		const ncpu	: (-> int)
+		const tid	: (-> tid)
 	;;
 
 Types
@@ -280,6 +288,68 @@ These are identical to the corresponding atomic implementations for integral
 types except `std.Some v` is used to represent a nonzero pointer and `std.None`
 is used to represent the zero pointer.
 
+Thread Local Storage
+--------------------
+
+Thread local storage can be used in cases where different threads each need
+their own copy of the same global variable. These variables must be pointers
+and are accessed via shared keys. The thread local variables of a newly spawned
+thread are uninitialized.
+
+	generic tlsalloc : (-> tlskey(@a#))
+
+Allocates a new thread local variable and returns its key.
+
+This function must be called from the main thread. The thread local variables
+available to a child thread C are the thread local variables available to its
+parent P at the time when P spawned C.
+
+	generic tlsset   : (k : tlskey(@a#), v : @a# -> void)
+
+Sets the thread local variable associated with the given key.
+
+	generic tlsget   : (k : tlskey(@a#) -> @a#)
+
+Gets the thread local variable associated with the given key.
+
+In the following example, a thread local variable is allocated and each thread
+stores a tuple of its id and the current time. A wait group is then used to
+serialize the printing of these values, demonstrating that each thread has a
+unique copy of the variable.
+
+```{runmyr threadlocal}
+use std
+use thread
+
+var key
+var wg
+
+const set = {
+	var t = std.mk((thread.tid(), std.now()))
+	thread.tlsset(key, t)
+}
+
+const greet = {
+	var t = thread.tlsget(key)
+	std.put("hello from thread {w=5} at time {}\n", t#.0, t#.1 % 1000000)
+	std.free(t)
+}
+
+const main = {
+	key = thread.tlsalloc()
+	wg = thread.mkwg(1)
+
+	set()
+	thread.spawn({
+		set()
+		greet()
+		thread.wgpost(&wg)
+	})
+	thread.wgwait(&wg)
+	greet()
+}
+```
+
 Misc
 ----
 
@@ -287,3 +357,8 @@ Misc
 
 Returns the number of CPUs available to run your code. On systems where this
 information is unavailable, `1` is returned as a safe default.
+
+	const tid : (-> tid)
+
+Returns the thread id of the current thread. The main thread is guaranteed to
+have thread id 0.
