@@ -22,8 +22,8 @@ File Handling
             const Seekend	: whence 
 
             /* open options */
-            const Ordonly  	: fdopt 
-            const Owronly  	: fdopt 
+            const Oread  	: fdopt 
+            const Owrite  	: fdopt 
             const Ordwr    	: fdopt 
             const Otrunc   	: fdopt 
             const Ocreat   	: fdopt 

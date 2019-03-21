@@ -244,17 +244,12 @@ Some simple examples of how to use the Myrddin networking API
 
 	const Dialstr = "tcp!*!1234"
 	const main = {
-		var lfd, afd
+		var afd
 		var buf : byte[1024]
 
 		match std.announce(Dialstr)
-		| `std.Ok f:    lfd = f
-		| `std.Err e:  std.fatal("unable to announce on {}: {}\n", Dialstr, e)
-		;;
-
-		match std.listen(lfd)
 		| `std.Ok f:    afd = f
-		| `std.Err e:  std.fatal("unable to listen on {}: {}\n", Dialstr, e)
+		| `std.Err e:  std.fatal("unable to announce on {}: {}\n", Dialstr, e)
 		;;
 
 		while true
