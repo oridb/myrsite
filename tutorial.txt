@@ -1398,7 +1398,7 @@ language.
 
 The type for the iterable trait is:
 
-	trait iterable @iterator -> @iteratedvalue
+	trait iterable @iterator -> @iteratedvalue =
 		__iternext__	: (iterp : @iterator#, valp : val# -> bool)
 		__iterfin__	: (iterp : @iterator#, valp : val# -> void)
 	;;
