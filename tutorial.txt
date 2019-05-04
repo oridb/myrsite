@@ -1433,7 +1433,7 @@ For example, if implementing a `byrange(lo, hi)` iterator, I might write:
 			valp# = iterp.idx++
 			-> true
 		}
-		___iterfin__ = {iterp, valp
+		__iterfin__ = {iterp, valp
 			/* nothing to clean up */
 		}
 	;;
