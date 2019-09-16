@@ -76,6 +76,19 @@ specified below.
     brackets from the ends, and replaces the default joiner string ", ".
     </p>
     </dd>
+
+    <dt>s=significant figure</dt>
+    <dd>
+    <p>Specify the number of significant digits (base 10) for floating
+    point types. These digits may be zero.</p>
+    </dd>
+
+    <dt>e</dt>
+    <dd>
+    <p>Format in scientific notation. This is only valid for
+    floating point types.
+    </p>
+    </dd>
 </dl>
 
 Specifiers can be installed by custom specifiers, and can be any
@@ -169,6 +182,8 @@ const main = {
 	std.put("{p=0,w=10}\n", "abcdefghijkl")
 	std.put("{w=10,x}\n", 10)
 	std.put("{p=0,w=10}\n", 10)
+	std.put("{p=#,w=10}\n", 1.23)
+	std.put("{e,s=3}\n", 91.9512)
 
         /* and now some escaping */
 	std.put("{}bar{}\n", "foo\n", "baz")
