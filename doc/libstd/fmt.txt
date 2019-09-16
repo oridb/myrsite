@@ -193,7 +193,7 @@ const goaway = {sb, ap, opts
         var i : int64
 
         i = std.vanext(ap)
-        std.sbfmt(sb, "go away! char val={}\n", i castto(char))
+        std.sbfmt(sb, "go away! char val={}\n", (i : char))
 }
 ```
 

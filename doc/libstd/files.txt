@@ -11,14 +11,19 @@ File Handling
             type dir
 	    type diriter
 
+	    /* well-known file descriptors */
+	    const In
+	    const Out
+	    const Err
+
             /* seek options */
             const Seekset	: whence 
             const Seekcur	: whence 
             const Seekend	: whence 
 
             /* open options */
-            const Ordonly  	: fdopt 
-            const Owronly  	: fdopt 
+            const Oread  	: fdopt 
+            const Owrite  	: fdopt 
             const Ordwr    	: fdopt 
             const Otrunc   	: fdopt 
             const Ocreat   	: fdopt 
@@ -116,6 +121,13 @@ be opened as a directory.
 `Ocreat` does not create the path leading to it, and will return an error if
 that path does not exist.
 
+    /* constants */
+    const In
+    const Out
+    const Err
+
+The constants `In`, `Out`, and `Err` respectively are defined to the system
+stdin, stdout, and stderr file descriptors.
 
 Directories
 -----------

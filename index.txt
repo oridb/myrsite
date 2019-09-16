@@ -241,8 +241,7 @@ Type                            | Description
 --------------------------------|------------------
 `(arg : t1, list : t2 -> ret)`  | Function with 2 args and a return type
 `(-> ret)`                      |  Function with 0 args and a return type
-`(arg : t1)`                    |  Function with 1 arg and an implicit return
-`[t1, t2, t3]`                  |  Three element tuple
+`(t1, t2, t3)`                  |  Three element tuple
 
 
 Structs in Myrddin behave much like they do in C, and are actually binary

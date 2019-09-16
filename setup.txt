@@ -9,19 +9,25 @@ Installing the Binaries
 To get the source, for the compiler, standard library, and myrbuild, you
 download it from git:
 
-        git clone git://git.eigenstate.org/git/ori/mc.git
+	$ git clone git://git.eigenstate.org/ori/mc.git
+	$ cd mc
 
-There are currently no released versions, and the language is in a heavy state
-of flux. I promise that if you use it, and I break some of your code, I will
-help port it to whatever the new sexiness is.
+	  # Set the prefix to anything you want, but
+	  # make sure that $prefix/bin is in $PATH
+	$ ./configure --prefix=/usr
 
-There are also a number of useful libraries:
+	  # On BSD, use gmake
+	$ make
+	$ sudo make install
 
-        git clone git://git.eigenstate.org/git/ori/libbio.git
-        git clone git://git.eigenstate.org/git/ori/libregex.git
-        git clone git://git.eigenstate.org/git/ori/libcryptohash.git
+Plan 9 is also supported:
 
-These are downloaded and installed in the same manner.
+	% hg clone https://bitbucket.org/oridb/mc
+	% cd mc
+	% mk
+	% mk install
+
+On some systems, you can also install Myrddin through your package system.
 
 Useful Supporting Tools
 ------------------------
@@ -31,17 +37,13 @@ not shipped with the above.
 
 ### vim myr support
 
-I have written indent and syntax scripts for vim. These scripts are fairly
-sparse, but they serve me well. To get them, you can grab
+The mc repository comes with indent and syntax scripts for vim. These scripts
+are fairly sparse, but they serve me well. To get them, you can take
 
+    https://git.eigenstate.org/ori/mc.git/tree/support/vim
+
+And put it into your vim path.
         
-They are also available separately as
-
-    http://eigenstate.org/vim/indent/myr.vim
-    http://eigenstate.org/vim/syntax/myr.vim
-    http://eigenstate.org/vim/ftplugin/myr.vim
-    http://eigenstate.org/vim/ftdetect/myr.vim
-
 I also suggest setting the indentation and shift widths for Myrddin files
 with an autocommand. To do that, add the text below to your .vimrc:
 
@@ -49,18 +51,25 @@ with an autocommand. To do that, add the text below to your .vimrc:
     autocmd FileType myr
                 \ setlocal noet |
                 \ setlocal sw=8
-    
+
 ### ctags
-I have added rudimentary Myrddin support to exuberant-ctags, which is
-available here:
 
-    git+ssh://git.eigenstate.org/git/ori/ctags-myr.git
-
-This will generate ctags for all file types that exuberant ctags supports,
-as well as Myrddin. It is not quite smart enough to handle parsing Myrddin
-files too well, so it will pick up text within comments, for example, or
-variables declared within functions. Still, having an index of symbols is
-useful for source navigation.
+[Universal ctags](https://github.com/universal-ctags/ctags) supports Myrddin
+out of the box.
 
 
+### mleakdump
+
+There are some rudimentary leak checking tools. Mleakdump is shipped with
+Myrddin, and is able to interpret the trace files that
+`std.startalloctrace("path")` creates. The output is a bit obtuse,
+as it isn't symbolized, but it's easy to convert the addresses into function
+names using gdb.
+
+### acid
+
+There are some support files shipped for the Plan 9 debugger. To get stack
+traces on Plan 9, use:
+
+	acid -l mc/support/acid/myr your-binary
 

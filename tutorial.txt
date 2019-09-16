@@ -279,7 +279,7 @@ match the pattern, the loop body is skipped.
 use std
 
 const main = {
-	for (1, x) : [(1,1), (2, 4), (1, 3), (2, 7)][:]
+	for (1, x) : [(1,1), (2, 4), (1, 3), (2, 7)]
 		std.put("x = {}\n", x)
 	;;
 }
@@ -292,8 +292,9 @@ over 4 values. This is because the pattern `(1, x)` only matches the values
 A Marginally Useful Program
 ----------------
 
-This program behaves like the Unix `wc` program. Unfortunately, it does input
-and output, and therefore will fail when run in the playground.
+This program behaves like the Unix `wc` program. You'll have to run it on your
+local machine -- it does input and output, and therefore will fail when run in
+the playground.
 
 ```{runmyr wc}
 use std
@@ -357,10 +358,10 @@ char`` indicates that a single character was successfully read from the file.
 Refer to the [API documentation](http://myrlang.org/doc/libbio/index.html) for the full
 details of what the buffered I/O library provides.
 
-The main loop first checks for errors, bailing out of the program with a
-failure if one is encountered. Then, it checks for the end of the file,
-exiting the loop and printing the accumulated statistics if one is
-encountered. In all other cases it matches on the character that was encountered
+The main loop first checks for the end of the file, exiting the loop and
+printing the accumulated statistics if one is encountered.  Then, it checks
+for errors, bailing out of the program with a failure if one is encountered.
+In all other cases it matches on the character that was encountered
 to count up the lines, words, and characters.
 
 There are four patterns that match on the `bio.Ok` union tag. The first two
@@ -655,11 +656,11 @@ care.
 		(  10,  "X"), (   9, "IX"),
 		(   5,  "V"), (   4, "IV"),
 		(   1,  "I"),
-	][:]
+	]
 
 	impl stringable roman =
 		stringify = {sb, n
-			for (i, s) : romanmap[:]
+			for (i, s) : romanmap
 				while n >= i
 					std.sbputs(sb, s)
 					n -= i
@@ -1397,7 +1398,7 @@ language.
 
 The type for the iterable trait is:
 
-	trait iterable @iterator -> @iteratedvalue
+	trait iterable @iterator -> @iteratedvalue =
 		__iternext__	: (iterp : @iterator#, valp : val# -> bool)
 		__iterfin__	: (iterp : @iterator#, valp : val# -> void)
 	;;
@@ -1432,7 +1433,7 @@ For example, if implementing a `byrange(lo, hi)` iterator, I might write:
 			valp# = iterp.idx++
 			-> true
 		}
-		___iterfin__ = {iterp, valp
+		__iterfin__ = {iterp, valp
 			/* nothing to clean up */
 		}
 	;;

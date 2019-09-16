@@ -78,7 +78,7 @@ Next, there is the definition for the library `convenience`. This is a
 library which is not installed, hence the `noinst` attribute. It contains
 a Myrddin source file, an assembly file for x86-64, and a bit of portability
 glue. This showcases a few interesting features of the build system, which
-were inspired a bit by Plan 9 and Go: System tags.  Files twhich have an identical
+were inspired a bit by Plan 9 and Go: System tags.  Files which have an identical
 stem, but end with a "+tag-list" will be filtered by the tags, and the one
 most appropriate for the system will be selected.
 

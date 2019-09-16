@@ -4,7 +4,7 @@
 	date: Jun 23 2018
 }
 
-Myrddin 0.3.1: "My Face is Made of Shame"
+Myrddin 0.3.1: "Stand Back, We're Proffessionals"
 ===============================================
 
 This release includes a commit that I forgot to push, which fixes

@@ -261,15 +261,16 @@ use regex
 const main = {
 	var re
 
-	re = std.try(regex.compile("(a*)bc(d)e"))
+	re = std.try(regex.compile("(a*)bc(d)ef"))
 	match regex.sub(re, "aaabcdef", ["HEY", "X"][:])
 	| `std.Some sub:
-		std.put("{}\n", sub[0])
-		regex.matchfree(matches)
+		std.put("{}\n", sub)
+		std.slfree(sub)
 	| `std.None:
 		std.fatal("should have matched")
 	;;
 }
+
 ```
 
 ```{runmyr regex3}
