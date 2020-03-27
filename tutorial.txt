@@ -473,7 +473,7 @@ the `byte[:]` stack can only contain `byte[:]`.
 The functions `stkpush`, `stkpop`, and `mkstk` are declared with the keyword
 `generic`. The `generic` keyword indicates that they may contain type
 parameters in their signatures. This means that when `stkpush` is called with
-a stack of `fixstack(int)`, the type `@a` is substituded with `int`.
+a stack of `fixstack(int)`, the type `@a` is substituted with `int`.
 Similarly, when called with `fixstack(byte[:])`, `@a` is substituted with
 `byte[:]`. Note that `@a` is substituted with the same type throughout the
 context, so if we defined a `max` function, we would not be able to mix
@@ -822,7 +822,7 @@ Variable declarations are indicated with `var`. Generic declarations are
 indicated with `generic`.
 
 This keyword is followed by the variable name. The type follows, optionally.
-If the type is ommitted, then it will be inferred. Finally, the initializer
+If the type is omitted, then it will be inferred. Finally, the initializer
 follows. In the case of consts, the initializer is mandatory. Otherwise, it
 can be omitted.
 
@@ -1064,7 +1064,7 @@ do.
 <dl>
 	<dt>&x</dt> 
 	<dd><p>
-		The addres-of operator takes the address of any value,
+		The address-of operator takes the address of any value,
 		evaluating to a pointer to that value.
 	</p></dd>
 	<dt>!x</dt>
@@ -1325,7 +1325,7 @@ In this case, if I had a function that required a generic type with the
 	}
 
 Generic types are only allowed as part of a generic declaration, or within a
-paremeterized type definition. If they are used outside of this context,
+parameterized type definition. If they are used outside of this context,
 then the compiler will flag this as an error.
 
 There are only a handful of built in traits. All, except for the iterable
