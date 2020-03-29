@@ -1,115 +1,364 @@
 {
-        title:  libthread
-        description:    Myrddin Thread Library
+	    title:  libthread
+	    description:    Myrddin Thread Library
 }
 
-Libthread
----------
+Summary
+-------
 
-    pkg thread =
-            trait atomic @a::(integral,numeric) =
-                    xget	: (p : @a# -> @a)
-                    xset	: (p : @a#, v : @a -> void)
-                    xadd	: (p : @a#, v : @a -> @a)
-                    xsub	: (p : @a#, v : @a -> @a)
-                    xcas	: (p : @a#, old : @a, new : @a -> @a)
-                    xchg	: (p : @a#, new : @a -> @a)
-            ;;
+	pkg thread =
+		/* types */
+		type tid
 
-            type cond = struct
-                    ...
-            ;;
+		trait atomic @a::(integral,numeric) =
+			xget	: (p : @a# -> @a)
+			xset	: (p : @a#, v : @a -> void)
+			xadd	: (p : @a#, v : @a -> @a)
+			xsub	: (p : @a#, v : @a -> @a)
+			xcas	: (p : @a#, old : @a, new : @a -> @a)
+			xchg	: (p : @a#, new : @a -> @a)
+		;;
 
-            type mutex = struct
-                    ...
-            ;;	
+		type mutex = struct
+			...
+		;;
 
-            impl atomic int32
-            impl atomic int64
-            impl atomic uint32
-            impl atomic uint64
+		type sem = struct
+			...
+		;;
 
-            /* mutexes */
-            const mkmtx	: (-> mutex)
-            const mtxlock	: (mtx : mutex# -> void)
-            const mtxtrylock	: (mtx : mutex# -> bool)
-            const mtxunlock	: (mtx : mutex# -> void)
+		type cond = struct
+			...
+		;;
 
-            /* condition variables */
-            const mkcond	: (mtx : mutex# -> cond)
-            const condwait	: (cond : cond# -> void)
-            const condsignal	: (cond : cond# -> void)
-            const condbroadcast	: (cond : cond# -> void)
-    ;;
+		type rwlock = struct
+			...
+		;;
+
+		type waitgrp = struct
+			...
+		;;
+
+		type tlskey(@a#)
+
+		impl atomic int32
+		impl atomic int64
+		impl atomic uint32
+		impl atomic uint64
+
+		/* creation */
+		const spawn : (fn : (-> void) -> std.result(tid, byte[:]))
+
+		/* mutexes */
+		const mkmtx	: (-> mutex)
+		const mtxlock	: (mtx : mutex# -> void)
+		const mtxtrylock	: (mtx : mutex# -> bool)
+		const mtxunlock	: (mtx : mutex# -> void)
+
+		/* semaphores */
+		const mksem      : (v : uint32 -> sem)
+		const semwait    : (s : sem# -> void)
+		const semtrywait : (s : sem# -> bool)
+		const sempost    : (s : sem# -> void)
+
+		/* condition variables */
+		const mkcond	: (mtx : mutex# -> cond)
+		const condwait	: (cond : cond# -> void)
+		const condsignal	: (cond : cond# -> void)
+		const condbroadcast	: (cond : cond# -> void)
+
+		/* reader-writer locks */
+		const mkrwlock  : (-> rwlock)
+		const rdlock    : (rw : rwlock# -> void)
+		const wrlock    : (rw : rwlock# -> void)
+		const tryrdlock : (rw : rwlock# -> bool)
+		const trywrlock : (rw : rwlock# -> bool)
+		const rdunlock  : (rw : rwlock# -> void)
+		const wrunlock  : (rw : rwlock# -> void)
+
+		/* wait groups */
+		const mkwg : (v : uint32 -> waitgrp)
+		const wgwait : (w : waitgrp# -> void)
+		const wgpost : (w : waitgrp# -> void)
+
+		/* atomic pointer operations */
+		generic xgetptr : (p : @a## -> std.option(@a#))
+		generic xsetptr : (p : @a##, v : std.option(@a#) -> void)
+		generic xcasptr : (p : @a##, old : std.option(@a#), new : std.option(@a#) -> std.option(@a#))
+		generic xchgptr : (p : @a##, new : std.option(@a#) -> std.option(@a#))
+
+		/* thread local storage */
+		generic tlsalloc : (-> tlskey(@a#))
+		generic tlsset   : (k : tlskey(@a#), v : @a# -> void)
+		generic tlsget   : (k : tlskey(@a#) -> @a#)
+
+		/* misc */
+		const ncpu	: (-> int)
+		const tid	: (-> tid)
+	;;
 
 Types
 -----
+	type tid
 
-    type cond = struct
-            ...
-    ;;
+	type mutex = struct ... ;;
+	type sem = struct ... ;;
+	type cond = struct ... ;;
+	type waitgrp = struct ... ;;
 
-Condition variable.
+	trait atomic @a::(integral,numeric) =
+	        xget	: (p : @a# -> @a)
+	        xset	: (p : @a#, v : @a -> void)
+	        xadd	: (p : @a#, v : @a -> @a)
+	        xsub	: (p : @a#, v : @a -> @a)
+	        xcas	: (p : @a#, old : @a, new : @a -> @a)
+	        xchg	: (p : @a#, new : @a -> @a)
+	;;
 
-    type mutex = struct
-            ...
-    ;;	
+Impls
+-----
 
-    trait atomic @a::(integral,numeric) =
-            xget	: (p : @a# -> @a)
-            xset	: (p : @a#, v : @a -> void)
-            xadd	: (p : @a#, v : @a -> @a)
-            xsub	: (p : @a#, v : @a -> @a)
-            xcas	: (p : @a#, old : @a, new : @a -> @a)
-            xchg	: (p : @a#, new : @a -> @a)
-    ;;
+The `atomic` trait is implemented for the types `int32`, `int64`, `uint32`, and
+`uint64`.
 
+	xget	: (p : @a# -> @a)
 
-Mutex.
+Atomically gets the value at address `p`.
 
-Functions: Mutexes
-------------------
+	xset	: (p : @a#, v : @a -> void)
 
-    const mkmtx	: (-> mutex)
+Atomically sets the value at address `p` to `v`.
+
+	xadd	: (p : @a#, v : @a -> @a)
+
+Atomically adds `v` to the value at address `p` and returns the previous value.
+
+	xcas	: (p : @a#, old : @a, new : @a -> @a)
+
+Atomically compares the value at address `p` to `old` and, if they are equal,
+swaps that value with `new`. Returns `old` if the swap succeeds, or the actual
+value at address `p` if it does not.
+
+	xchg	: (p : @a#, new : @a -> @a)
+
+Atomically exchanges the value at address `p` with `new`.
+
+Thread Creation
+---------------
+
+	const spawn : (fn : (-> void) -> std.result(tid, byte[:]))
+
+Spawn creates a new thread. If it succeeds, it returns the thread id
+of the created thread. Otherwise, it returns a string describing the
+error.
+
+The environment of the closure is duplicated before the thread is
+spawend, allowing for safe access to the variables copied by value.
+
+Mutexes
+-------
+
+	const mkmtx	: (-> mutex)
 
 Crates a new mutex, in the unlocked state.
 
-    const mtxlock	: (mtx : mutex# -> void)
+	const mtxlock	: (mtx : mutex# -> void)
 
 Locks a mutex. Blocks if the mutex is already locked.
 
-    const mtxtrylock	: (mtx : mutex# -> bool)
+	const mtxtrylock	: (mtx : mutex# -> bool)
 
-Attempts to lock a mutex. Returns true if the lock was
-taken successful. Returns false if the lock was not taken.
+Attempts to lock a mutex. Returns true if the lock was taken successfully.
+Returns false if the lock was not taken.
 
 This call does not block.
 
-    const mtxunlock	: (mtx : mutex# -> void)
+	const mtxunlock	: (mtx : mutex# -> void)
 
 Unlocks a mutex that is taken. It is a bug to call this on a mutex that you
 have not successfully locked.
 
-Functions: Condition Variables.
-------------------------------
+Semaphores
+----------
 
-    const mkcond	: (mtx : mutex# -> cond)
+	const mksem      : (v : uint32 -> sem)
+
+Creates a semaphore with the initial value `v`.
+
+	const semwait    : (s : sem# -> void)
+
+Decrements a semaphore, blocking if its value is less than or equal to 0.
+
+	const semtrywait : (s : sem# -> bool)
+
+Attempts to decrement a semaphore. If the value is zero, this function returns false
+and leaves the value of the semaphore unchanged, otherwise it decrements it
+and returns true.
+
+	const sempost    : (s : sem# -> void)
+
+Increments a semaphore, waking at least one waiter, if any exist.
+
+Condition Variables
+-------------------
+
+	const mkcond	: (mtx : mutex# -> cond)
 
 Creates a condition variable. Associates the mutex with the condition
 variable.
 
-    const condwait	: (cond : cond# -> void)
+	const condwait	: (cond : cond# -> void)
 
-Waits on the condition to be notiifed on. Must be called with the associated
+Waits on the condition to be notified on. Must be called with the associated
 mutex locked. Unlocks the mutex that is associated with the condition variable
 and sleeps until someone has notified on the condition variable.
 
-    const condsignal	: (cond : cond# -> void)
+	const condsignal	: (cond : cond# -> void)
 
-Wakes at least one waiter on the condition variable, allowing them to take the
-mutex.
+Wakes one waiter on the condition variable, allowing them to take the mutex.
 
-    const condbroadcast	: (cond : cond# -> void)
+	const condbroadcast	: (cond : cond# -> void)
 
 Wakes all waiters on the condition variable.
 
+Reader-Writer Locks
+-------------------
+
+	const mkrwlock  : (-> rwlock)
+
+Creates a new reader-writer lock in the unlocked state.
+
+	const rdlock    : (rw : rwlock# -> void)
+
+Acquires the rwlock as a reader. Any number of readers may concurrently hold
+the lock but no writer may acquire the lock while it is held by a reader.
+
+	const wrlock    : (rw : rwlock# -> void)
+
+Acquires the rwlock as a writer. Only one writer may concurrently hold the lock
+and no reader may acquire the lock while it is held by a writer.
+
+	const tryrdlock : (rw : rwlock# -> bool)
+
+Attempts to acquire the rwlock as a reader and returns true if successful or
+false if unsuccessful.
+
+	const trywrlock : (rw : rwlock# -> bool)
+
+Attempts to acquire the rwlock as a writer and returns true if successful or
+false if unsuccessful.
+
+	const rdunlock  : (rw : rwlock# -> void)
+
+Releases the rwlock as a reader. It is a bug to call this if you acquired the
+lock as a writer or if you don't hold the lock at all.
+
+	const wrunlock  : (rw : rwlock# -> void)
+
+Releases the rwlock as a writer. It is a bug to call this if you acquired the
+lock as a reader or if you don't hold the lock at all.
+
+Wait Groups
+-----------
+
+	const mkwg : (v : uint32 -> waitgrp)
+
+Creates a wait group with the initial value `v`.
+
+	const wgwait : (w : waitgrp# -> void)
+
+Blocks if the value of the wait group is nonzero.
+
+	const wgpost : (w : waitgrp# -> void)
+
+Decrements the value of the wait group. If the new value is zero, all threads
+waiting on the wait group are woken.
+
+Posting to a wait group that is already at zero is an error.
+
+Atomic Pointer Operations
+-------------------------
+
+	generic xgetptr : (p : @a## -> std.option(@a#))
+	generic xsetptr : (p : @a##, v : std.option(@a#) -> void)
+	generic xcasptr : (p : @a##, old : std.option(@a#), new : std.option(@a#) -> std.option(@a#))
+	generic xchgptr : (p : @a##, new : std.option(@a#) -> std.option(@a#))
+
+These are identical to the corresponding atomic implementations for integral
+types except `std.Some v` is used to represent a nonzero pointer and `std.None`
+is used to represent the zero pointer.
+
+Thread Local Storage
+--------------------
+
+Thread local storage can be used in cases where different threads each need
+their own copy of the same global variable. These variables must be pointers
+and are accessed via shared keys. The thread local variables of a newly spawned
+thread are uninitialized.
+
+	generic tlsalloc : (-> tlskey(@a#))
+
+Allocates a new thread local variable and returns its key.
+
+This function must be called from the main thread. The thread local variables
+available to a child thread C are the thread local variables available to its
+parent P at the time when P spawned C.
+
+	generic tlsset   : (k : tlskey(@a#), v : @a# -> void)
+
+Sets the thread local variable associated with the given key.
+
+	generic tlsget   : (k : tlskey(@a#) -> @a#)
+
+Gets the thread local variable associated with the given key.
+
+In the following example, a thread local variable is allocated and each thread
+stores a tuple of its id and the current time. A wait group is then used to
+serialize the printing of these values, demonstrating that each thread has a
+unique copy of the variable.
+
+```{runmyr threadlocal}
+use std
+use thread
+
+var key
+var wg
+
+const set = {
+	var t = std.mk((thread.tid(), std.now()))
+	thread.tlsset(key, t)
+}
+
+const greet = {
+	var t = thread.tlsget(key)
+	std.put("hello from thread {w=5} at time {}\n", t#.0, t#.1 % 1000000)
+	std.free(t)
+}
+
+const main = {
+	key = thread.tlsalloc()
+	wg = thread.mkwg(1)
+
+	set()
+	thread.spawn({
+		set()
+		greet()
+		thread.wgpost(&wg)
+	})
+	thread.wgwait(&wg)
+	greet()
+}
+```
+
+Misc
+----
+
+	const ncpu : (-> int)
+
+Returns the number of CPUs available to run your code. On systems where this
+information is unavailable, `1` is returned as a safe default.
+
+	const tid : (-> tid)
+
+Returns the thread id of the current thread. The main thread is guaranteed to
+have thread id 0.

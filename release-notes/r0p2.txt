@@ -1,0 +1,199 @@
+{
+	title: 0.2
+	description: Releases
+	date: Sept 15 2017
+}
+
+Myrddin 0.2.2
+=============
+
+This release solves build issues when using llvm linker (lld). It fixes
+alignment so that the linker will accept the assembly that we generate.
+
+Myrddin 0.2.1
+=============
+
+This is a point release. It should have no user-visible changes on existing
+platforms, but it brings in full OpenBSD 6.3 support. This consists of two
+major things:
+
+	- Generating the system call tables for sys+openbsd:6.3-x64.myr. Not
+	  too much changed (mostly pledge stuff, as far as I can tell), but
+	  it's worth doing.
+
+	- Adding support for MAP_STACK mmap flags in libthread. For the sake
+	  of security, OpenBSD is starting to require that the stack pointer
+	  point to memory that is mapped with MAP_STACK.
+
+Myrddin 0.2: "9 out of 10 cats agree"
+=====================================
+
+Myrddin 0.2 has been released. This release was focused on filing off the
+sharp edges shipped with the previous release. But not to worry, there are
+still plenty of stabby bits left for the masochists.
+
+![9 out of 10 cats](9of10cats.gif)
+
+
+Major highlights since 0.1
+--------------------------
+
+	$ git diff --stat r0.1.1..HEAD | tail -n 1
+ 	265 files changed, 26195 insertions(+), 7080 deletions(-)
+	$ git log --pretty=oneline r0.1.1..HEAD | wc -l
+	332
+
+- Bug fixes and bug fixes and bug fixes.
+- Performance has improved overall.
+- Rudimentary GDB line number support.
+- Rudimentary Plan 9 Acid debugger support.
+- Murmurhash has been replaced with siphash
+- Libhttp is shipped by default
+- Libbio allows arbitrary, user-defined backing stores
+- Partial NetBSD support
+- Mbld builds are parallel, and performance is competitive with ninja.
+- Mbld supports benchmarking via `mbld bench`.
+- Mbld build tags may now be versioned.
+- Type errors indicate where the sources of the conflicting types.
+- An initial look at scoped resoure management, via `auto`.
+- The ability to request a function by trait using `impl` statements.
+- A complete rewrite of trait resolution, which fixes many known bugs.
+- Full system call coverage on Linux, FreeBSD, OpenBSD, and Plan 9.
+- Buffered IO now supports non-file I/O
+- For loops now use `:` in place of `in`
+- signal() is no longer flaky on linux.
+- DNS resolution is far more robust.
+- Fix several instances of miscompilation.
+- Allow duping closures without memory allocations.
+- Allow race-free access to the environment within thread spawning
+- Fix DNS for cname records.
+- Libthread uses futexes on OpenBSD 6.2
+
+
+Breaking Changes
+----------------
+
+- std.Ordonly and std.Owronly have been named to std.Oread and std.Owrite.
+- `for x in y` became `for x : y`. It's only a warning right now, but it will
+  break your code soon.
+- Sigpipe is no longer handled by default.
+- readv and writev now use iovec structs instead of slices.
+- Solsock is now called Solsocket, and it's type changed to match getsockopt.
+- Output no longer clutters the source directory, but instead goes into
+  `obj/`.
+- The `std.listen` API has been merged with `std.accept`.
+- `mbld test` no longer impliciltly adds files to the test build.
+- Custom hash functions return int64, not int32.
+- Several unnecessary options (`-d`, `-l`, `-C`, `-M`) were removed from mbld.
+
+New External Libraries and Programs
+--------------------------
+
+Yep, there's code thats not part of the main Myrddin distribution.
+
+- [Libtermdraw](https://git.eigenstate.org/ori/libtermdraw.git): A library
+  for doing curses-like drawing on the terminal.
+- [Mparse](https://git.eigenstate.org/ori/mparse.git): A library
+  written in Myrddin, that parses Myrddin.
+- [irc.myr](https://git.eigenstate.org/ori/irc.myr.git): A simple IRC
+  client, reminiscent of irssi.
+- [Sergen](https://git.eigenstate.org/ori/sergen.git): A crude reinvention
+  of protobufs/thrift.
+- [Libwl](https://github.com/michaelforney/libwl): A wayland client library.
+- [ddmin](https://github.com/andrewchambers/ddmin): A tool for paring down a
+  large testcase into a minimal one.
+
+Endorsements
+------------
+
+"Fine, it's a good language. Now will you get out of the bathroom and let me
+shit in peace?" -- Charles Babbage
+
+"Make Programming Great Again" -- Barack Obama
+
+"I think it's gluten free" -- Anonymous
+
+"Back Off! Those are *MY* dentures!" -- Mom
+
+Thanks to the contributors
+--------------------------
+
+In no particular order:
+
+- Quentin Carbonneaux, for good discussion and implementing auto.
+- Michael Forney, for bug fixes, code cleanup, and impl statements.
+- Andrew Chambers, for testing, bug reports, and ddmin.
+- Lucas Gabriel Vuotto, for bug fixes, testing, and siphash.
+- Ryan Gonzalez, for bug fixes and code cleanup.
+- Carlin Bingham, for fixing some OpenBSD system calls.
+- Kamil Rytarowski, for the initial work on NetBSD.
+- Roberto E. Vargas Caballero, for ideas, and collaboration on tools.
+- S. Gilles, for testing, bug reports, and patches.
+- Everyone else who complained about my incompetence.
+
+Packages and Installation
+-------------------------
+
+Myrddin 0.2 is being packaged for supported systems. Some of them may
+be behind, as packagers finish putting together updated packages.
+
+It is also easy to install from source.
+
+#### From Git
+
+Myrddin is a young language. There are regular fixes to the language and
+libraries. Therefore, it's probably a good idea to install it from Git. To
+install Myrddin from source:
+
+	$ git clone git://git.eigenstate.org/ori/mc.git
+	$ cd mc
+	$ ./configure --prefix=/usr
+	# On BSD, use gmake
+	$ make
+	$ sudo make install
+
+### From Tarballs
+
+Tarballs of this release are also available
+
+- [myrddin-0.2.0.tar.bz2](/releases/myrddin-0.2.0.tar.bz2)
+- [myrddin-0.2.0.tar.gz](/releases/myrddin-0.2.0.tar.gz)
+- [myrddin-0.2.0.tar.xz](/releases/myrddin-0.2.0.tar.xz)
+
+#### Mac OSX
+
+There is a brew tap for OSX. If you have Homebrew installed,
+here is how you can use it to install Myrddin:
+
+	$ brew install oridb/myrddin/myrddin
+
+#### FreeBSD
+
+The port for Myrddin is in the FreeBSD ports tree. You can install it
+using:
+
+	# pkg install myrddin
+
+#### OpenBSD
+
+The port for Myrddin is in the OpenBSD ports tree. You can install it
+using:
+
+	# pkg_add myrddin
+
+#### Plan 9 (9front)
+
+Because Mercurial is the version control mechanism for Plan 9, there
+is a mirror of the repository on Bitbucket. To install it:
+
+	% hg clone https://bitbucket.org/oridb/mc
+	% cd mc
+	% mk
+	% mk install
+
+Supported Platforms
+-------------------
+
+The 0.2 release comes with an amd64 compiler. The supported platforms are
+Linux, OSX, FreeBSD, OpenBSD, and Plan9. There is partial support
+for NetBSD.

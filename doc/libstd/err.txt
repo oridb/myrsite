@@ -14,8 +14,8 @@ Error Handling
             ;;
 
             type result(@a, @b) = union
-                    `Ok	@a
-                    `Fail	@b
+                    `Ok @a
+                    `Err @b
             ;;
 
             $noret const fatalv	: (fmt : byte[:], ap : valist# -> void)
@@ -26,8 +26,10 @@ Error Handling
 
             generic try : (v : result(@a, @b) -> @a)
             generic tryv : (v : result(@a, @b), d : @a -> @a)
+
             generic get : (v : option(@a) -> @a)
             generic getv : (v : option(@a), d : @a -> @a)
+            generic canget : (v : option(@a) -> bool)
     ;;
 
 Overview
@@ -62,8 +64,8 @@ and error type. It is typically used  in places where a missing value is the
 only exceptional condition.
 
     type result(@a, @b) = union
-            `Ok	@a
-            `Fail	@b
+            `Ok @a
+            `Err @b
     ;;
 
 
@@ -98,8 +100,8 @@ program goes away.
     generic get : (v : option(@a) -> @a)
 
 Try and get both return the value from the successful branch of their type:
-`try` returns the value contained in `\`std.Ok`, and `get` returns the value
-in `\`std.Some`.
+`try` returns the value contained in `` `std.Ok``, and `get` returns the value
+in `` `std.Some``.
 
 If this does not match the union, a diagnostic message is printed and the
 program is aborted.
@@ -108,9 +110,12 @@ program is aborted.
     generic getv : (v : option(@a), default : @a -> @a)
 
 Try and get both return the value from the successful branch of their type:
-`try` returns the value contained in `\`std.Ok`, and `get` returns the value
-in `\`std.Some`.
+`try` returns the value contained in `` `std.Ok``, and `get` returns the value
+in `` `std.Some``.
 
 If this does not match the union, the default value is returned to the
-caller, as though the type had contained `\`Some default` or `\`Ok default` 
+caller, as though the type had contained `` `Some default`` or `` `Ok default``.
 
+    generic canget	: (v : option(@a) -> @a)
+
+Canget is a predicate returning true if the option matches `\`Some _`

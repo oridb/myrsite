@@ -3,7 +3,7 @@
         description:    libstd: Unicode
 }
 
-Unicode
+Summary: Unicode
 --------
 
     pkg std =
@@ -20,7 +20,10 @@ Unicode
             const charlen	: (chr : char -> size)
             const encode	: (buf : byte[:], chr : char -> size)
             const decode	: (buf : byte[:] -> char)
-            const strstep	: (str : byte[:] -> (char, byte[:]))
+            const charstep	: (str : byte[:] -> (char, byte[:]))
+            const graphemestep	: (str : byte[:] -> (byte[:], byte[:]))
+            const cellwidth	: (c : char -> int)
+            const strcellwidth	: (str : byte[:] -> size)
 
             /* character class predicates */
             const isalpha	: (c : char -> bool)
@@ -78,13 +81,14 @@ Functions: Iterating over strings
 Chariter returns an iterator which steps through a string character by
 character.
 
-Functions: Encoding and Decoding
---------------------------------
+Functions: Encoding, Decoding, Information
+------------------------------------------
 
     const charlen	: (chr : char -> size)
 
 Charlen returns the length in bytes that decoding the character provided into
-unicode would take. This can vary between 1 and Maxcharlen bytes.
+unicode would take. This can vary between 1 and Maxcharlen bytes. In the case
+of an invalid character, `1` is returned.
 
     const encode	: (buf : byte[:], chr : char -> size)
 
@@ -102,12 +106,33 @@ returning the codepoint itself, or `Badchar` if the codepoint is invalid.
 The tail of the buffer is not considered, allowing this function to be used
 to peek at the contents of a string.
 
-    const strstep	: (str : byte[:] -> (char, byte[:]))
+    const charstep	: (str : byte[:] -> (char, byte[:]))
 
-strstep is a function for stepping through unicode encoded strings. It
+`charstep` is a function for stepping through unicode encoded strings. It
 returns the tuple (`Badchar`, str[1:]) if the value cannot be decoded,
-or `(charval, str[std.charlen(charval):])` therwise.
+or `(charval, str[std.charlen(charval):])` if it can.
 
+    const graphemestep	: (str : byte[:] -> (byte[:], byte[:]))
+
+`graphemestep` is similar to `charstep`. If possible, it will return
+a tuple consisting of the first grapheme of `str` and the rest of
+`str`.  A "grapheme" is taken to be either one of the characters
+`'\n'`, `'\r'`, `'\t'`, or a character of nonzero width (according
+to `std.cellwidth`) followed by arbitrarily many characters of zero
+width.
+
+If `str` does not start with a grapheme, or does not contain valid
+UTF-8, `graphemestep` returns the tuple `([][:], str[1:])`
+
+    const cellwidth	: (str : byte[:] -> size)
+
+`cellwidth` returns a prediction of how many cells in a terminal
+`c` would take, if printed.
+
+    const strcellwidth	: (str : byte[:] -> size)
+
+`strcellwidth` returns the sum of invoking `std.cellwidth` on each
+character in `str`, as returned by `charstep`.
 
 ```{runmyr striter}
     s = "abcd"

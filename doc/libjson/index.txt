@@ -1,0 +1,65 @@
+{
+	title: libjson
+	description: Libinifile API documentation.
+}
+
+Summary
+-------
+
+Json is a common format, used for many web services. This package
+implements well tested parsing and formatting routines for it.
+
+	pkg json =
+		type elt = union
+			`Null
+			`Bool	bool
+			`Num	flt64
+			`Str	byte[:]
+			`Arr	elt#[:]
+			`Obj	(byte[:], elt#)[:]
+		;;
+
+		type err = struct
+			e	: errtype
+			line	: std.size
+			off	: std.size
+		;;
+
+		type errtype = union
+			`Badesc char
+			`Junk char
+			`Depth
+			`End
+		;;
+
+		const parse	: (str : byte[:] -> std.result(elt#, err))
+		const free	: (j : elt# -> void)
+	;;
+
+Libjson parses and formats json. The formatting is handled via a custom
+formatter.
+
+Functions
+---------
+
+	const parse	: (str : byte[:] -> std.result(elt#, err))
+
+Parse parses a string into a json structure.
+
+	const free	: (j : elt# -> void)
+
+Free frees the parsed json structure.
+
+Examples
+--------
+
+	use std
+	use json
+
+	const main = {
+		var j
+
+		j = std.try(json.parse("{\"a\": 123}"))
+		std.put("json parsed: {}\n", j)
+		json.free(j)
+	}

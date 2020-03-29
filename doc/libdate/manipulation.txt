@@ -4,12 +4,17 @@
 	description: Libdate API documentation.
 }
 
-Creation and Manipulation
--------------------------
+Summary: Creation and Manipulation
+-------
+
+Creation and manipulation of dates is fairly subtle. While insulating the
+developer from all of the subtlety of date manipulation is difficult, libdate
+attempts to provide an API that does the right thing in most circumstances.
+
     pkg date =
             /* useful constructors */
             const utcnow	: (-> instant)
-            const now	: (tz : byte[:] -> instant)
+            const now		: (tz : byte[:] -> instant)
             const tozone	: (d : instant, zone : byte[:]	-> instant)
             const mkdate	: (y : int, m : int, day : int, zone : byte[:]	-> instant)
             const mkdatetime	: (year : int, mon : int, day : int, \

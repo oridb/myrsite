@@ -3,8 +3,8 @@
 	description: Libdate API documentation.
 }
 
-Date and Time Formatting
----------------------
+Summary: Formatting
+----------
 
 Formatting in libdate is done through the standard formatting
 functionality, and there are actually no functions exposed by libdate.

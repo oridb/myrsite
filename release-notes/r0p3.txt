@@ -1,0 +1,337 @@
+{
+	title: 0.3
+	description: Releases
+	date: Jun 23 2018
+}
+
+Myrddin 0.3.1: "Stand Back, We're Proffessionals"
+===============================================
+
+This release includes a commit that I forgot to push, which fixes
+the build on OSX.
+
+Downloading
+-----------
+
+The release has been tagged with r0.3.1 in git. If you want a
+tarball, you can get it from here:
+
+- [myrddin-0.3.1.tar.bz2](/releases/myrddin-0.3.1.tar.bz2)
+- [myrddin-0.3.1.tar.gz](/releases/myrddin-0.3.1.tar.gz)
+- [myrddin-0.3.1.tar.xz](/releases/myrddin-0.3.1.tar.xz)
+
+Myrddin 0.3.0: "Stand Back, We're Proffessionals"
+===============================================
+
+Myrddin 0.3 has been released. This is the first Myrddin release that is being
+used in a commercial setting. Sure, it's a continuous build system, and one
+day we'll outgrow it within the org, but for now, that makes us a commercial
+success, right?
+
+![Stand Back, We're Proffesionals](proffesional.jpg)
+
+Downloading
+-----------
+
+The release has been tagged with r0.3.0 in git. If you want a
+tarball, you can get it from here:
+
+- [myrddin-0.3.0.tar.bz2](/releases/myrddin-0.3.0.tar.bz2)
+- [myrddin-0.3.0.tar.gz](/releases/myrddin-0.3.0.tar.gz)
+- [myrddin-0.3.0.tar.xz](/releases/myrddin-0.3.0.tar.xz)
+
+
+Reporting Bugs, Getting Help
+----------------------------
+
+Most discussion is on IRC, in #myrddin on irc.eigenstate.org. You can join
+using your favorite client, or through a web browser via something like [kiwi
+IRC](https://kiwiirc.com/client/irc.eigenstate.org/?nick=yournick#myrddin)
+
+We are also responsive on the [mailing list](list-subscribe.html).
+
+Endorsements
+------------
+
+"Wait, we're using this garbage? Why?" -- CTO, Markov Corporation
+
+Major Highlights since 0.2
+--------------------------
+
+Lots of churn. The bulk of the code size increase has been adding
+tests for many of our libraries.
+
+	$ git diff --stat r0.2.2..HEAD | tail -n 1
+	322 files changed, 34451 insertions(+), 3860 deletions(-)
+	$ git log r0.2.2..HEAD --pretty=oneline | wc -l
+	359
+
+- The 'in' token has been removed fully. Now, `for elt in seq` is invalid
+  syntax: it must be written as `for elt : seq`. This frees up a useful
+  variable name.
+- A `default.nix` has been added for building on systems.
+- Many language bugs have been fixed, including trait issues, thanks to
+  lgv.
+	- Traits should work far more reliably.
+	- We should be more agressive about flagging uses of uninitialized
+	  variables.
+	- Linking against C works on OpenBSD
+- Several language features have been added
+	- Enums should be slightly cheaper (thanks, mpu)
+	- Auto declarations are now supported.
+	- You can use `==` on enum style unions
+- Many library bugs have been fixed, covering everything from
+  the memory allocator, through to dealing with packet loss correctly
+  in the DNS resolver.
+- Mbld is a bit smarter in several ways.
+	- It knows when the compiler or libraries changed, so it will now
+	  rebuild your myrddin install changes. This prevents some mysterious
+	  build failures around mismatched library versions.
+	- mbld now outputs to `obj/` instead of the current working directory,
+	  leading to cleaner builds.
+	- mbld knows how to run subsets of tests.
+	- Several new CPU type tags are set by default.
+- Several new libraries have been added, most notably:
+	- [libmath](https://git.eigenstate.org/ori/mc.git/tree/lib/math),
+	  which implements several floating point functions of interest
+	  from scratch.
+	- [libflate](https://git.eigenstate.org/ori/mc.git/tree/lib/flate),
+	  which implements gzip compression/decompression.
+- Several  existing ones have been significantly improved.
+	- Libthread is now usable on OSX, thanks to the work of iriri. It also
+	  now uses futexes on OpenBSD, significantly improving its performance
+	  and behavior.
+	- Several threading bugs have been fixed in libstd, largely focused
+	  around forking and execing in a threaded program.
+	- Pledge has been added to libstd. It's invokes pledge on OpenBSD,
+	  and is a no-op on deficient platforms.
+	- Constant time RSA has been implemented in libcrypto, following the lead of
+	  BearSSL
+	- AES GCM mode is now implemented in libcrypto.
+	- SHA HMAC functions are now implemented in libcrypto.
+	- Libbio now has a vtable, and therefore can be used to buffer any
+	  stream of data.
+- Others have been less significantly improved.
+	- Integers can be printed in any base.
+	- std.put now will allow printing arbitrary binary data, instead of
+	  just unicode.
+	- Libstd now counts graphemes instead of simply counting codepoints
+	  when outputting text.
+	- Libtermdraw also counts graphemes instead of codepoints.
+	- Regex has been sped up by several times.
+	- libfileutil has had several API signatures changed, and now
+	  has code to remove file trees recursively.
+- IPv6 is now fully supported.
+- The size of generated binaries is now smaller, thanks to enabling
+  `--gc-sections` by default on platforms that support it.
+- Dependent system tags can now be defined.
+- Several new APIs have been added, including:
+- Support for OpenBSD 6.3 (from 0.2.2)
+
+Breaking changes
+----------------
+
+- Auto variables have been removed in favor of the auto operator.
+- Trait syntax has been changed, in order to reduce repetition and allow for
+  auxiliary types to be attached to traits.
+- The earlier `for, in` change.
+- libbio now returns `std.result(@t, bio.err)` instead of a custom
+  `bio.status(@t)` type.
+- Hash tables now use traits instead of callbacks, meaning that all
+  hash tables using `std.mkht(hashfn, cmpfn)` need to be replaced
+  with `std.mkht()`. The types should be inferred appropriately in
+  most cases.
+- The various equality checking functions have been removed in favor
+  of trait overloading `std.eq`.
+- Several iterators have been moved out of libstd and into libiter
+
+Other Developments
+----------------------
+
+- Irc.myr has been my primary client for a while.
+- Libtermdraw has stabilized, and is in a mostly finished state.
+- Libxmyrb has working X bindings, although I've got some API changes on the
+  way.
+- Libdraw is working and more or less complete
+- And a few more.
+
+Feature Descriptions
+--------------------
+
+### In token
+
+This change is pretty simple, but affects a *lot* of code:
+
+	for elt in sequence
+		frob(elt)
+	;;
+
+Can now only be written as
+
+	for elt : sequence
+		frob(elt)
+	;;
+
+This isn't a semantic change, but a trivial syntactic one. It frees up
+a perfectly good variable name that I've wanted to use more than once.
+
+This was a warning in the 0.2 series, and now it's a hard error.
+
+### Dependent tags
+
+Mbld now supports setting build tags that are dependent on other build
+tags. Beside your `bld.proj`, there may now live a `bld.tags`, which
+contains lines of the form:
+
+	foo
+	bar: baz sse4
+	baz: freebsd
+	baz: openbsd
+	quux: bar baz x64
+
+These lines set the tag on the right hand side if all of the tags on
+the left hand side are satisfied. If there is no right hand side, then
+the tag is unconditionally enabled. If you want to have an `or` of the
+tag sets, repeat the line setting the tags. For example, if you want to
+enable `baz` on freebsd or openbsd, write:
+
+	baz: freebsd
+	baz: openbsd
+
+These tags are unordered, so tags later in the file may enable tags
+earlier in the file.
+
+These tags are used to enable futex tags when building the thread library.
+Look [here](https://git.eigenstate.org/ori/mc.git/tree/bld.tags) for an
+example.
+
+### Auto operator
+
+During the Myrcon last September we discussed an 'auto' operator
+that would evaluate what it applies to, store the result in a
+temporary t, and call __dispose__(t) when the current block exits.
+
+This patch has been implemented. We added a unary operator. This, for
+instance, allows to have:
+
+	impl disposable regex# =
+		__dispose__ = {r; regex.free(r)}
+	;;
+
+	regex.exec(auto std.try(regex.compile("f..bar")), "foobar")
+
+Like before, it is guaranteed that __dispose__ is called in
+reverse order of auto appearance.
+
+### Flate encoding
+
+As an official summer of cod entry, we got a start for
+the libflate library, which will eventually contain
+Myrddin's [de]compression equipment.
+
+It currently exposes a single function
+
+	const decode : (outf : bio.file#, inf : bio.file# -> std.result(void, err))
+
+that decodes a DEFLATE stream in the inf file into the
+outf file. The function guarantees that it will not read
+more than necessary from inf to either, figure out that
+the stream is bogus, or fully uncompress the stream.
+
+### Libmath
+
+As part of the Summer of Cod, we also got the start of libmath landed. Libmath
+is a library to implement some IEEE-754 functions (cos, sin, sqrt, &c). A
+first milestone has been pulled. Here's what we've got:
+
+- some initial IEEE-754 functions: exp, expm1, sqrt, trunc, ceil,
+  floor, rn, scalB,
+
+- some utility functions: algorithms for efficiently and accurately
+  computing sums, evaluating polynomials, and performing fused
+  multiply-add,
+
+- improved support for feature flag detection with mbld: we can
+  now check for fancy, non-universal CPU features like sse,
+
+- an out-of-tree tool for comparing various IEEE-754 implementations:
+  http://repo.or.cz/fpmath-consensus.git
+
+Right now, the algorithms are coming from the survey work of Muller,
+and in particular I'm working through an article series by Tang
+describing tabular + polynomial approximation methods: see
+lib/math/references in the tree.
+
+Based on some informal analysis, we're achieving accuracy at least
+on par with glibc and musl, and better in some situations. Our speed
+appears to be at least within an order of magnitude of glibc for
+the software implementations, and where hardware implementations
+exist we're even better.
+
+
+Packages and Installation
+-------------------------
+
+Myrddin 0.2 is being packaged for supported systems. Some of them may
+be behind, as packagers finish putting together updated packages.
+
+It is also easy to install from source.
+
+#### From Git
+
+Myrddin is a young language. There are regular fixes to the language and
+libraries. Therefore, it's probably a good idea to install it from Git. To
+install Myrddin from source:
+
+	$ git clone git://git.eigenstate.org/ori/mc.git
+	$ cd mc
+	$ ./configure --prefix=/usr
+	# On BSD, use gmake
+	$ make
+	$ sudo make install
+
+### From Tarballs
+
+Tarballs of this release are also available
+
+- [myrddin-0.3.0.tar.bz2](/releases/myrddin-0.3.0.tar.bz2)
+- [myrddin-0.3.0.tar.gz](/releases/myrddin-0.3.0.tar.gz)
+- [myrddin-0.3.0.tar.xz](/releases/myrddin-0.3.0.tar.xz)
+
+#### Mac OSX
+
+There is a brew tap for OSX. If you have Homebrew installed,
+here is how you can use it to install Myrddin:
+
+	$ brew install oridb/myrddin/myrddin
+
+#### FreeBSD
+
+The port for Myrddin is in the FreeBSD ports tree. You can install it
+using:
+
+	# pkg install myrddin
+
+#### OpenBSD
+
+The port for Myrddin is in the OpenBSD ports tree. You can install it
+using:
+
+	# pkg_add myrddin
+
+#### Plan 9 (9front)
+
+Because Mercurial is the version control mechanism for Plan 9, there
+is a mirror of the repository on Bitbucket. To install it:
+
+	% hg clone https://bitbucket.org/oridb/mc
+	% cd mc
+	% mk
+	% mk install
+
+Supported Platforms
+-------------------
+
+The 0.3 release comes with an amd64 compiler. The supported platforms are
+Linux, OSX, FreeBSD, OpenBSD, and Plan9. There is partial support
+for NetBSD. Threads are known to be unimplemented on NetBSD.

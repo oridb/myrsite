@@ -1,0 +1,183 @@
+{
+        title:  libmath
+        description:    Math Library
+}
+
+Summary
+-------
+
+Math is hard, let's go shopping.
+
+	pkg math =
+		trait fpmath @f =
+			exp : (x : @f -> @f)
+			expm1 : (x : @f -> @f)
+
+			fma : (x : @f, y : @f, z : @f -> @f)
+
+			log : (x : @f -> @f)
+			log1p : (x : @f -> @f)
+
+			horner_poly : (x : @f, a : @f[:] -> @f)
+			horner_polyu : (x : @f, a : @u[:] -> @f)
+
+			powr : (x : @f, y : @f -> @f)
+
+			scale2 : (x : @f, m : @i -> @f)
+
+			sin : (x : @f -> @f)
+			cos : (x : @f -> @f)
+			sincos : (x : @f -> (@f, @f))
+
+			sqrt : (x : @f -> @f)
+
+			kahan_sum : (a : @f[:] -> @f)
+			priest_sum : (a : @f[:] -> @f)
+
+			tan : (x : @f -> @f)
+			cot : (x : @f -> @f)
+
+			trunc : (f : @f -> @f)
+			ceil  : (f : @f -> @f)
+			floor : (f : @f -> @f)
+		;;
+
+		trait roundable @f -> @i =
+			rn : (f : @f -> @i)
+		;;
+
+		impl std.equatable flt32
+		impl std.equatable flt64
+		impl roundable flt64 -> int64
+		impl roundable flt32 -> int32
+		impl fpmath flt32
+		impl fpmath flt64
+	;;
+
+Libmath currently does not raise floating point exceptions. Only
+the rounding mode round-to-nearest (RN) is supported, and the only
+base is 2, in binary32 and binary64 formats.
+
+Exponentiation
+--------------
+
+	const exp : (x : @f -> @f)
+	const expm1 : (x : @f -> @f)
+
+The `exp` function computes the base *e* exponential e^x. `expm1`
+computes e^x-1. `expm1` is accurate even for small values of `x`.
+Results should be correct to within 0.77 ulps.
+
+Fused-mul-add
+-------------
+
+	const fma : (x : @f, y : @f, z : @f -> @f)
+
+The `fma` function computes `x*y+z` as a single operation, avoiding
+a rounding error and subtractive cancellation on the intermediate
+value. When supported, a specialized CPU instruction is used.
+
+Logarithms
+----------
+
+	log : (x : @f -> @f)
+	log1p : (x : @f -> @f)
+
+The `log` function computes the natural logarithm log(x). `log1p`
+computes log(1 + x). `log1p` is accurate even for small values of
+`x`. Results should be correct to within 0.6 ulps.
+
+Horner Polynomials
+------------------
+
+	const horner_poly : (x : @f, a : @f[:] -> @f)
+	const horner_polyu : (x : @f, a : @u[:] -> @f)
+
+Evaluates a polynomial represented by the coefficients `a` at
+`x`. The `polyu` version accepts coefficients in bit form (as
+output from `flt64bits`).
+
+Powr
+____
+
+	powr : (x : @f, y : @f -> @f)
+
+The `powr` function computes `x^y`, with exceptions arising from
+considering the formula e^(log(y) * x). This is not the `pow`
+function of the C standard; negative integer values are not treated
+specially.
+
+This function is relatively accurate for real-world values of `x`
+and `y`, but exhibits poor behavior when `x` is extremely high and
+`y` is extremely small, with errors up to 16 ulps observed.
+
+Scaling
+-------
+
+	scale2 : (x : @f, m : @i -> @f)
+
+Computes `2^m * x`, including cases when `2^m` would overflow
+or underflow floating-point representation, but the product
+is representable.
+
+Sine and Cosine
+---------------
+
+	sin : (x : @f -> @f)
+	cos : (x : @f -> @f)
+	sincos : (x : @f -> (@f, @f))
+
+Compute sine and cosine of `x`. The calculation is exhaustively
+correct for `flt32` arguments, and is usually within 1 ulp for
+`flt64` arguments. All calculation, however, is performed in 64-bit
+precision, so `flt32` calculations are relatively slow.
+
+Sqrt
+----
+
+	sqrt : (x : @f -> @f)
+
+Computes the square root of `x`. The calculation should be correctly
+rounded.
+
+Summation
+---------
+
+	kahan_sum : (a : @f[:] -> @f)
+	priest_sum : (a : @f[:] -> @f)
+
+Implements Kahan and Priest summation, respectively. These
+functions provide more accurate summation than simply adding
+each number in the sequence naively.
+
+Each function sums a sequence of floats, returning the computed
+sum.
+
+Tangent and Cotangent
+---------------
+
+	tan : (x : @f -> @f)
+	cot : (x : @f -> @f)
+
+Compute tangent and cotangent of `x`. The calculation is exhaustively
+correct for `flt32` arguments, and is usually within 1 ulp for
+`flt64` arguments, although errors of up to 4 ulps have been observed.
+All calculation is performed in 64-bit precision, so `flt32`
+calculations are relatively slow.
+
+Rounding
+--------
+
+	trunc : (x : @f -> @f)
+	ceil  : (x : @f -> @f)
+	floor : (x : @f -> @f)
+	rn : (x : @f -> @i)
+
+Trunc truncates its argument, or equivalently, rounds its argument downwards
+towards zero.
+
+Floor and ceil compute the floor and ceiling of their argument, rounding
+towards negative infinity and infinity, respectively.
+
+Rn rounds its argument to the nearest integer, rounding towards even numbers
+in order to break ties.

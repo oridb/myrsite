@@ -4,8 +4,8 @@
 }
 
 
-Data Structures
-----------------
+Summary: Data Structures
+------------------------
 
     pkg std =
             type htab(@k, @v) = struct
@@ -29,24 +29,30 @@ Data Structures
             const bsdup	: (bs : bitset# -> bitset#)
             const bsfree	: (bs : bitset# -> void)
             const bsmax	: (a : bitset# -> size)
-            generic bsput	: (bs : bitset#, v : @a::(integral,numeric) -> bool)
-            generic bsdel	: (bs : bitset#, v : @a::(integral,numeric) -> bool)
-            generic bshas	: (bs : bitset#, v : @a::(integral,numeric) -> bool)
+            generic bsput	: (bs : bitset#, v : @a -> bool) :: integral,numeric @a
+            generic bsdel	: (bs : bitset#, v : @a -> bool) :: integral,numeric @a
+            generic bshas	: (bs : bitset#, v : @a -> bool) :: integral,numeric @a
             const bsdiff	: (a : bitset#, b : bitset# -> void)
             const bsintersect	: (a : bitset#, b : bitset# -> void)
             const bsunion	: (a : bitset#, b : bitset# -> void)
             const bseq	: (a : bitset#, b : bitset# -> bool)
+            const bshash	: (a : bitset# -> uint64)
             const bsissubset	: (a : bitset#, b : bitset# -> bool)
             const bsclear	: (bs : bitset# -> bitset#)
+	    const bscount	: (a : bitset# -> size)
 
             /* prepackaged hashing and equality tests */
             const strhash	: (s : byte[:]	-> uint32)
             const streq	: (a : byte[:], b : byte[:]	-> bool)
             generic ptrhash	: (p : @a#	-> uint32)
             generic ptreq	: (a : @a#, b : @a#	-> bool)
-            generic inthash	: (v : @a::(integral,numeric)	-> uint32)
-            generic inteq	: (a : @a::(integral,numeric), b : @a::(integral,numeric) -> bool)
+            generic inthash	: (v : @a	-> uint32) :: integral,numeric @a
+            generic inteq	: (a : @a::(integral,numeric), b : @a -> bool) :: integral,numeric @a
             generic slhash	: (sl : @a[:] -> uint32)
+	    
+	    type bsiter
+	    impl iterable bsiter -> size
+	    const bybsvalue	: (bs : bitset# -> bsiter)
     ;;
 
 Hash Tables
@@ -82,8 +88,8 @@ Removes a key value pair from the hash table `ht`.
 
     generic htget	: (ht : htab(@k, @v)#, k : @k -> option(@v))
 
-Looks up a value from a hash table, returning `\`Some v` if the key is
-present, or `\`None` if the value is not present.
+Looks up a value from a hash table, returning `` `Some v`` if the key is
+present, or `` `None`` if the value is not present.
 
     generic htgetv	: (ht : htab(@k, @v)#, k : @k, fallback : @v-> @v)
 
@@ -93,7 +99,7 @@ present, or `fallback` if it is not present.
     generic hthas	: (ht : htab(@k, @v)#, k : @k -> bool)
 
 Looks up a value from a hash table, returning `true` if the key is
-present, or `falase` if the value is not present.
+present, or `false` if the value is not present.
 
     generic htkeys	: (ht : htab(@k, @v)# -> @k[:])
 
@@ -129,20 +135,25 @@ Frees all resources associated with the bitset `bs`.
 
     const bsmax	: (a : bitset# -> size)
 
-Returns the maximum value that the bitset contains. This is a completely
-awful interface for iterating the contents of a bitset.
+Returns the maximum value that the bitset contains. This is an approximation
+of the capacity of the bitset, not a hard limit on the number of elements.
 
-    generic bsput	: (bs : bitset#, v : @a::(integral,numeric) -> bool)
+    const bscount	: (a : bitset# -> size)
+
+Returns the total number of elements that the bitset contains. This is an
+O(n) operation that involves iterating all of the bits.
+
+    generic bsput	: (bs : bitset#, v : @a -> bool) :: integral,numeric @a
 
 Inserts the integer value `v` into the bit set `bs`. Returns `true` if this
 operation changed the set, or `false` otherwise.
 
-    generic bsdel	: (bs : bitset#, v : @a::(integral,numeric) -> bool)
+    generic bsdel	: (bs : bitset#, v : @a -> bool) :: integral,numeric @a
 
 Removes the integer value `v` from the bit set `bs`. Returns `true` if this
 operation changed the set, or `false` otherwise.
 
-    generic bshas	: (bs : bitset#, v : @a::(integral,numeric) -> bool)
+    generic bshas	: (bs : bitset#, v : @a -> bool) :: integral,numeric @a
 
 Returns whether the bit set `bs` contains the value `v`.
 
@@ -165,6 +176,12 @@ Takes the set union between `a` and `b`, storing the result back into `a`.
 Tests whether the bitsets `a` and `b` contain the same elements, returning
 `true` if they are equivalent and `false` otherwise.
 
+    const bshash	: (a : bitset# -> uint64)
+
+Returns a hash of bitset `a`. The hash is identical for two bitsets that
+compare equal with `std.bseq`. This hash function is suitable for use
+with libstd hash tables.
+
     const bsissubset	: (a : bitset#, b : bitset# -> bool)
 
 Tests whether every element of `b` is also within `a`, returning `true` if
@@ -174,3 +191,7 @@ Tests whether every element of `b` is also within `a`, returning `true` if
 
 Zeros every value within the bitset `bs`. This is equivalent to iterating
 through it and deleting every element.
+
+    const bybsiter	: (bs : bitset -> bsiter)
+
+Returns a bitset iterator that can be used in for loops.

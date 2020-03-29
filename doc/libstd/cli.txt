@@ -4,7 +4,7 @@
 }
 
 
-Command Line Parsing
+Summary: Command Line Parsing
 --------------------
 
 Command line parsing is something that nearly every program needs. This
@@ -18,6 +18,7 @@ help.
                     maxargs	: std.size	/* the maximum number of positional args (0 = unlimited) */
                     noargs	: std.bool	/* whether we accept args at all */
                     opts	: optdesc[:]	/* the description of the options */
+		    dest	: std.option(byte[:]#)	/* destination for option */
             ;;
             type optdesc = struct
                     opt	: char
@@ -69,13 +70,13 @@ Types
 The API provided for command line parsing is relatively declarative, with the
 options specified in a struct passed to the parsing.
 
-    type optdef = struct
-            argdesc	: byte[:]
-            minargs	: std.size
-            maxargs	: std.size
-            noargs	: std.bool
-            opts	: optdesc[:]
-    ;;
+	type optdef = struct
+		argdesc	: byte[:]
+		minargs	: std.size
+		maxargs	: std.size
+		noargs	: std.bool
+		opts	: optdesc[:]
+	;;
 
 The optdef is the top level structure describing the command line arguments.
 It contains the following fields:
@@ -97,7 +98,7 @@ It contains the following fields:
     <p><code>"output inputs..."</code></p>
 
     <p>When the help string is generated, the output would look like:</p>
-    <p><code>myprog [-o option] output inputs...</code></p>
+    <p><code>myprog [-h?] [-o option] output inputs...</code></p>
     </dd>
 
     <dt><code>minargs</code></dt>
@@ -113,8 +114,8 @@ It contains the following fields:
     <dd>
     <p>This argument limits the maximum number of arguments that the program
     will accept without error. If the program takes at most 1 argument, for
-    example, example, then this value should be set to 3. Just like
-    <code>maxargs</code>, this does not count flags or the program name.
+    example, example, then this value should be set to 1. Just like
+    <code>minargs</code>, this does not count flags or the program name.
     </p>
     <p> If set to 0, this value is ignored. This is the default value.</p>
     </dd>
@@ -123,20 +124,23 @@ It contains the following fields:
     <dd>
     <p>This argument causes the program to reject any arguments at all.</p>
     </dd>
+
     <dt><code>opts</code></dt>
     <dd><p>This is a list of descriptions of the options that this program
     takes. This list may be empty, at which point this api still provides a
     good way of checking that no invalid arguments are passed.</p>
     </dd>
+
 </dl>
     
-    
-    type optdesc = struct
-            opt	: char
-            arg	: byte[:]
-            desc	: byte[:]
-            optional	: bool
-    ;;
+
+	type optdesc = struct
+		opt	: char
+		arg	: byte[:]
+		desc	: byte[:]
+		optional	: bool
+		dest	: std.option(byte[:]#)	/* destination for option */
+	;;
 
 This is a description of a command line argument. It contains the following
 fields to be set by the user:
@@ -167,6 +171,10 @@ fields to be set by the user:
     help output for the arguments.
     </p>
     </dd>
+
+    <dt><code>dest</code></dt>
+    <dd><p>If there is an arg parameter, and this is value is `Some ptr,
+    then the pointer is initialized with the argument value.</p></dd>
 </dl>
 
 
@@ -217,7 +225,7 @@ errors if given any.
         cmd = std.optparse(args, &[
                 .argdesc = "vals",
         ])
-        for arg in cmd.args
+        for arg : cmd.args
                 std.put("arg: {}\n", arg)
         ;;
     }
@@ -250,7 +258,7 @@ mbld.
 	])
 	targname = ""
 	tags = [][:]
-	for opt in cmd.opts
+	for opt : cmd.opts
 		match opt
 		| ('t', ""):	dumponly = true
 		| ('S', ""):	bld.opt_genasm = true
@@ -281,7 +289,7 @@ mbld.
 		;;
 	;;
 
-        for arg in cmd.args
+        for arg : cmd.args
                 /* build stuff */
         ;;
     }

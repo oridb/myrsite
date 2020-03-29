@@ -3,14 +3,14 @@
         description:  libstd: Bigints
 }
 
-Bigints
+Summary: Bigints
 -------
 
   pkg std =
             type bigint = struct
             ;;
 
-            generic mkbigint	: (v : @a::(numeric,integral) -> bigint#)
+            generic mkbigint	: (v : @a -> bigint#) :: numeric,integral @a
             const bigfree	: (a : bigint# -> void)
             const bigdup	: (a : bigint# -> bigint#)
             const bigassign	: (d : bigint#, s : bigint# -> bigint#)
@@ -18,7 +18,7 @@ Bigints
             const bigparse	: (s : byte[:] -> option(bigint#))
             const bigclear	: (a : bigint# -> bigint#)
             const bigbfmt	: (b : byte[:], a : bigint#, base : int -> size)
-            const bigtoint	: (a : bigint#	-> @a::(numeric,integral))
+            const bigtoint	: (a : bigint#	-> @a) :: numeric,integral @a
             const bigiszero	: (a : bigint# -> bool)
             const bigeq	: (a : bigint#, b : bigint# -> bool)
             const bigcmp	: (a : bigint#, b : bigint# -> order)
@@ -32,13 +32,13 @@ Bigints
             const bigshr	: (a : bigint#, b : bigint# -> bigint#)
             const bigmodpow	: (b : bigint#, e : bigint#, m : bigint# -> bigint#)
             const bigpow	: (a : bigint#, b : bigint# -> bigint#)
-            generic bigeqi	: (a : bigint#, b : @a::(numeric,integral) -> bool)
-            generic bigaddi	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
-            generic bigsubi	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
-            generic bigmuli	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
-            generic bigdivi	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
-            generic bigshli	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
-            generic bigshri	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
+            generic bigeqi	: (a : bigint#, b : @a -> bool)		:: numeric,integral @a
+            generic bigaddi	: (a : bigint#, b : @a -> bigint#)      :: integral,numeric @a
+            generic bigsubi	: (a : bigint#, b : @a -> bigint#)      :: integral,numeric @a
+            generic bigmuli	: (a : bigint#, b : @a -> bigint#)      :: integral,numeric @a
+            generic bigdivi	: (a : bigint#, b : @a -> bigint#)      :: integral,numeric @a
+            generic bigshli	: (a : bigint#, b : @a -> bigint#)      :: integral,numeric @a
+            generic bigshri	: (a : bigint#, b : @a -> bigint#)      :: integral,numeric @a
             const bigpowi	: (a : bigint#, b : uint64 -> bigint#)
     ;;
 
@@ -75,7 +75,7 @@ bigger.
 Functions: Bookkeeping and IO
 -----------------------
 
-    generic mkbigint	: (v : @a::(numeric,integral) -> bigint#)
+    generic mkbigint	: (v : @a -> bigint#) :: numeric, integral @a
 
 Mkbigint takes a regular small int, and creates a biginteger from that
 value. It allocates the value on the heap, returning a pointer to the bigint
@@ -109,7 +109,7 @@ No new values are allocated.
     const bigparse	: (s : byte[:] -> option(bigint#))
 
 Bigparse converts a string representation of an integer into a bigint,
-returning `\`Some val` if the string is a valid bigint, or `\`None` otherwise.
+returning `` `Some val`` if the string is a valid bigint, or `` `None`` otherwise.
 
 Decimal, hex, octal, and binary biginteger strings are recognized. Decimal
 is the default, and is recognized unprefixed. Hex must be prefixed with `0x`,
@@ -121,7 +121,7 @@ constants.
 
 Bigclear zeroes out a biginteger, returning it.
 
-    const bigtoint	: (a : bigint#	-> @a::(numeric,integral))
+    const bigtoint	: (a : bigint#	-> @a) :: numeric,integral @a
 
 
 Bigtoint returns the low order digits of a bigint as an integer value. Care
@@ -143,7 +143,7 @@ Bigeq compares whether two integers are equal.
     const bigcmp	: (a : bigint#, b : bigint# -> order)
 
 Bigcmp compares two big integers, and returns the ordering between them.
-`\`Before` if a < b, `\`After` if a > b, and `\`Equal` if the two values
+`` `Before`` if a < b, `` `After`` if a > b, and `` `Equal`` if the two values
 are equal.
 
     const bigadd	: (a : bigint#, b : bigint# -> bigint#)
@@ -165,13 +165,13 @@ is the second argument. They return `a`, without allocating a new result.
 Bigdivmod is an exception to the above convention. Because it needs to return
 two values, it returns a tuple of newly allocated bigints.
 
-    generic bigeqi	: (a : bigint#, b : @a::(numeric,integral) -> bool)
-    generic bigaddi	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
-    generic bigsubi	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
-    generic bigmuli	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
-    generic bigdivi	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
-    generic bigshli	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
-    generic bigshri	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
+    generic bigeqi	: (a : bigint#, b : @a -> bool) :: numeric,integral @a
+    generic bigaddi	: (a : bigint#, b : @a -> bigint#) :: integral,numeric @a
+    generic bigsubi	: (a : bigint#, b : @a -> bigint#) :: integral,numeric @a
+    generic bigmuli	: (a : bigint#, b : @a -> bigint#) :: integral,numeric @a
+    generic bigdivi	: (a : bigint#, b : @a -> bigint#) :: integral,numeric @a
+    generic bigshli	: (a : bigint#, b : @a -> bigint#) :: integral,numeric @a
+    generic bigshri	: (a : bigint#, b : @a -> bigint#) :: integral,numeric @a
     const bigpowi	: (a : bigint#, b : uint64 -> bigint#)
 
 All of these are identical ot the bigint operations above, however instead of
@@ -183,7 +183,6 @@ Examples
 --------
 
 ```{runmyr bigcmp}
-
 use std
 use bio
 
@@ -194,9 +193,9 @@ const main = {args : byte[:][:]
         b = try(std.bigparse("0x75f3_fffc_1123_5ce4"))
 
         match std.bigcmp(a, b)
-        | `std.Equal:   "{} is equal to {}\n", a, b)
-        | `std.Before:  "{} is less than {}\n", a, b)
-        | `std.After:  "{} is greater than {}\n", a, b)
+        | `std.Equal:	std.put("{} is equal to {}\n", a, b)
+        | `std.Before:	std.put("{} is less than {}\n", a, b)
+        | `std.After:	std.put("{} is greater than {}\n", a, b)
         ;;
 
         std.bigmul(a, b)

@@ -72,7 +72,10 @@ OS Interfaces
             const execve	: (cmd : byte[:], args : byte[:][:], env : byte[:][:] -> int64)
             const waitpid	: (pid:pid, loc:int32#, opt : int64	-> int64)
             const spork	: (cmd : byte[:][:]	-> result((pid, fd, fd), int))
+            const espork	: (cmd : byte[:][:] -> result((pid, fd, fd, fd), errno))
             const sporkfd	: (cmd : byte[:][:], infd : fd, outfd : fd	-> result(pid, int))
+            const sporkdir	: (cmd : byte[:][:], dir : byte[:]	-> result((pid, fd, fd), errno))
+            const esporkdir	: (cmd : byte[:][:], dir : byte[:]	-> result((pid, fd, fd, fd), errno))
             const exit	: (status:int -> void)
             const now	: (-> time)
             const wait	: (pid : pid -> waitstatus)
@@ -163,8 +166,8 @@ Returns: Errno on failure. On success, the function does not return.
 
 The `getenv` function looks up a variable from the process environment.
 
-Returns: `\`Some env\_val` for an environment variable that is present in the
-environment, or `\`None` if it is not present.
+Returns: `` `Some env_val`` for an environment variable that is present in the
+environment, or `` `None`` if it is not present.
 
     const getenvv :	(name : byte[:], default : byte[:] -> byte[:])
 
@@ -197,16 +200,21 @@ been called on the process id of the child process, then this function
 will return a status immediately.
 
 If the child process has already been waited on, calling this function is
-invalid, and it should return a `\`Waiterror`.
+invalid, and it should return a `` `Waiterror``.
 
 Returns: A waitstatus, telling you if the process crashed, exited with
 failure, exited with success, or whether the wait call was invalid.
 
     const spork	: (cmd : byte[:][:]	-> result((pid, fd, fd), errno))
+    const espork	: (cmd : byte[:][:] -> result((pid, fd, fd, fd), errno))
+    const sporkdir	: (cmd : byte[:][:], dir : byte[:]	-> result((pid, fd, fd), errno))
+    const esporkdir	: (cmd : byte[:][:], dir : byte[:]	-> result((pid, fd, fd, fd), errno))
 
 Spork stand for `Speak to Process Fork`. It returns a process id and an
 input and output file descriptor via which you can communicate to the process
-over stdin and stdout. Stderr is inherited from the current process.
+over stdin and stdout. Stderr is inherited from the current process. Espork is
+similar, but returns a file descriptor for stderr. The `dir` functions provide
+a race-free method of starting a process in a specific directory.
 
 Returns: Either a tuple of (pid, stdin, stdout) on success, or the error
 that caused the failure.

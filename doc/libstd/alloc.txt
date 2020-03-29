@@ -3,7 +3,7 @@
         description:  libstd: Allocation
 }
 
-Memory Allocation
+Summary: Memory Allocation
 -----------------
 
     pkg std =
@@ -87,22 +87,23 @@ possible. The code for this looks like:
 ```{runmyr mk-example}
 use std
 
-type mytype =
+type mytype = struct
 	a : int
 	b : char
-	c : byte[:[
+	c : byte[:]
 ;;
 
 const main = {
-        var v
-
-        v = std.mk([
-            .a = 123
-            .b = 'x'
-            .c = "my string" /* this isn't heapified */
-        ])
-
-        std.free(v)
+	var v : mytype#
+	
+	v = std.mk([
+		.a = 123,
+		.b = 'x',
+		.c = "my string" /* this isn't heapified */
+	])
+	
+	std.put("{}\n", v#)
+	std.free(v)
 }
 ```
 
@@ -112,7 +113,7 @@ const main = {
 this to calulate the size to allocate:
 
 
-```{runmyr mk-example}
+```{runmyr alloc-example}
 use std
 
 const main = {
@@ -134,7 +135,7 @@ Thankfully, unlike C++ delete and delete[], it's impossible to pass a slice
 to the wrong free function.
 
 
-```{runmyr mk-example}
+```{runmyr slalloc-example}
 use std
 
 const main = {
@@ -147,14 +148,14 @@ const main = {
 
 Growing slices can be done using slgrow() and slzgrow():
 
-```{runmyr mk-example}
+```{runmyr slgrow-example}
 use std
 
 const main = {
         var x : int[:]
 
         x = std.slalloc(10)     /* slice of 10 ints */
-        x = std.slzgrow(x, 20)     /* x[10:20] are guaranteed to be zeroed.*/
+        std.slzgrow(&x, 20)     /* x[10:20] are guaranteed to be zeroed.*/
         std.slfree(x)
 }
 ```

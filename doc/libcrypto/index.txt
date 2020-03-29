@@ -1,0 +1,157 @@
+{
+        title: libcrypto
+        description: Libcrypto API documentation.
+}
+
+
+Summary
+-------
+
+Libcrypto contains a set of implementations of common hash functions. It
+supports taking the hash of an entire string, as well as a streaming API.
+
+    pkg crypto =
+            /* state types */
+            type md5
+            type sha1
+            type sha256
+            type sha224
+            type sha512
+            type aesctx
+	    type aesgcmctx
+            type chacha20ctx
+
+            /* md5 funtions */
+            const md5       : (data : byte[:] -> byte[16])
+            const md5init   : (st : md5# -> void)
+            const md5add    : (st : md5#, data : byte[:] -> void)
+            const md5fin    : (st : md5# -> byte[16])
+
+            /* sha1 functions */
+            const sha1      : (data : byte[:] -> byte[20])
+            const sha1init  : (st : sha1# -> void)
+            const sha1add   : (st : sha1#, data : byte[:] -> void)
+            const sha1fin   : (st : sha1# -> byte[20])
+
+            /* sha256 functions */
+            const sha256    : (data : byte[:] -> byte[32])
+            const sha256init        : (st : sha256# -> void)
+            const sha256add : (st : sha256#, data : byte[:] -> void)
+            const sha256fin : (st : sha256# -> byte[32])
+
+            /* sha224 functions */
+            const sha224    : (data : byte[:] -> byte[28])
+            const sha224init        : (st : sha224# -> void)
+            const sha224add : (st : sha224#, data : byte[:] -> void)
+            const sha224fin : (st : sha224# -> byte[28])
+
+            /* sha512 functions */
+            const sha512    : (data : byte[:] -> byte[64])
+            const sha512init        : (st : sha512# -> void)
+            const sha512add : (st : sha512#, data : byte[:] -> void)
+            const sha512fin : (st : sha512# -> byte[64])
+
+            /* sha384 functions */
+            const sha384    : (data : byte[:] -> byte[48])
+            const sha384init        : (st : sha384# -> void)
+            const sha384add : (st : sha384#, data : byte[:] -> void)
+            const sha384fin : (st : sha384# -> byte[48])
+
+	    /* AES functions */
+            const ortho	: (q : uint64[:] -> void)
+            const aeskeysched	: (x : aesctx#, k : byte[:] -> void) 
+            const aesencrypt	: (x : aesctx#, m : byte[:], c : byte[:] -> void)
+            const aesdecrypt	: (x : aesctx#, c : byte[:], m : byte[:] -> void)
+
+            /* AES GCM functions */
+            const aesgcminit	: (c : aesgcmctx#, key : byte[:], iv : byte[:] -> void)
+            const aesgcmfin		: (c : aesgcmctx# -> void)
+            const aesgcmencrypt	: (c : aesgcmctx#, buf : byte[:], aad : byte[:], tag : byte[:] -> void)
+            const aesgcmdecrypt	: (c : aesgcmctx#, buf : byte[:], aad : byte[:], tag : byte[:] -> bool)
+
+	    /* RSA functions */
+	    const rsapub_pkcs15	: (msg : byte[:], exp : byte[:], mod : byte[:] -> byte[:])
+
+            /* Chacha20 functions */
+            const chacha20keysetup	: (x : chacha20ctx#, k : byte[:] -> void) 
+            const chacha20ivsetup	: (x : chacha20ctx#, iv : byte[:] -> void)
+            const chacha20encrypt	: (x : chacha20ctx#, m : byte[:], c : byte[:] -> void)
+
+            /* Randomness */
+            const randbytes	: (buf : byte[:] -> void)
+            generic rand	: (lo : @a, hi : @a -> @a) :: numeric,integral @a
+            generic randnum	: (-> @a) :: numeric,integral @a
+
+            /* secure clearing */
+            generic clear	: (p : @a# -> void)
+            generic slclear	: (sl : @a[:] -> void)
+            generic free	: (p : @a# -> void)
+            generic slfree	: (sl : @a[:] -> void)
+
+	    /* constant time operations */
+            generic not	: (a : @t -> @t)	:: integral,numeric @t
+            generic eq	: (a : @t, b : @t -> @t)	:: integral,numeric @t
+            generic ne	: (a : @t, b : @t -> @t)	:: integral,numeric @t
+            generic gt	: (a : @t, b : @t -> @t)	:: integral,numeric @t
+            generic lt	: (a : @t, b : @t -> @t)	:: integral,numeric @t
+            generic ge	: (a : @t, b : @t -> @t)	:: integral,numeric @t
+            generic le	: (a : @t, b : @t -> @t)	:: integral,numeric @t
+            generic mux	: (x : @t, a : @t, b : @t ->@t)	:: integral,numeric @t
+            generic min	: (a : @t, b : @t -> @t)	:: integral,numeric @t
+            generic max	: (a : @t, b : @t -> @t)	:: integral,numeric @t
+            const bufeq	: (a : byte[:], b : byte[:] -> bool)
+    ;;
+
+The `hashtype` functions (eg, `md5()`, `sha1()`, etc) all compute and
+immediately return the hash of their argument.
+
+The `hashtypeinit()` functions will initialize a hashing state of type
+hashtype, and prepare it to accept input.
+
+The `hashtypeadd()` functions must be called on an initialized state, and
+will add `data` argument to the hashed value.
+
+The `hashtypefin()` functions will return the hash value that was computed
+on the data added by `hashtypeadd()`. If `hashtypeadd()` was not called,
+the hash of 0 bytes of data will be returned.
+
+Example: Simple hashing
+-----------------------
+
+```{runmyr nonstream}
+use crypto
+use std
+
+const main = {
+        var hash
+
+        /* basic hashing of a buffer */
+        hash = crypto.md5("hello world!\n")
+	std.put("{r}\n", hash[:])
+}
+```
+
+Example: Simple hashing
+-----------------------
+
+```{runmyr stream}
+use crypto
+use std
+
+const main = {
+        var st, hash
+
+        /* piecewise hashing of a buffer */
+        crypto.sha256init(&st)
+        crypto.sha256add(&st, "some bytes!")
+        crypto.sha256add(&st, "more bytes!")
+        crypto.sha256add(&st, "even more bytes!")
+        hash = crypto.sha256fin(&st)
+
+        for b : hash
+                std.put("{x}", b)
+        ;;
+        std.put("\n")
+}
+```
+

@@ -3,8 +3,14 @@
         description:    libstd: Algorithms
 }
 
-Algorithms
-----------
+Summary: Algorithms
+-------------------
+
+There are a number of algorithms that are pervasive through many programs.
+These include sorting, searching, and similar
+
+We only cover sorting and searching here, although more would be a good
+addition. Maybe in a separate library.
 
     pkg std =
             /* the result of a comparison */
@@ -16,30 +22,21 @@ Algorithms
 
             /* sorting and searching */
             generic sort	: (sl:@a[:], cmp:(a:@a, b:@a -> order) -> @a[:])
-            generic lsearch	: (sl : @t[:], val : @t, cmp : (a : @t, b : @t -> order) -> option(@idx::(integral,numeric)))
-            generic bsearch	: (sl : @t[:], val : @t, cmp : (a : @t, b : @t -> order) -> option(@idx::(integral,numeric)))
+            generic lsearch	: (sl : @t[:], val : @t, cmp : (a : @t, b : @t -> order) -> option(@idx)) :: numeric,integral @idx
+            generic bsearch	: (sl : @t[:], val : @t, cmp : (a : @t, b : @t -> order) -> option(@idx)) :: numeric,integral @idx
             generic swap	: (a : @a#, b : @a# -> void)
 
             /* prepackaged comparisons */
-            generic numcmp	: (a : @a, b : @a -> order)
+            generic numcmp	: (a : @a, b : @a -> order) :: numeric @a
             const strcmp	: (a : byte[:], b : byte[:] -> order)
             const strncmp	: (a : byte[:], b : byte[:], n : size -> order)
 
             /* extrema and absolute values */
-            generic min	: (a : @a::numeric, b : @a::numeric  -> @a::numeric)
-            generic max	: (a : @a::numeric, b : @a::numeric  -> @a::numeric)
-            generic clamp	: (a : @a::numeric, min : @a::numeric, max : @a::numeric -> @a::numeric)
-            generic abs	: (a : @a::numeric -> @a::numeric)
+            generic min	: (a : @a, b : @a  -> @a) :: numeric @a
+            generic max	: (a : @a, b : @a  -> @a) :: numeric @a
+            generic clamp	: (a : @a, min : @a, max : @a -> @a) :: numeric @a
+            generic abs	: (a : @a -> @a) :: numeric @a
     ;;
-
-Overview
---------
-
-There are a number of algorithms that are pervasive through many programs.
-These include sorting, searching, and similar
-
-We only cover sorting and searching here, although more would be a good
-addition. Maybe in a separate library.
 
 Types
 -----
@@ -71,28 +68,28 @@ moved.
     generic lsearch	: (sl : @t[:], val : @t, cmp : (a : @t, b : @t -> order) -> option(@idx::(integral,numeric)))
 
 Performs a linear search for a value using the comparison predicate `cmp`. The
-slice is walked in order until the first value where `cmp` returns `\`Equal`.
+slice is walked in order until the first value where `cmp` returns `` `Equal``.
 
-Returns: `\`Some idx`, or `\`None` if the value is not present.
+Returns: `` `Some idx``, or `` `None`` if the value is not present.
 
     generic bsearch	: (sl : @t[:], val : @t, cmp : (a : @t, b : @t -> order) -> option(@idx::(integral,numeric)))
 
 Performs a binary search for a value using the comparison predicate `cmp`. The
 input slice `sl` must be sorted according to the comparsion function `cmp`
 such that for a value at index `idx`, the comparison `cmp(sl[idx - 1],
-sl[idx])` must return either `\`Before` or `\`Equal`.
+sl[idx])` must return either `` `Before`` or `` `Equal``.
 
 If there are multiple equal copies value within a list, the index retuned is
 not defined.
 
-Returns: `\`Some idx`, or `\`None` if the value is not present.
+Returns: `` `Some idx``, or `` `None`` if the value is not present.
 
     generic swap	: (a : @a#, b : @a# -> void)
 
 Takes two pointers to two values, and switches them. If the pointers are
 equal, this is a no-op.
 
-    generic numcmp	: (a : @a::numeric, b : @a::numeric -> order)
+    generic numcmp	: (a : @a, b : @a -> order)
     const strcmp	: (a : byte[:], b : byte[:] -> order)
     const strncmp	: (a : byte[:], b : byte[:], n : size -> order)
 
@@ -110,19 +107,19 @@ a comparison by codepoint.
 Functions: Extrema and Clamping
 -------------------------------
 
-    generic min	: (a : @a::numeric, b : @a::numeric  -> @a::numeric)
-    generic max	: (a : @a::numeric, b : @a::numeric  -> @a::numeric)
+    generic min	: (a : @a, b : @a  -> @a)
+    generic max	: (a : @a, b : @a  -> @a)
 
 Min and max return the larger or smaller of the two numeric values passed to
 them, respectively. They rely on the built in comparison functions.
 
-    generic clamp	: (a : @a::numeric, min : @a::numeric, max : @a::numeric -> @a::numeric)
+    generic clamp	: (a : @a, min : @a, max : @a -> @a)
 
 Clamp clamps the value `a` to the range [min, max], and returns it. This means
 that if `a` is lower than `min`, or greater than `max`, it is adjusted to
 those bounds and returned.
 
-    generic abs	: (a : @a::numeric -> @a::numeric)
+    generic abs	: (a : @a -> @a) :: numeric @a
 
 Abs returns the absolute value of a number. This means that if the number is
 less than 0, it is retuned with the sign inverted. If the type `@a` is

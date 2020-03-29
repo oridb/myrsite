@@ -3,8 +3,10 @@
 	description: Libdate API documentation.
 }
 
-Contents
+Summary: Types
 --------
+
+The types provided here are used throughout libdate.
 
     pkg date = 
             type instant = struct
@@ -59,10 +61,10 @@ daylight savings, and other similar events. If you add a day to
 an instant, you would get the same wallclock time the next day,
 should that wallclock time exist.
 
-For example, if I were to add `\`Day 2` to the instant 
+For example, if I were to add `` `Day 2`` to the instant
 `Oct 31 2015 3:00`, then the result would be the date
 `Nov 2 2015 3:00`, regardless of the daylight savings time adjustment.
-However, adding `\`Hour 48` would not have that effect.
+However, adding `` `Hour 48`` would not have that effect.
 
 In cases where the adjustment does not exist -- for example, leap years,
 then the time will "wrap around" to the next available day. For example,

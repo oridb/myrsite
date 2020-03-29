@@ -1,0 +1,59 @@
+{
+        title:  libfileutil
+        description:    A collection of utility functions for files
+}
+
+Summary
+-------
+
+Libfileutil is a collection of common functions that people use
+for handling files.
+
+	pkg fileutil =
+		/* File walking */
+		type walkiter
+
+		impl iterable walkiter -> byte[:]
+		const bywalk	: (dir : byte[:] -> walkiter)
+		const rmrf	: (dir : byte[:] -> bool)
+
+		/* information about files */
+		const homedir	: (-> byte[:])
+		const tmpdir	: (-> byte[:])
+	;;
+
+Overview
+--------
+
+The file util library provides some useful functionality
+for handling files. It's intent is to provide a number of
+high level operations like walking a directory heirarchy.
+
+Functions: file walking
+------------------
+            
+    const bywalk	: (dir : std.dir# -> walkiter)
+
+Walks through all files and subdirectories of the directory
+`dir`.
+
+    const rmrf	: (dir : byte[:] -> bool)
+
+Attempts to delete all files within a directory `dir`. Returns
+true if all files are removed, false otherwise. If a file cannot
+be removed, `rmrf` will continue to attempt file removal.
+
+Returns true if all files could be removed, false otherwise.
+
+Functions: File info
+------------------
+
+	const homedir   : (-> byte[:])
+
+Returns the current user's home directory. The returned path
+should not be freed.
+
+	const tmpdir   : (-> byte[:])
+
+Returns the tmp directory that should be used. The returned path
+should not be freed.

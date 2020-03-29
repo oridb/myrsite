@@ -33,6 +33,31 @@ to use and typesafe functions for this to be written.
             const bytefree	: (m:byte#, sz:size	-> void)
     ;;
 
+#### [Common Traits](traits)
+
+Myrddin provides a number of common traits. These traits are implemented
+on several types in the standard library. They are also available for
+implementation from outside the standard library.
+
+    pkg std =
+            trait equatable @a =
+                    eq      : (a : @a, b : @a -> bool)
+            ;;
+    
+            trait hashable @a =
+                    hash    : (a : @a -> uint64)
+            ;;
+
+            impl equatable @a[:]
+            impl equatable @a :: integral,numeric @a
+            impl equatable @a#
+
+            impl hashable @a[:]
+            impl hashable @a :: integral,numeric @a
+            impl hashable @a#
+    ;;
+
+
 #### [Error Handling](err)
 
 Myrddin provides a number of types and operations for propagating errors
@@ -49,7 +74,7 @@ fire, and screaming, if that's more appropriate.
             pkg std =
                     type result(@a, @b) = union
                             `Ok	@a
-                            `Fail	@b
+                            `Err @b
                     ;;
             ;;
 
@@ -122,6 +147,12 @@ interface to the common subset that most programs need and most OSes provide.
     pkg std =
             type dir = struct
             ;;
+
+	    /* well-known file descriptors */
+	    const In
+	    const Out
+	    const Err
+
 
             /* seek options */
             const Seekset	: whence 
@@ -384,11 +415,17 @@ boo.
             generic sleq	: (a : @a[:], b : @a[:] -> bool)
             generic slcp    : (a : @a[:], b : @a[:] -> void)
             generic slput	: (sl : @a[:], idx : size, elt : @a	-> @a[:])
-            generic slpush	: (sl : @a[:], elt : @a	-> @a[:])
+            generic slpush	: (sl : @a[:]#, elt : @a	-> @a[:])
             generic sldup   : (sl : @a[:] -> @a[:])
             generic slfill	: (sl : @a[:], v : @a	-> @a[:])
             generic sljoin	: (dst : @a[:]#, src : @a[:]	-> @a[:])
     ;;
+
+#### [Pledge](pledge)
+
+Pledge is a useful security feature.
+
+    const pledge	: (promise : byte[:], epromise : byte[:] -> result(void, errno))
 
 #### [String Manipulation](strings)
 
@@ -435,9 +472,9 @@ utf8 data.
             const strrstrip	: (str : byte[:] -> byte[:])
 
             /* parsing numbers out of strings */
-            generic intparsebase	: (s : byte[:], base : int -> option(@a::(integral,numeric)))
-            generic intparse	: (s : byte[:]	-> option(@a::(integral,numeric)))
-            generic charval : (c : char, base : int -> @a::(integral,numeric))
+            generic intparsebase	: (s : byte[:], base : int -> option(@a)) :: integral,numeric @a
+            generic intparse	: (s : byte[:]	-> option(@a)) :: integral,numeric @a
+            generic charval : (c : char, base : int -> @a) :: integral,numeric @a
     ;;
 
 #### [Unicode](unicode)
@@ -488,39 +525,39 @@ Sets, and hash tables. Libstd includes them for that reason.
             type htab(@k, @v) = struct
             ;;
 
+	    type htkviter(@k, @v)
+	    impl iterable htkviter
+
+	    type bsiter = struct
+	    impl iterable bsiter
+
             /* bit sets */
             const mkbs	: (-> bitset#)
             const bsdup	: (bs : bitset# -> bitset#)
             const bsfree	: (bs : bitset# -> void)
             const bsmax	: (a : bitset# -> size)
-            generic bsput	: (bs : bitset#, v : @a::(integral,numeric) -> bool)
-            generic bsdel	: (bs : bitset#, v : @a::(integral,numeric) -> bool)
-            generic bshas	: (bs : bitset#, v : @a::(integral,numeric) -> bool)
+            const bscount	: (a : bitset# -> size)
+            generic bsput	: (bs : bitset#, v : @a -> bool) :: integral,numeric @a
+            generic bsdel	: (bs : bitset#, v : @a -> bool) :: integral,numeric @a
+            generic bshas	: (bs : bitset#, v : @a -> bool) :: integral,numeric @a
             const bsdiff	: (a : bitset#, b : bitset# -> void)
             const bsintersect	: (a : bitset#, b : bitset# -> void)
             const bsunion	: (a : bitset#, b : bitset# -> void)
             const bseq	: (a : bitset#, b : bitset# -> bool)
             const bsissubset	: (a : bitset#, b : bitset# -> bool)
             const bsclear	: (bs : bitset# -> bitset#)
+	    const bybsvalue	: (bs : bitset# -> bsiter)
 
             /* hash tables */
-            generic mkht	: (h : (k : @k -> uint32), eq : (a : @k, b : @k -> bool) -> htab(@k, @v)#)
-            generic htfree	: (ht : htab(@k, @v)# -> void)
-            generic htput	: (ht : htab(@k, @v)#, k : @k, v : @v -> void)
-            generic htdel	: (ht : htab(@k, @v)#, k : @k -> void)
-            generic htget	: (ht : htab(@k, @v)#, k : @k -> option(@v))
-            generic htgetv	: (ht : htab(@k, @v)#, k : @k, fallback : @v-> @v)
-            generic hthas	: (ht : htab(@k, @v)#, k : @k -> bool)
-            generic htkeys	: (ht : htab(@k, @v)# -> @k[:])
-
-            /* prepackaged hashing and equality tests */
-            const strhash	: (s : byte[:]	-> uint32)
-            const streq	: (a : byte[:], b : byte[:]	-> bool)
-            generic ptrhash	: (p : @a#	-> uint32)
-            generic ptreq	: (a : @a#, b : @a#	-> bool)
-            generic inthash	: (v : @a::(integral,numeric)	-> uint32)
-            generic inteq	: (a : @a::(integral,numeric), b : @a::(integral,numeric) -> bool)
-            generic slhash	: (sl : @a[:] -> uint32)
+            generic mkht	: (-> htab(@k, @v)#) :: hashable,equatable @k
+            generic htfree	: (ht : htab(@k, @v)# -> void) :: hashable,equatable @k
+            generic htput	: (ht : htab(@k, @v)#, k : @k, v : @v -> void) :: hashable,equatable @k
+            generic htdel	: (ht : htab(@k, @v)#, k : @k -> void) :: hashable,equatable @k
+            generic htget	: (ht : htab(@k, @v)#, k : @k -> option(@v))  :: hashable,equatable @k
+            generic htgetv	: (ht : htab(@k, @v)#, k : @k, fallback : @v-> @v) :: hashable,equatable @k
+            generic hthas	: (ht : htab(@k, @v)#, k : @k -> bool)  :: hashable,equatable @k
+            generic htkeys	: (ht : htab(@k, @v)# -> @k[:]) :: hashable,equatable @k
+            generic byhtkeyvals	: (ht : htab(@k, @v)# -> htkviter(@k, @v)) :: hashable,equatable @k
     ;;
 
 
@@ -539,8 +576,8 @@ libstd. In addition, we package some useful comparison and hashing functions
 
             /* sorting and searching */
             generic sort	: (sl:@a[:], cmp:(a:@a, b:@a -> order) -> @a[:])
-            generic lsearch	: (sl : @t[:], val : @t, cmp : (a : @t, b : @t -> order) -> option(@idx::(integral,numeric)))
-            generic bsearch	: (sl : @t[:], val : @t, cmp : (a : @t, b : @t -> order) -> option(@idx::(integral,numeric)))
+            generic lsearch	: (sl : @t[:], val : @t, cmp : (a : @t, b : @t -> order) -> option(@idx)) :: integral,numeric @a
+            generic bsearch	: (sl : @t[:], val : @t, cmp : (a : @t, b : @t -> order) -> option(@idx)) :: integral,numeric @a
             generic swap	: (a : @a#, b : @a# -> void)
 
             /* prepackaged comparisons */
@@ -549,10 +586,10 @@ libstd. In addition, we package some useful comparison and hashing functions
             const strncmp	: (a : byte[:], b : byte[:], n : size -> order)
 
             /* extrema and absolute values */
-            generic min	: (a : @a::numeric, b : @a::numeric  -> @a::numeric)
-            generic max	: (a : @a::numeric, b : @a::numeric  -> @a::numeric)
-            generic clamp	: (a : @a::numeric, min : @a::numeric, max : @a::numeric -> @a::numeric)
-            generic abs	: (a : @a::numeric -> @a::numeric)
+            generic min	: (a : @a, b : @a  -> @a) :: numeric @a
+            generic max	: (a : @a, b : @a  -> @a) :: numeric @a
+            generic clamp	: (a : @a, min : @a, max : @a -> @a) :: numeric @a
+            generic abs	: (a : @a -> @a) :: numeric @a
     ;;
 
 #### [Randomness](randomness)
@@ -562,9 +599,9 @@ And of course, you can't go without being a little random at times.
     pkg std =
             const mksrng	: (seed : uint32 -> rng#)
             const freerng	: (rng : rng# -> void)
-            generic rand	: (lo : @a::(numeric,integral), hi : @a::(numeric,integral) -> @a::(numeric,integral))
-            generic rngrand	: (rng : rng#, lo : @a::(numeric,integral), hi : @a::(numeric,integral) -> @a::(numeric,integral))
-            generic rngrandnum	: (rng : rng# -> @a::(numeric,integral))
+            generic rand	: (lo : @a, hi : @a -> @a) :: numeric,integral @a
+            generic rngrand	: (rng : rng#, lo : @a, hi : @a -> @a) :: numeric,integral @a
+            generic rngrandnum	: (rng : rng# -> @a) :: numeric,integral @a
             const rngrandbytes	: (rng : rng#, buf : byte[:]	-> size)
     ;;
 
@@ -581,7 +618,7 @@ expose them in the public API.
             type bigint = struct
             ;;
 
-            generic mkbigint	: (v : @a::(numeric,integral) -> bigint#)
+            generic mkbigint	: (v : @a -> bigint#) :: numeric,integral @a
             const bigfree	: (a : bigint# -> void)
             const bigdup	: (a : bigint# -> bigint#)
             const bigassign	: (d : bigint#, s : bigint# -> bigint#)
@@ -589,7 +626,7 @@ expose them in the public API.
             const bigparse	: (s : byte[:] -> option(bigint#))
             const bigclear	: (a : bigint# -> bigint#)
             const bigbfmt	: (b : byte[:], a : bigint#, base : int -> size)
-            const bigtoint	: (a : bigint#	-> @a::(numeric,integral))
+            const bigtoint	: (a : bigint#	-> @a) :: numeric,integral @a
             const bigiszero	: (a : bigint# -> bool)
             const bigeq	: (a : bigint#, b : bigint# -> bool)
             const bigcmp	: (a : bigint#, b : bigint# -> order)
@@ -603,13 +640,13 @@ expose them in the public API.
             const bigshr	: (a : bigint#, b : bigint# -> bigint#)
             const bigmodpow	: (b : bigint#, e : bigint#, m : bigint# -> bigint#)
             const bigpow	: (a : bigint#, b : bigint# -> bigint#)
-            generic bigeqi	: (a : bigint#, b : @a::(numeric,integral) -> bool)
-            generic bigaddi	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
-            generic bigsubi	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
-            generic bigmuli	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
-            generic bigdivi	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
-            generic bigshli	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
-            generic bigshri	: (a : bigint#, b : @a::(integral,numeric) -> bigint#)
+            generic bigeqi	: (a : bigint#, b : @a -> bool	:: numeric,integral @a
+            generic bigaddi	: (a : bigint#, b : @a -> bigint#) :: integral,numeric @a
+            generic bigsubi	: (a : bigint#, b : @a -> bigint#) :: integral,numeric @a
+            generic bigmuli	: (a : bigint#, b : @a -> bigint#) :: integral,numeric @a
+            generic bigdivi	: (a : bigint#, b : @a -> bigint#) :: integral,numeric @a
+            generic bigshli	: (a : bigint#, b : @a -> bigint#) :: integral,numeric @a
+            generic bigshri	: (a : bigint#, b : @a -> bigint#) :: integral,numeric @a
             const bigpowi	: (a : bigint#, b : uint64 -> bigint#)
     ;;
 
@@ -619,8 +656,10 @@ expose them in the public API.
 There are functions for heapifying closures, too.
 
     pkg std =
-            generic fndup	: (fn : @fn::function -> @fn::function)
-            generic fnfree	: (fn : @fn::function -> void)
+            generic fndup	: (fn : @fn-> @fn) :: function @fn 
+            generic fnfree	: (fn : @fn-> void) :: function @fn
+            generic fnenvsz	: (fn : @fn -> size)	:: function @fn
+            generic fnbdup	: (fn : @fn, buf : byte[:] -> @fn)	:: function @fn
     ;;
 
 #### [Misc](misc)
@@ -629,50 +668,50 @@ Well, I said it was a grab bag.  These don't really fit into any overarching
 category.
 
     pkg std =
-            generic KiB	: @a::(integral,numeric)	
-            generic MiB	: @a::(integral,numeric)	
-            generic GiB	: @a::(integral,numeric)	
-            generic TiB	: @a::(integral,numeric)	
-            generic PiB	: @a::(integral,numeric)	
-            generic EiB	: @a::(integral,numeric)	
-            generic ZiB	: @a::(integral,numeric)	
-            generic YiB	: @a::(integral,numeric)	
+            generic KiB	: @a :: integral,numeric @a	
+            generic MiB	: @a :: integral,numeric @a	
+            generic GiB	: @a :: integral,numeric @a	
+            generic TiB	: @a :: integral,numeric @a	
+            generic PiB	: @a :: integral,numeric @a	
+            generic EiB	: @a :: integral,numeric @a	
+            generic ZiB	: @a :: integral,numeric @a	
+            generic YiB	: @a :: integral,numeric @a	
 
-            generic Sec  : @a::(integral,numeric)
-            generic Msec  : @a::(integral,numeric)
-            generic Usec  : @a::(integral,numeric)
+            generic Sec  : @a :: integral,numeric @a
+            generic Msec  : @a :: integral,numeric @a
+            generic Usec  : @a :: integral,numeric @a
 
             /* time */
             const now	: (-> time)
 
             /* packing integers */
-            generic putle64	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-            generic putbe64	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-            generic putle32	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-            generic putbe32	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-            generic putle16	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-            generic putbe16	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-            generic putle8	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
-            generic putbe8	: (buf : byte[:], v :  @a::(numeric,integral) -> size)
+            generic putle64	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+            generic putbe64	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+            generic putle32	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+            generic putbe32	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+            generic putle16	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+            generic putbe16	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+            generic putle8	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
+            generic putbe8	: (buf : byte[:], v :  @a -> size) :: numeric,integral @a
 
             /* unpacking integers */
-            generic getle64	: (buf : byte[:]	-> @a::(numeric,integral))
-            generic getbe64	: (buf : byte[:]	-> @a::(numeric,integral))
-            generic getle32	: (buf : byte[:]	-> @a::(numeric,integral))
-            generic getbe32	: (buf : byte[:]	-> @a::(numeric,integral))
-            generic getle16	: (buf : byte[:]	-> @a::(numeric,integral))
-            generic getbe16	: (buf : byte[:]	-> @a::(numeric,integral))
-            generic getle8	: (buf : byte[:]	-> @a::(numeric,integral))
-            generic getbe8	: (buf : byte[:]	-> @a::(numeric,integral))
+            generic getle64	: (buf : byte[:]	-> @a) :: numeric,integral @a
+            generic getbe64	: (buf : byte[:]	-> @a) :: numeric,integral @a
+            generic getle32	: (buf : byte[:]	-> @a) :: numeric,integral @a
+            generic getbe32	: (buf : byte[:]	-> @a) :: numeric,integral @a
+            generic getle16	: (buf : byte[:]	-> @a) :: numeric,integral @a
+            generic getbe16	: (buf : byte[:]	-> @a) :: numeric,integral @a
+            generic getle8	: (buf : byte[:]	-> @a) :: numeric,integral @a
+            generic getbe8	: (buf : byte[:]	-> @a) :: numeric,integral @a
 
             /* exploding and stitching floats */
-            const flt64bits	: (flt : flt64 -> int64)
-            const flt32bits	: (flt : flt32 -> int32)
+            const flt64bits	: (flt : flt64 -> uint64)
+            const flt32bits	: (flt : flt32 -> uint32)
             const flt64frombits	: (bits : uint64 -> flt64)
             const flt32frombits	: (bits : uint32 -> flt32)
-            const flt64explode	: (flt : flt64 -> (bool, int64, int64))
-            const flt32explode	: (flt : flt32 -> (bool, int32, int32))
-            const flt64stitch	: (flt : flt64 -> (bool, int64, int64))
-            const flt32stitch	: (flt : flt32 -> (bool, int32, int32))
+            const flt64explode	: (flt : flt64 -> (bool, int64, uint64))
+            const flt32explode	: (flt : flt32 -> (bool, int32, uint32))
+            const flt64stitch	: (flt : flt64 -> (bool, int64, uint64))
+            const flt32stitch	: (flt : flt32 -> (bool, int32, uint32))
 
     ;;

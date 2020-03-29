@@ -8,8 +8,13 @@ File Handling
 
 
     pkg std =
-            type dir = struct
-            ;;
+            type dir
+	    type diriter
+
+	    /* well-known file descriptors */
+	    const In
+	    const Out
+	    const Err
 
             /* seek options */
             const Seekset	: whence 
@@ -17,34 +22,41 @@ File Handling
             const Seekend	: whence 
 
             /* open options */
-            const Ordonly  	: fdopt 
-            const Owronly  	: fdopt 
+            const Oread  	: fdopt 
+            const Owrite  	: fdopt 
             const Ordwr    	: fdopt 
             const Otrunc   	: fdopt 
             const Ocreat   	: fdopt 
+            const Ocexec   	: fdopt 
             const Oappend  	: fdopt 
             const Odir	: fdopt 
 
             /* directory handling */
+            const byentry	: (d : dir# -> diriter)
             const diropen	: (p : byte[:] -> std.result(dir#, byte[:]))
             const dirread	: (d : dir# -> std.option(byte[:]))
             const dirclose	: (d : dir# -> void)
             const dirname	: (p : byte[:] -> byte[:])
-            const mkdir	: (path : byte[:], mode : int64 -> int64)
+            const mkdir		: (path : byte[:], mode : int64 -> int64)
             const mkpath	: (p : byte[:] -> bool)
-            const chdir	: (path : byte[:] -> bool)
+            const chdir		: (path : byte[:] -> bool)
 
             /* file handling */
             const open	: (path : byte[:], opts : fdopt -> std.result(fd, errno))
             const openmode	: (path : byte[:], opts : fdopt, mode : int64 -> std.result(fd, errno))
             const mktemp	: (base : byte[:], opts : fdopt, mode : int64 -> std.result((fd, byte[:]), errno)
-            const close	: (fd : fd -> int64)
-            const creat	: (path : byte[:], mode : int64 -> fd)
-            const read	: (fd : fd, buf : byte[:] -> size)
-            const write	: (fd : fd, buf : byte[:] -> size)
-            const seek	: (fd : fd, delta : off, whence : whence -> off)
-            const pipe	: (fds : fd[2]# -> int64)
-            const dup2	: (ofd : fd, nfd : fd -> fd)
+            const mkdtemp	: (base : byte[:], mode : int64 -> std.result(byte[:], errno)
+            const close		: (fd : fd -> int64)
+            const creat		: (path : byte[:], mode : int64 -> fd)
+            const read		: (fd : fd, buf : byte[:] -> std.result(size, errno))
+            const pread         : (fd : fd, buf : byte[:], off : off -> std.result(size, errno))
+            const readall       : (fd : fd, buf : byte[:] -> std.result(size, errno))
+            const write         : (fd : fd, buf : byte[:] -> std.result(size, errno))
+            const pwrite        : (fd : fd, buf : byte[:], off : off -> std.result(size, errno))
+	    const writeall	: (fd : fd, buf : byte[:] -> std.result(size, errno))
+            const seek          : (fd : fd, delta : off, whence : whence -> off)
+            const pipe          : (fds : fd[2]# -> int64)
+            const dup2		: (ofd : fd, nfd : fd -> fd)
             const remove	: (path : byte[:] -> bool)
             const unlink	: (path : byte[:] -> int)
 
@@ -89,8 +101,8 @@ The directory struct represents the current state of a directory walk.
 These are a set of values which describe from where to seek within the file.
 
     /* open options */
-    const Oread  	: fdopt 
-    const Owrite  	: fdopt 
+    const Ordonly  	: fdopt
+    const Owronly  	: fdopt
     const Ordwr    	: fdopt 
     const Otrunc   	: fdopt 
     const Ocreat   	: fdopt 
@@ -99,8 +111,8 @@ These are a set of options that are passed to the open variants describing
 what mode to open the file in. These are bit masks which be OR'ed together to
 combine them.
 
-`Oread` and `Owrite` request permission to read and write the file, respectively.
-`Ordwr` is a convenience flag which ors read and write together. `Otrunc`
+`Ordonly` and `Owronly` request permission to read and write the file,
+respectively. `Ordwr` requests both read and write permissions. `Otrunc`
 indicates that the file should be truncated to zero bytes in length before it
 is opened. `Ocreat` indicates that the file should be created if it does not
 exist instead of returning an error. `Odir` indicates that this file should
@@ -109,6 +121,13 @@ be opened as a directory.
 `Ocreat` does not create the path leading to it, and will return an error if
 that path does not exist.
 
+    /* constants */
+    const In
+    const Out
+    const Err
+
+The constants `In`, `Out`, and `Err` respectively are defined to the system
+stdin, stdout, and stderr file descriptors.
 
 Directories
 -----------
@@ -119,15 +138,15 @@ The `diropen` function opens a path as a directory, and returns a pointer
 to an object which tracks the state of the directory, allowing for reading
 file names one by one from this directory.
 
-Returns: Either a directory wrapped up in the `\`Ok` branch of the result,
-or a string describing the failure reason in the `\`Fail` branch.
+Returns: Either a directory wrapped up in the `` `Ok`` branch of the result,
+or a string describing the failure reason in the `` `Err`` branch.
 
-    const dirread	: (d : dir# -> result(option(byte[:]), errno)
+    const dirread	: (d : dir# -> std.option(byte[:]))
 
 The `dirread` reads a single entry from the directory, opened with `diropen`,
-returning it as a string. 
+returning it as a string. The returned string must be freed by the caller.
 
-Returns `\`Some entry`, or `\`None` at the end of the directory.
+Returns `` `Some entry``, or `` `None`` at the end of the directory.
 
     const dirclose	: (d : dir# -> void)
 
@@ -166,8 +185,11 @@ to fail on failure.
     const chdir	: (path : byte[:] -> bool)
 
 Chdir changes the current working directory to the path specified in `path`.
+Returns True on success, false on failure.
 
-Returns: True on success, false on failure.
+    const byentry : (d : dir# -> diriter)
+
+Returns a directory iterator that can be used in a for loop.
 
 Files
 -----
@@ -177,7 +199,7 @@ Files
 
 Open opens the file `path` for I/O according to the flags reqeusted in `opts`,
 and returns a result containing the file descriptor or error. The mode is a
-combination of the modes specified above: `Oread`,   `Owrite`, `Ordwr`,
+combination of the modes specified above: `Ordonly`,   `Owronly`, `Ordwr`,
 `Otrunc`, or `Ocreat`.
 
 Openmode is similar to open, however, if Ocreate is passed, it the file
@@ -198,6 +220,15 @@ opened and path generated, or an error describing the failure. The path
 is allocated with `std.slalloc`, and must be freed by the caller using
 `std.slfree`. The file descriptor must be closed as ususal.
 
+    const mkdtemp : (base : byte[:], mode : int64 -> std.result(byte[:], errno)
+
+`mkdtemp` is to `mkdir` as `mktemp` is to `openmode`. Like `mktemp`, it
+generates a unique name for a new directory in temporary storage by
+appending a random string to the base name `base`.
+
+Returns: Either a successful result containing the path generated (in this case,
+the directory now exists), or an error describing the failure. The path is
+allocated with `std.slalloc`, and must be freed by the caller using `std.slfree`.
 
     const close	: (fd : fd -> void)
 

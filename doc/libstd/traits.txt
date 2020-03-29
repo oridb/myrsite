@@ -1,0 +1,173 @@
+{
+        title:  Traits
+        description:  libstd: Traits
+}
+
+
+Summary: Traits
+------------------------
+
+    pkg std =
+            trait equatable @a =
+                    eq      : (a : @a, b : @a -> bool)
+            ;;
+    
+            trait hashable @a =
+                    hash    : (a : @a -> uint64)
+            ;;
+
+            impl equatable @a[:]
+            impl equatable @a::(integral,numeric)
+            impl equatable @a#
+
+            impl hashable @a[:]
+            impl hashable @a::(integral,numeric)
+            impl hashable @a#
+    ;;
+
+Traits: Equatable
+------
+
+    trait equatable @a =
+            eq      : (a : @a, b : @a -> bool)
+    ;;
+
+The equatable trait allows two values of the type
+`@a` to be compared with each other. The function
+should return `true` if the values are the same,
+or `false` otherwise.
+
+Several default implementations exist, aiming
+to provide sane equality comparisons for many
+common cases.
+
+#### Default Impls
+
+    impl equatable @a[:]
+
+The `equatable` implementation for generic slices does
+a shallow, byte for byte comparison of each slice element.
+
+    impl equatable @a::(integral,numeric)
+
+The `equatable` implementation for integral types uses
+the `==` comparison to check whether two integral values
+are equal.
+
+    impl equatable @a#
+
+The `equatable` implementation for pointer types uses
+the `==` comparison to check whether two integral values
+are equal. This checks whether the two pointers are equal,
+and does not concern itself 
+    
+Traits: Equatable
+------
+
+    trait hashable @a =
+            hash    : (a : @a -> uint64)
+    ;;
+
+The hashable trait allows the hash of a value to
+be computed.
+
+Several default implementations of hashing are provided.  The
+specific hash function is implementation defined and subject to
+change. At the moment, we have chosen siphash as a good default
+hash function.
+
+#### Default Impls
+
+    impl hashable @a[:]
+
+The `hashable` impl for slices hashes does a shallow
+hash of each byte of the slice.
+
+    impl hashable @a::(integral,numeric)
+
+The `hashable` impl for integral types hashes a single integer,
+scrambling its bits.
+
+    impl hashable @a#
+
+The `hashable` impl for integral types hashes a pointer,
+scrambling its bits. It does not follow the pointer.
+
+Examples
+--------
+
+This example equates a few types which match the
+equatable trait.
+
+```{runmyr equate}
+use std
+
+const main = {
+        /* equal */
+        std.put("{}\n", std.eq([1,2,3][:], [1,2,3][:]))
+        std.put("{}\n", std.eq("abc", "abc"))
+        std.put("{}\n", std.eq(123, 123))
+
+        /* unequal */
+        std.put("{}\n", std.eq([1,2,3][:], [1,2,4][:]))
+        std.put("{}\n", std.eq("abc", "def"))
+        std.put("{}\n", std.eq(123, 246))
+}
+```
+
+This example hashes a few types which match the
+hashable trait.
+
+```{runmyr hash}
+use std
+
+const main = {
+        /* equal */
+        std.put("{}\n", std.hash([1,2,3][:]))
+        std.put("{}\n", std.hash("abc"))
+        std.put("{}\n", std.hash(123))
+}
+```
+
+This example adds a new implementation for the
+equatable trait, and then puts them into a
+hash table.
+
+```{runmyr histogram}
+use std
+
+type histogramkey = int32
+impl std.hashable histogramkey =
+        hash = {val
+                -> std.hash((val : int32) >> 16)
+        }
+;;
+
+impl std.equatable histogramkey =
+        eq = {a, b
+                -> std.eq((a : int32) >> 16), (a : int32) >> 16))
+        }
+;;
+
+const increment = {histogram, key
+        var count = std.htgetv(histogram, key, 0) + 1
+        std.htput(histogram, key, count)
+}
+
+const main = {
+        var histogram = std.mkht()
+
+        increment(histogram, 194809128)
+        increment(histogram, 194809123)
+        increment(histogram, 13092)
+        increment(histogram, 103014)
+        increment(histogram, 1234)
+        increment(histogram, 123515)
+
+        std.put("histogram counts:\n"
+        for (k, v) : std.byhtkeyvals(histogram)
+                std.put("\t{}:\t{}\n", k, v)
+        ;;
+}
+```
+

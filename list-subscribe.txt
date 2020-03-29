@@ -8,13 +8,13 @@ List Archives
 
 Development discussion, 
 
-[Myrddin-dev archives](http://eigenstate.org/archive/myrddin-dev/)
+[Myrddin-dev archives](https://eigenstate.org/archive/myrddin-dev/index.html)
 
 
 Subscribe: myrddin-dev@eigenstate.org
 -------------------------------------
 
-<form action="http://eigenstate.org/lists/subscribe-cgi" method="post">
+<form action="https://eigenstate.org/lists/subscribe-cgi" method="post">
 <input name="mailinglist" type="hidden" value="myrddin-dev@eigenstate.org">
 <input name="operation" type="hidden" value="subscribe">
 <input name="email" value="your-email@example.org" type="text" size="30" maxlength="254"><br>
@@ -24,7 +24,7 @@ Subscribe: myrddin-dev@eigenstate.org
 Unubscribe: myrddin-dev@eigenstate.org
 -------------------------------------
 
-<form action="http://eigenstate.org/lists/subscribe-cgi" method="post">
+<form action="https://eigenstate.org/lists/subscribe-cgi" method="post">
 <input name="mailinglist" type="hidden" value="myrddin-dev@eigenstate.org">
 <input name="operation" type="hidden" value="unsubscribe">
 <input name="email" value="your-email@example.org" type="text" size="30" maxlength="254"><br>

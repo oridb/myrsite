@@ -14,7 +14,7 @@ Randomness
 
             generic rand	: (lo : @a::(numeric,integral), hi : @a::(numeric,integral) -> @a::(numeric,integral))
             generic randnum	: (rng : rng# -> @a::(numeric,integral))
-            const randbytes	: (buf : byte[:] -> size)
+            const randbytes	: (buf : byte[:] -> void)
 
             const mksrng	: (seed : uint32 -> rng#)
             const freerng	: (rng : rng# -> void)
@@ -59,7 +59,7 @@ value may be negative, if the type is signed.
 
     const randbytes	: (buf : byte[:] -> size)
 
-Fills a buffer with random bytes.
+Fills a buffer with random bytes. This is not secure.
 
     const mksrng	: (seed : uint32 -> rng#)
 

@@ -3,6 +3,9 @@
         description:    BIO library description
 }
 
+Summary
+-------
+
 Myrddin's BIO library is used for buffered input and output. It is a fairly
 simple library that handles reading and writing from file descriptors.
 
@@ -15,97 +18,106 @@ One thing to keep in mind with libbio that it does not attempt to flush
 buffers on program exit, which means that any unwritten, unflushed data
 will be lost. Closing the bio files will prevent this issue.
 
-Summary
--------
 
-    pkg bio =
-            type mode
-            const Rd	: mode
-            const Wr	: mode
-            const Rw	: mode
+	pkg bio =
+		type mode
+		const Rd	: mode
+		const Wr	: mode
+		const Rw	: mode
 
-            type file = struct
-            ;;
+		type file = struct
+		;;
 
-	    type lineiter
+		type lineiter
 
-            type status(@a) = union
-                    `Eof
-                    `Ok @a
-                    `Err ioerr
-            ;;
+		type std.result(@a, err)) = union
+			`Eof
+			`Ok @a
+			`Err ioerr
+		;;
 
-            type ioerr = union
-                    `Ebadfile
-                    `Ebadbuf
-                    `Ebadfd
-                    `Eioerr
-            ;;
+		type ioerr = union
+			`Ebadfile
+			`Ebadbuf
+			`Ebadfd
+			`Eioerr
+		;;
 
-	    impl iterable lineiter
+		type vtab = struct
+			read	: (buf : byte[:] -> std.result(std.size, std.errno))
+			write	: (buf : byte[:] -> std.result(std.size, std.errno))
+			seek	: (idx : std.off -> std.result(std.off, std.errno))
+			close	: (-> bool)
+		;;
 
-            /* creation */
-            const mkfile	: (fd : std.fd, mode : mode	-> file#)
-            const open	: (path : byte[:], mode : mode	-> std.result(file#, byte[:]))
-            const dial	: (srv	: byte[:], mode : mode	-> std.result(file#, byte[:]))
-            const create	: (path : byte[:], mode : mode, perm : int	-> std.result(file#, byte[:]))
-            const close	: (f : file# -> bool)
-            const free	: (f : file# -> void)
+		impl iterable lineiter
+		impl iterable chariter
 
-            /* basic i/o. Returns sub-buffer when applicable. */
-            const write	: (f : file#, src : byte[:]	-> status(std.size))
-            const read	: (f : file#, dst : byte[:]	-> status(byte[:]))
-            const flush	: (f : file# -> bool)
+		/* creation */
+		const mkfile	: (fd : std.fd, mode : mode	-> file#)
+		const dial	: (srv : byte[:], mod : mode	-> file#)
+		const mk	: (mode : mode, vt : vtab	-> file#)
+		const open	: (path : byte[:], mode : mode	-> std.result(file#, byte[:]))
+		const dial	: (srv	: byte[:], mode : mode	-> std.result(file#, byte[:]))
+		const create	: (path : byte[:], mode : mode, perm : int	-> std.result(file#, byte[:]))
+		const close	: (f : file# -> bool)
+		const free	: (f : file# -> void)
 
-            /* seeking */
-            const seek	: (f : file#, std.off -> std.result(std.off, ioerr))
+		/* basic i/o. Returns sub-buffer when applicable. */
+		const write	: (f : file#, src : byte[:]	-> std.result(std.size, err))
+		const read	: (f : file#, dst : byte[:]	-> std.result(std.size, err))
+		const flush	: (f : file# -> bool)
 
-            /* single unit operations */
-            const putb	: (f : file#, b : byte	-> status(std.size))
-            const putc	: (f : file#, c : char	-> status(std.size))
-            const getb	: (f : file# -> status(byte))
-            const getc	: (f : file# -> status(char))
+		/* seeking */
+		const seek	: (f : file#, std.off -> std.result(std.off, ioerr))
 
-            /* peeking */
-            const peekb	: (f : file# -> status(byte))
-            const peekc	: (f : file# -> status(char))
+		/* single unit operations */
+		const putb	: (f : file#, b : byte	-> std.result(std.size, err)))
+		const putc	: (f : file#, c : char	-> std.result(std.size, err)))
+		const getb	: (f : file# -> std.result(byte, err)))
+		const getc	: (f : file# -> std.result(char, err)))
 
-            /* delimited read; returns freshly allocated buffer. */
-            const readln	: (f : file#	-> status(byte[:]))
-            const readto	: (f : file#, delim : byte[:]	-> status(byte[:]))
-            const skipto	: (f : file#, delim : byte[:]	-> bool)
-            const skipspace	: (f : file# -> bool)
+		/* peeking */
+		const peekb	: (f : file# -> std.result(byte, err)))
+		const peekc	: (f : file# -> std.result(char, err)))
 
-            /* iterators */
-            const lineiter	: (f : file# -> lineiter)
+		/* delimited read; returns freshly allocated buffer. */
+		const readln	: (f : file#	-> std.result(byte[:], err)))
+		const readto	: (f : file#, delim : byte[:]	-> std.result(byte[:], err)))
+		const skipto	: (f : file#, delim : byte[:]	-> bool)
+		const skipspace	: (f : file# -> bool)
 
-            /* formatted i/o */
-            const put	: (f : file#, fmt : byte[:], args : ... -> status(std.size))
+		/* iterators */
+		const byline	: (f : file# -> lineiter)
+		const bychar	: (f : file# -> chariter)
 
-            /* unsigned big endian reads */
-            generic getbe8	: (f : file# -> status(@a::(numeric,integral)))
-            generic getbe16	: (f : file# -> status(@a::(numeric,integral)))
-            generic getbe32	: (f : file# -> status(@a::(numeric,integral)))
-            generic getbe64	: (f : file# -> status(@a::(numeric,integral)))
+		/* formatted i/o */
+		const put	: (f : file#, fmt : byte[:], args : ... -> std.result(std.size, err)))
 
-            /* signed big endian reads */
-            generic getle8	: (f : file# -> status(@a::(numeric,integral)))
-            generic getle16	: (f : file# -> status(@a::(numeric,integral)))
-            generic getle32	: (f : file# -> status(@a::(numeric,integral)))
-            generic getle64	: (f : file# -> status(@a::(numeric,integral)))
+		/* unsigned big endian reads */
+		generic getbe8	: (f : file# -> std.result(@a::(numeric,integral, err))))
+		generic getbe16	: (f : file# -> std.result(@a::(numeric,integral, err))))
+		generic getbe32	: (f : file# -> std.result(@a::(numeric,integral, err))))
+		generic getbe64	: (f : file# -> std.result(@a::(numeric,integral, err))))
 
-            /* unsigned big endian */
-            generic putbe8	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-            generic putbe16	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-            generic putbe32	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-            generic putbe64	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
+		/* signed big endian reads */
+		generic getle8	: (f : file# -> std.result(@a::(numeric,integral, err))))
+		generic getle16	: (f : file# -> std.result(@a::(numeric,integral, err))))
+		generic getle32	: (f : file# -> std.result(@a::(numeric,integral, err))))
+		generic getle64	: (f : file# -> std.result(@a::(numeric,integral, err))))
 
-            /* unsigned little endian */
-            generic putle8	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-            generic putle16	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-            generic putle32	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-            generic putle64	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-    ;;
+		/* unsigned big endian */
+		generic putbe8	: (f : file#, v : @a::(numeric,integral) -> std.result(std.size, err)))
+		generic putbe16	: (f : file#, v : @a::(numeric,integral) -> std.result(std.size, err)))
+		generic putbe32	: (f : file#, v : @a::(numeric,integral) -> std.result(std.size, err)))
+		generic putbe64	: (f : file#, v : @a::(numeric,integral) -> std.result(std.size, err)))
+
+		/* unsigned little endian */
+		generic putle8	: (f : file#, v : @a::(numeric,integral) -> std.result(std.size, err)))
+		generic putle16	: (f : file#, v : @a::(numeric,integral) -> std.result(std.size, err)))
+		generic putle32	: (f : file#, v : @a::(numeric,integral) -> std.result(std.size, err)))
+		generic putle64	: (f : file#, v : @a::(numeric,integral) -> std.result(std.size, err)))
+	;;
 
 The Data Structures
 -------------------
@@ -119,20 +131,14 @@ All of the state is internal, except for the file descriptor, which is exposed
 for the purposes of poll() and friends. Reading from it directly may lead to
 inconsistent buffer state, and is strongly not recommended.
 
-    type ioerr = union
-            `Ebadfile
-            `Ebadbuf
-            `Ebadfd
-            `Eioerr
-    ;;
-
-    type status(@a) = union
+    type err = union
+            `Eio
             `Eof
-            `Ok @a
-            `Err ioerr
+            `Ebadf
     ;;
 
-The `bio.status(@a)` union returns the result of the read operation, which
+
+The `std.result(@a, err)` union returns the result of the read operation, which
 is going to either be a result of type '@a', an error-free end of file, or
 an error of type `ioerr`. All of these conditions are transient, and are
 retried on subsequent calls to the IO operations. For example, if reading
@@ -142,6 +148,17 @@ will return data again.
 In general, errors will be queued up, so if there is a buffered read or
 write that partly succeeds but is interrupted halfway, the error will be
 reported on the next operation. This way, partial operations are not lost.
+
+	type vtab = struct
+		read	: (buf : byte[:] -> std.result(std.size, std.errno))
+		write	: (buf : byte[:] -> std.result(std.size, std.errno))
+		seek	: (idx : std.off -> std.result(std.off, std.errno))
+		close	: (-> bool)
+	;;
+
+If file i/o isn't sufficient, libbio provides a way of hooking in your own
+read and write closures. When passed to `mk`, these functions will be called
+instead of the usual file io functions.
 
 File Creation and Opening
 -------------------------
@@ -158,6 +175,12 @@ both readable and writable.
 Bio file creation
 -------------
 
+    const mk	: (mode : mode, vt : vtab	-> file#)
+
+This function creates a bio file vtable and a mode. The functions provided
+are called, instead of the standard, file-descriptor based I/O calls. This
+allows the opened file to provide any sort of data it wishes.
+
     const mkfile	: (fd : std.fd, mode : mode	-> file#)
 
 This function creates a bio file from a file descriptor and mode, returning a
@@ -167,11 +190,28 @@ succeed. If the FD is incorrectly configured, uses of it will error out.
 
 Returns: A buffered file wrapping the file descriptor `fd`
 
+
     const open	: (path : byte[:], mode : mode	-> std.result(file#, byte[:]))
 
 This function attempts to open the path passed in with the mode, returning
 a result which is either a file, or a string representing the error that
 prevented the file from being opened.
+
+    const dial	: (srv	: byte[:], mode : mode	-> std.result(file#, byte[:]))
+
+This function attempts to dial a server on dial string `ds`, returning a
+result which is either a file, or a string describing the failure to dial
+the server.
+
+Returns: A buffered file wrapping the file descriptor `fd`, or an error.
+
+    const mkmem	: (buf : byte[:] -> file#)
+
+This function creates a bio file from a memory buffer, returning a
+`bio.file#`. This bio.file will read from and write into the buffer that
+is provided.
+
+Returns: A buffered file wrapping the memory `mem`.
 
 Returns: A buffered file representing `path` opened with the requested
 permissions.
@@ -241,32 +281,32 @@ Single Unit Operations
 ----------------------
 
         /* single unit operations */
-    const putb	: (f : file#, b : byte	-> status(std.size))
+    const putb	: (f : file#, b : byte	-> std.result(std.size, err)))
 
 Writes a single byte out to the file 'f', returning a status. If
 it is successful, the return value represents the number of bytes written.
 For single byte writes, this value is unsurprisingly always 1.
 
-    const putc	: (f : file#, c : char	-> status(std.size))
+    const putc	: (f : file#, c : char	-> std.result(std.size, err)))
 
 Writes a single unicode character out to the file 'f', returning a status.
 This character is encoded in utf-8. If it is successful, the return value
 represents the number of bytes written, varying between 1 and 4.
 
-    const getb	: (f : file# -> status(byte))
+    const getb	: (f : file# -> std.result(byte, err)))
 
 Reads a single byte from the file `f`, returning a status. If this read
 succeeds, the next byte in the file is returned.
 
-    const getc	: (f : file# -> status(char))
+    const getc	: (f : file# -> std.result(char, err)))
 
 Reads a unicode character from the file `f`, returning a status. If this read
 was successful, the next character is returned from the file. The file is
 assumed to be encoded in utf-8.
 
     /* peeking */
-    const peekb	: (f : file# -> status(byte))
-    const peekc	: (f : file# -> status(char))
+    const peekb	: (f : file# -> std.result(byte, err)))
+    const peekc	: (f : file# -> std.result(char, err)))
 
 Both peekb and peekc are similar to getb and getc respectively, although
 they return the value without advancing the position within the buffer.
@@ -276,7 +316,7 @@ Delimited Operations
 --------------------
 
     /* delimited read; returns freshly allocated buffer. */
-    const readln	: (f : file#	-> status(byte[:]))
+    const readln	: (f : file#	-> std.result(byte[:], err)))
 
 Readln reads a single line of input from the file 'f', returning the line
 with the line ending characters removed. '\n', '\r', and '\r\n' are all
@@ -284,7 +324,7 @@ accepted as valid line endings, and are treated interchangably when reading.
 
 The buffer is heap allocated, and must be freed with std.slfree
 
-    const readto	: (f : file#, delim : byte[:]	-> status(byte[:]))
+    const readto	: (f : file#, delim : byte[:]	-> std.result(byte[:], err)))
 
 Readto is similar to readln, but instead of reading to a line ending, it will
 read up to the point where it finds the requested delimiter. The delimiter is
@@ -307,18 +347,24 @@ returns true for any successful reads, and false if an error was encountered.
 Iteration
 ---------
 
-    const lineiter	: (f : file# -> lineiter)
+    const byline	: (f : file# -> lineiter)
+    const bychar	: (f : file# -> chariter)
 
-Lineiter will return an interable type that will iterate through each line
+Byline will return an interable type that will iterate through each line
 in a file. These lines are allocated on the heap, and are automatically freed
 at the end of the iteration.
+
+Bychar behaves similarly, iterating over the contents of a file character by
+character.
+
+Both stop at the end of file or error.
 
 The returned iterator object is a value type, and does not need to be freed.
 
 Formatted IO
 -------------
 
-    const put	: (f : file#, fmt : byte[:], args : ... -> status(std.size))
+    const put	: (f : file#, fmt : byte[:], args : ... -> std.result(std.size, err)))
 
 This formats the output using the std.fmt api, and writes it to the file `f`.
 All custom formatters installed for `std.fmt` are used for this formatting.
@@ -327,15 +373,15 @@ This call returns the number of bytes written on success.
 Endian Aware Reads
 ------------------
 
-    generic getbe8	: (f : file# -> status(@a::(numeric,integral)))
-    generic getbe16	: (f : file# -> status(@a::(numeric,integral)))
-    generic getbe32	: (f : file# -> status(@a::(numeric,integral)))
-    generic getbe64	: (f : file# -> status(@a::(numeric,integral)))
-
-    generic getle8	: (f : file# -> status(@a::(numeric,integral)))
-    generic getle16	: (f : file# -> status(@a::(numeric,integral)))
-    generic getle32	: (f : file# -> status(@a::(numeric,integral)))
-    generic getle64	: (f : file# -> status(@a::(numeric,integral)))
+    generic getbe8	: (f : file# -> std.result(@a, err))) :: numeric,integral @a
+    generic getbe16	: (f : file# -> std.result(@a, err))) :: numeric,integral @a
+    generic getbe32	: (f : file# -> std.result(@a, err))) :: numeric,integral @a
+    generic getbe64	: (f : file# -> std.result(@a, err))) :: numeric,integral @a
+                                                                        @a
+    generic getle8	: (f : file# -> std.result(@a, err))) :: numeric,integral @a
+    generic getle16	: (f : file# -> std.result(@a, err))) :: numeric,integral @a
+    generic getle32	: (f : file# -> std.result(@a, err))) :: numeric,integral @a
+    generic getle64	: (f : file# -> std.result(@a, err))) :: numeric,integral @a
 
 The functions above all read from a bio file, and return the value read on
 success. The 'be' variants read big endian values, and the `le' variants
@@ -348,15 +394,15 @@ function call. For eample, `getbe8()` will read 8 bits, or one byte from the
 stream. `getle64` will get a 64 bit, or 8 byte, value. The number of bytes
 consumed is independent of the size of the type being assigned to.
 
-    generic putbe8	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-    generic putbe16	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-    generic putbe32	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-    generic putbe64	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
+    generic putbe8	: (f : file#, v : @a -> std.result(std.size, err))) :: numeric,integral @a
+    generic putbe16	: (f : file#, v : @a -> std.result(std.size, err))) :: numeric,integral @a
+    generic putbe32	: (f : file#, v : @a -> std.result(std.size, err))) :: numeric,integral @a
+    generic putbe64	: (f : file#, v : @a -> std.result(std.size, err))) :: numeric,integral @a
 
-    generic putle8	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-    generic putle16	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-    generic putle32	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
-    generic putle64	: (f : file#, v : @a::(numeric,integral) -> status(std.size))
+    generic putle8	: (f : file#, v : @a -> std.result(std.size, err))) :: numeric,integral @a
+    generic putle16	: (f : file#, v : @a -> std.result(std.size, err))) :: numeric,integral @a
+    generic putle32	: (f : file#, v : @a -> std.result(std.size, err))) :: numeric,integral @a
+    generic putle64	: (f : file#, v : @a -> std.result(std.size, err))) :: numeric,integral @a
 
 The functions above all write to a bio file, and return the number of bytes
 written on success. The number of bytes written will always be the size of the
@@ -376,41 +422,40 @@ writes to it. It creates it with 0o644 permissions (ie, rw-r--r--), and then
 immediately closes it. The result of this program should be a file called
 `create-example` containing the words.
 
-    use std
-    use bio
+	use std
+	use bio
 
-    const main = {
-            var f
+	const main = {
+		var f
 
-            match bio.create("create-example", bio.Wr, 0o644)
-            | `std.Some bio:    f = bio
-            | `std.None:        std.fatal(1, "Failed to open file\n")
-            ;;
-            bio.write(f, "Hello user\n")
-            bio.close(f)
-    }
+		match bio.create("create-example", bio.Wr, 0o644)
+		| `std.Ok bio:    f = bio
+		| `std.Err e:        std.fatal("Failed to open file: {}\n", e)
+		;;
+		bio.write(f, "Hello user\n")
+		bio.close(f)
+	}
 
 The next example shows reading from a file called "lines", line by line. It
 should echo the lines, numbering them as it prints them:
 
-    use std
-    use bio
+	use std
+	use bio
 
-    const main = {
-            var f
-            var i
+	const main = {
+		var f, i
 
-            match bio.open("lines", bio.Rd)
-            | `std.Some bio:        f = bio
-            | `std.None:    std.fatal(1, "Unable to open data file\n")
-            ;;
+		match bio.open("lines", bio.Rd)
+		| `std.Ok bio:        f = bio
+		| `std.Err e:    std.fatal("Unable to open data file: {}\n", e)
+		;;
 
-            while true
-                    match bio.readlin(f)
-                    | `std.Some ln:
-                            std.put("line %i: %s\n", i, ln)
-                    | `std.None:
-                            break;
-                    ;;
-            ;;
-    }
+		i = 0
+		while true
+			match bio.readln(f)
+			| `std.Err `bio.Eof: 	break;
+			| `std.Err e: 		std.fatal("err: {}\n", e)
+			| `std.Ok ln:		std.put("line {}: {}\n", i++, ln)
+			;;
+		;;
+	}

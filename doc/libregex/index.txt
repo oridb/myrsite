@@ -6,6 +6,10 @@
 Summary
 -------
 
+Regexes are useful tools for parsing and matching text. This library
+implements a simple but powerful regex variant, which executes in
+`O(text*pat)`.
+
 	pkg regex =
                 type ast = union
                         /* basic string building */
@@ -82,6 +86,8 @@ The grammar for regexes that are accepted is sketched out below.
                        | '.'
                        | '^'
                        | '$'
+                       | '\<'
+                       | '\>'
                        | '(' regex ')'
            charclass   : see below
            charrange   : '[' (literal('-' literal)?)+']'
@@ -92,6 +98,8 @@ Matches a single unicode character
 
 <table>
 	<tr><tr><th>Metachar</th>        <th>Description</th></tr>
+	<tr><td><code>\&lt;</td></code>      <td>Matches the beginning of a word. Does not consume any characters.</td></tr>
+	<tr><td><code>\&gt;</td></code>      <td>Matches the end of a word. Does not consume any characters.</td></tr>
 	<tr><td><code>^</td></code>      <td>Matches the beginning of a line. Does not consume any characters.</td></tr>
 	<tr><td><code>$</td></code>      <td>Matches the end of a line. Does not consume any characters.</td></tr>
 	<tr><td><code>*</td></code>      <td>Matches any number of repetitions of the preceding regex fragment.</td></tr>
@@ -160,7 +168,7 @@ Functions
     const parse	: (re : byte[:]	-> std.result(ast#, status))
 
 Parse takes a regex string, and converts it to a regex syntax tree, returning
-`\`std.Success ast#` if the regex was valid, or a `\`std.Failure r` if the
+`` `std.Ok ast#`` if the regex was valid, or a `` `std.Err e`` if the
 regex could not be parsed. This AST can be used to further process the regex,
 possibly turning it into a multiregex as in Hairless, or using it for NFA and
 DFA tricks.
@@ -169,7 +177,7 @@ DFA tricks.
     const dbgcompile	: (re : byte[:] -> std.result(regex#, status))
 
 `compile` takes a regex string, and converts it to a compiled regex, returning
-`\`std.Success regex` if the regex was valid, or a `\`std.Failure r` with the
+`` `std.Ok regex`` if the regex was valid, or a `` `std.Err e`` with the
 reason that the compilation failed. `dbgcompile` is similar, however, the
 regex is compiled so it will spit out a good deal of debugging output. Unless
 you are intent on debugging the internals of the regex engine, this is likely
@@ -182,15 +190,15 @@ are finished using it.
 
     const exec	: (re : regex#, str : byte[:] -> std.option(byte[:][:])
 
-`exec` runs the regex over the specified text, returning an `\`std.Some matches`
-if the text matched, or `std.None` if the text did not match. matches[0] is
+`exec` runs the regex over the specified text, returning an `` `std.Some matches``
+if the text matched, or `` `std.None`` if the text did not match. matches[0] is
 always the full text that was matched, and will always be returned regardless
 of whether capture groups are specified.
 
     const search	: (re : regex#, str : byte[:] -> std.option(byte[:][:]))
 
 `search` searches for a matching sub-segment of the regex over the specified
-text, returning an `\`std.Some matches` if the text matched, or `std.None` if
+text, returning an `` `std.Some matches`` if the text matched, or `` `std.None`` if
 the text did not match.  matches[0] is always the full text that was matched,
 and will always be returned regardless of whether capture groups are
 specified. `search` returns the the earliest match in the string provided.
@@ -205,7 +213,7 @@ within `str` with `subst`, returning a freshly allocated string.  `sbsub`
 behaves identically, however it inserts the new string into the string
 buffer provided, instead of allocating a new string.
 
-If there is no match, then `\`std.None` will be returned.
+If there is no match, then `` `std.None`` will be returned.
 
     const suball	: (re : regex#, str : byte[:], subst : byte[:][:] -> byte[:])
     const sbsuball	: (sb : std.strbuf#, re : regex#, str : byte[:], subst : byte[:][:] -> void)
@@ -226,7 +234,7 @@ use regex
 const main = {
 	match regex.compile("ab(c+)")
 	| `std.Ok re:	runwith(re, "abccc")
-	| `std.Fail m:	std.fatal("Failed to compile regex\n")
+	| `std.Err m:	std.fatal("Failed to compile regex\n")
 	;;
 }
 
@@ -234,7 +242,7 @@ const runwith = {re, txt
 	match regex.exec(re, txt)
 	| `std.Some matches:
 		std.put("matched {}, got {} matches\n", txt, matches.len)
-		for m in matches
+		for m : matches
 			std.put("Match: {}\n", m)
 		;;
 		regex.matchfree(matches)
@@ -246,25 +254,26 @@ const runwith = {re, txt
 
 #### Substitution
 
-```{runmyr regex}
+```{runmyr regex2}
 use std
 use regex
 
 const main = {
 	var re
 
-	re = std.try(regex.compile("(a*)bc(d)e"))
+	re = std.try(regex.compile("(a*)bc(d)ef"))
 	match regex.sub(re, "aaabcdef", ["HEY", "X"][:])
 	| `std.Some sub:
-		std.put("{}\n", sub[0])
-		regex.matchfree(matches)
+		std.put("{}\n", sub)
+		std.slfree(sub)
 	| `std.None:
 		std.fatal("should have matched")
 	;;
 }
+
 ```
 
-```{runmyr regex}
+```{runmyr regex3}
 use std
 use regex
 

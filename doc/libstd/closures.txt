@@ -1,0 +1,50 @@
+{
+        title:  Closures
+        description:  libstd: Closures
+}
+
+Summary: Closures
+-----------------
+
+pkg std =
+        generic fndup   : (fn : @fn::function -> @fn::function)
+	generic fnbdup  : (fn : @fn::function, buf : byte[:] -> @fn::function)
+	generic fenvsz	: (fn : @fn::function -> size)
+        generic fnfree  : (fn : @fn::function -> void)
+;;
+
+Overview
+--------
+
+Closures are useful, however, in Myrddin, they refer to an environment that
+lives on the heap. In many cases, it is desirable to keep a closure around
+for longer than the lifetime of the function that it is capturing variables
+from.
+
+These functions facilitate that need, by allowing the heapification and
+freeing of a closure. This is only needed for functions that capture an
+environment -- global functions may be passed without copying. This also holds
+for local functions that do not refer to the environment.
+
+Functions
+---------
+
+	generic fndup   : (fn : @fn::function -> @fn::function)
+
+Takes any function, and copies the captured environment to the heap, if there
+is an environment to copy.
+
+	generic fnbdup  : (fn : @fn::function, buf : byte[:] -> @fn::function)
+
+Takes any function, and copies the captured environment to the buffer
+provided. The buffer must be at least as big as the value reported by
+`fenvsz`.
+
+	generic fenvsz	: (fn : @fn::function -> size)
+
+Returns the size in bytes of the environment referenced by the closure `fn`.
+If there is no environment, then this function returns `0`.
+
+	generic fnfree  : (fn : @fn::function -> void)
+
+Frees the environment of a function heapified with fndup.

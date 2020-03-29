@@ -4,36 +4,29 @@
 }
 
 Myrddin
-------------------------
+=======
 
 ```{runmyr introloop}
 use std
 const main = {
-        for x in [(1, "let's"), (2, "get"), (3, "started")]
+        for x : [(1, "let's"), (2, "get"), (3, "started")]
                 std.put("{}\n", x)
         ;;
 }
 ```
 
-Myrddin is a systems programming language that covers a similar niche as C including 
-desktop, OS, and embedded development, but at the same time making it harder to
-shoot yourself in the foot.
+Myrddin is a programming language. It aims for control and simplicity.  It
+features strong type checking, generics, type inference, closures, and traits.
+It aims to fit into a similar niche as C, but with fewer bullets in your feet.
 
-It is designed to be a simple language that runs close to the
-metal, giving the programmer predictable and transparent behavior and mental
-model. It also does strong type checking, generics, type inference, closures,
-and traits.
-
-Myrddin is not a language designed to explore the forefront of type theory or
-compiler technology. It is not a language that is focused on guaranteeing
-perfect safety. It is satisfied to be a practical, small, fairly well defined,
-and easy to understand language for code that needs to be close to the
-hardware.
+Myrddin does not aim to explore the forefront of type theory or compiler
+technology. It does not focus on guaranteeing perfect safety. It is satisfied
+to be a practical, small language.
 
 Code
 ------
 
-The [code is available on both Github](https://github.com/oridb/mc),
+The [code is available on both GitHub](https://github.com/oridb/mc),
 and [on Eigenstate](https://git.eigenstate.org/ori/mc.git)
 
 Status
@@ -44,16 +37,20 @@ Status
 Supported Platforms.
 --------------------
 
-Myrddin currently compiles for x86-64. It runs on four OSes at the moment:
+Myrddin currently compiles for x86-64. It runs on five OSes at the moment:
 
 - Linux
 - OSX
 - Plan 9 (9front)
 - FreeBSD
+- OpenBSD
+- NetBSD (preliminary)
 
 It has proved relatively easy to port between these
 systems, needing only a few system calls, and a couple of hundred lines of
 code to get the bootstrap working.
+
+NetBSD currently does not support libthread.
 
 Major Features
 --------------
@@ -76,14 +73,14 @@ use to experiment with code. It's fairly restrictive, and prevents you from
 using the vast majority of system calls, but it's enough to get a feel for
 things.
 
-[So, give it a shot.](http://eigenstate.org/myrddin/playground)
+[So, give it a shot.](https://myrlang.org/playground)
 
 Installing The Compiler
 -----------------------
 
 First, make sure you have the dependencies. To build you'll need Make, a C99
-compiler, an AT&T syntax assembler, and a Posix YACC implementation. To clone
-the repository you'll need git. On debian, you can run:
+compiler, an AT&T syntax assembler, and a POSIX YACC implementation. To clone
+the repository you'll need Git. On Debian, you can run:
 
     sudo apt-get install bison gcc git make
 
@@ -93,10 +90,15 @@ running `./configure --prefix=/path/to/wherever`. Just be sure to remember to
 add the prefix to $PATH before trying to run any commands, or your shell will
 not be able to find them.
 
-    git clone git://git.eigenstate.org/git/ori/mc.git
+    git clone git://git.eigenstate.org/ori/mc.git
     cd mc               # the directory you cloned into
     make                # build it
     sudo make install   # defaults to /usr/local
+
+When running from git, you may need to first run `make bootstrap` on the
+first installation, or upon significant changes to mbld.
+
+    make bootstrap	# generate the bootstrap tools
 
 Compiling Hello World
 ---------------------
@@ -109,7 +111,7 @@ use std
 
 const main = {args : byte[:][:] /* a slice of byte slices */
         std.put("Hello-世界\n")     /* prints to stdout */
-        for a in args
+        for a : args
                 std.put("arg = {}\n", a)
         ;;
 } 
@@ -122,7 +124,7 @@ To build it, put it in a file of your choice. I'll use hello.myr. Then, run
 This will produce a binary called hello, which will print "Hello-世界", echo
 all of the args given, and exit with a status of 0.
 
-The mbld program wraps the entire build process for myrddin code. It
+The mbld program wraps the entire build process for Myrddin code. It
 determines the dependencies, the build order, and manages the set of libraries
 that need to be linked in to produce the final library or binary, assuming that
 the included libraries are installed to the conventional location
@@ -141,8 +143,8 @@ and make the functions in it available to our code.
 
         const main = {args : byte[:][:];...}
 
-This is declaration where the anonymous function `{args; ...}` is assigned
-the the constant value 'main'.. All function declarations in Myrddin are done
+This is a declaration where the anonymous function `{args; ...}` is assigned
+the constant value 'main'.. All function declarations in Myrddin are done
 by assigning an anonymous function to a variable, generic, or constant.
 
 The keyword `const` is one of the three ways of beginning a declaration. The
@@ -155,14 +157,14 @@ Keyword   |  Meaning
 `var`     |  A mutable, assignable value.
 
 The general form of anonymous functions is `{arg, list; body_statements()}`.
-Semicolons and newlines are interchangable through all Myrddin code.
+Semicolons and newlines are interchangeable through all Myrddin code.
 
         std.put("Hello-世界\n")
 
 Invokes the function 'std.put', which came from the 'std' package, printing to
 standard output. The string is encoded in utf8.
 
-        for a in args
+        for a : args
                 std.put("arg {} = {}\n", i, args[i])
         ;;
 
@@ -171,7 +173,7 @@ syntax, which will iterate over type that is iterable, matching the values
 with the pattern and executing the loop body if there is a valid pattern
 match.
 
-The alternative syntax, `for init; bound; incr` syntax is also acceptaed. For
+The alternative syntax, `for init; bound; incr` syntax is also accepted. For
 this syntax, The initializer, test, and increment are all single expressions
 terminated with a newline or semicolon. The `init` clause may include a
 declaration.
@@ -188,7 +190,7 @@ strong, with no implicit conversions between them.
 ---------------|----------------------------------
    `void`      | A void type
    `bool`      | A boolean type
-   `char`      | A single unicode codepoint
+   `char`      | A single Unicode codepoint
    `int8`      | A 8 bit integer
    `int16`     | A 16 bit integer
    `int32`     | A 32 bit integer
@@ -203,7 +205,7 @@ strong, with no implicit conversions between them.
    `flt64`     | A double precision floating point
    `...`       | A variadic argument list
 
-In addition to primitive types, it has type paramters. Type
+In addition to primitive types, it has type parameters. Type
 parameters act as variables which may be substituted with any
 other type on invocation or use of a type.
 
@@ -212,7 +214,7 @@ substituted type in order for the substitution to proceed.
 
 Type               | Description
 -------------------|-------------------
-`@t`               | A type paramter
+`@t`               | A type parameter
 `@t::trait`        | A type parameter with a trait
 `@t::(trait,list)` | A type parameter with a list of traits.
 
@@ -230,19 +232,16 @@ Type>            | Description
 `type[:]`        | A slice of type 
 `type[SIZE]`     | A type array of size SIZE. 
 
-Functions are specified with parentheses. The argument names are mandatory
-in all tyle specifications, although the return type is optional. Tuples are
-specified with square brackets. A better, but still conflict free syntax would
+Function types are specified with parentheses. The argument names are mandatory
+in all type specifications, although the return type is optional. Tuples are
+specified with parentheses. A better, but still conflict-free syntax would
 be welcome.
 
-
-    
 Type                            | Description
 --------------------------------|------------------
 `(arg : t1, list : t2 -> ret)`  | Function with 2 args and a return type
 `(-> ret)`                      |  Function with 0 args and a return type
-`(arg : t1)`                    |  Function with 1 arg and an implicit return
-`[t1, t2, t3]`                  |  Three element tuple
+`(t1, t2, t3)`                  |  Three element tuple
 
 
 Structs in Myrddin behave much like they do in C, and are actually binary
@@ -256,7 +255,7 @@ struct literal notation `[.memb=val, .other=val]`
                              
 Unions in Myrddin are closer to algebraic data types in ML than they are to C unions.
 The union knows the value that is currently being held in it, and is constructed
-and matched with a tag. To construct a union, the `\`Tag val` syntax is used
+and matched with a tag. To construct a union, the `` `Tag val`` syntax is used
 
     union
            `Tag1 t1
@@ -270,17 +269,18 @@ Myrddin has a simple package system, doing away with headers. Myrddin source
 files can define the functions they export by including a package section,
 which lists the exported symbols.
 
-To use a package installed into the compiler search path, add use package_name
-statement to your code. This will allow you to access 'package_name.symbol'.
+To use a package installed into the compiler search path, add a `use`
+statement, like `use package_name`, to your code. This will allow you to access
+`package_name.symbol`.
 
 To import symbols from a file within the same directory as your source code,
-add use "filename.use". The package name that is brought in to your namespace
-is determined by the 'pkg' spec within the source file being imported.
+add `use "filename"`. The package name that is brought in to your namespace is
+determined by the `pkg` spec within the source file being imported.
 
-If two use statements load the same package (eg, two local files export symbols
-for the 'foo' package), then the packages will be merged.
+If two use statements load the same package (e.g., two local files export symbols
+for the `foo` package), then the packages will be merged.
 
-To create your own package, add a pkg block to it. While it's not necessarily,
+To create your own package, add a `pkg` block to it. While it's not necessarily,
 stylistically, the exported symbols should have their types fully specified.
 
 An example of a 3 source file program that uses a system import is given here.
@@ -291,7 +291,7 @@ provide the demo package, `say-hello.use` and `say-goodbye.use`
 Unfortunately, since the runner that I have does not support multiple files,
 this code will not build or run online. Sorry.
 
-```{runmyr pkg1}
+```
 /* This is in main.myr */
 use std
 use "say-hello.use"
@@ -308,7 +308,7 @@ const main = {
 `say-hello.myr` defines a package block that exports the function
 `sayhello`, into the package `demo`, as well as providing the definition
 
-```{runmyr pkg2}
+```
 /* This code is in say-hello.myr */
 use std
 
@@ -324,7 +324,7 @@ const sayhello = {
 `say-goodbye.myr` defines a package block that exports the function
 `saygoodbye`, into the package `demo`, as well as providing the definition
 
-```{runmyr pkg3}
+```
 /* This code is in say-goodbye.myr */
 use std
 
@@ -399,7 +399,9 @@ const main = {
         v = [.a = 123, .b=`Some 456, .c=(5, 10)]
         match v
         | [.a = 234]:              std.put("Should not be here\n")
-        | [.a = 123, .c=(x, y)]:   std.put("tuple is ({}, {})\n", x, y)
+        | [.a = 123, .c=(x, y)]:   std.put("extracted tuple is ({}, {})\n", x, y)
+        | [.a = 123, .c=(x, y)]:   std.put("extracted tuple is ({}, {})\n", x, y)
+        | [.a = other]:            std.put("got other value: {}\n", other)
         ;;
 }
 ```
@@ -480,23 +482,40 @@ Libraries
 
 Myrddin ships with a number of useful libraries. The most common ones, and the
 ones that ship with the compiler, are libsys, libstd, libbio, libregex,
-libcryptohash, and libdate. Other libraries are in the works.
+libcrypto, and libdate. Other libraries are in the works.
 
-[Libstd](/myrddin/doc/libstd) handles functionality that most programs written
+[Libstd](doc/libstd/index.html) handles functionality that most programs written
 would find useful.  It's a bit of a grab bag, but it's useful.
 
-[Libbio](/myrddin/doc/libbio) handles buffered IO, allowing you to do fancy
+[Libbio](doc/libbio/index.html) handles buffered IO, allowing you to do fancy
 things with input and output, line reading linewise, or reading up to
 delimiters.
 
-[Libregex](/myrddin/doc/libregex) handles regexes. It implements a simple but powerful regex syntax,
-and has working unicode support.
+[Libregex](doc/libregex/index.html) handles regexes. It implements a simple but powerful regex syntax,
+and has working Unicode support.
 
-[Libcryptohash](/myrddin/doc/libcryptohash) provides cryptographic hashes. It
+[Libcrypto](doc/libcrypto/index.html) provides cryptographic functions. It
 implements many of the most common ones.
 
-[Libdate](/myrddin/doc/libdate) provides a fairly complete interface for
+[Libdate](doc/libdate/index.html) provides a fairly complete interface for
 manipulating dates, times, and timezones.
+
+[Libhtml](doc/libhtml/index.html) allows for HTTP serving and handling.
+
+[Libescfmt](doc/libescfmt/index.html) escapes and unescapes various input and
+output formats.
+
+[Libfileutil](doc/libfileutil/index.html) handles a variety of less common but
+still useful file manipulation functions: directory tree walks, recursive
+deletion, temporary file support, and other similar things are included.
+
+[Libiter](doc/libiter/index.html) provides a number of iteration utilities
+in a generic form, allowing for reverse iteration, zipping, cartesian
+products, and a number of other things.
+
+[Libinitile](doc/libinifile/index.html) handles parsing ini files.
+
+[Libtestr](doc/libtestr/index.html) facilitates writing unit tests.
 
 C Binding
 ---------
@@ -509,17 +528,19 @@ system, but automated binding generation has only been started on.
 Further Reading
 ----------------
 
-- [Language Specification](http://git.eigenstate.org/ori/mc.git/tree/doc/lang.txt)`
-- [Library source](http://git.eigenstate.org/ori/mc.git/tree/lib/)`
-- [Standard library API docs](/myrddin/doc/libstd)`
-- [Compiler Internals Documentation](http://git.eigenstate.org/ori/mc.git/tree/doc/compiler.txt)`
+- [Language Specification](https://git.eigenstate.org/ori/mc.git/tree/doc/lang.txt)`
+- [Library source](https://git.eigenstate.org/ori/mc.git/tree/lib/)`
+- [Standard library API docs](doc/libstd/index.html)`
+- [Compiler Internals Documentation](https://git.eigenstate.org/ori/mc.git/tree/doc/compiler.txt)`
 
 Mailing List
 ------------
 
-[Subscribe to the Mailing List](/myrddin/list-subscribe)
+[Subscribe to the Mailing List](list-subscribe.html)
 
-IRC: irc.eigenstate.org, in #myrddin
+IRC: irc.eigenstate.org, in #myrddin. You can get there using your favorite
+client, or with [kiwi IRC](https://kiwiirc.com/client/irc.eigenstate.org/?nick=yournick#myrddin)
+
 
 Or contact me directly, at 'ori@eigenstate.org'
 

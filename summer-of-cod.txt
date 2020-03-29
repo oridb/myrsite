@@ -1,0 +1,160 @@
+{
+    title       : Summer of Cod
+    description : Summer of Cod 2018
+}
+
+GARGLE SUMMER OF COD
+--------------------
+
+As you may have noticed, we were not accepted for this year's google summer of
+code, in spite of our organization vitality and clear leadership in the 'wheel
+reinvention' domain. However, we've got a backup plan.
+
+Today I'm pleased to announce that I am announcing the GARGLE SUMMER OF COD.
+This program is smaller than 'Summer of Code'. Precisely one letter
+smaller, in fact.
+
+![Cod](cod.jpg "Cod")
+
+Eligibility:
+------------------------
+
+In order to qualify for GARGLE SUMMER OF COD, we will need to be able
+to ship you cod. If we can figure out how to ship your sea-stipend, you are
+elegible to apply. Talk to us for shipping details.
+
+If you've got a completed project, we'll be shipping the fish out on
+August 31st. Let us know in advance, so we can 
+
+Stipend:
+------------------------
+
+Of course, good work should be rewarded. And, since we all know that
+sea lions love fish, we'll be rewarding you in cod.
+
+A successful project will be rewarded several pounds of cod. Vegetarian
+substitutes are available. (Are sea cucumbers vegetables?)
+
+Project ideas:
+------------------------
+
+We have the Google Summer of Code page up. Use it for ideas.
+
+[https://myrlang.org/gsoc.html](https://myrlang.org/gsoc.html)
+
+How To Apply
+------------------------
+
+Send an email to the [mailing list](https://myrlang.org/list-subscribe),
+or ping us on IRC. If your idea sounds interesting, and you seem like
+yu will be able to execute, we'll put your name down as a participant.
+
+Because there's only so much fish I'm willing to have shipped, there is a
+limited number of slots, so let us know you're planning to work on something
+in advance.
+
+At the end of the summer, if you've produced code, we ship cod.
+
+Current Participants
+------------------------
+
+###npnth
+
+libmath: Implementing a basic floating point math library for Myrddin.
+
+###fsx
+
+Automatic C bindings. Generating headers and glue code from a header
+and a module specification.
+
+(Dropped out due to lack of time, up for grabs)
+
+###mpu
+
+Compression library
+
+FAQ:
+------------------------
+Are you serious?
+
+- We never take ourselves that seriously. But we promise you'll get your cod.
+
+When can I get my fish?
+
+- We'll be shipping it on August 31st.
+
+What projects are eligible?
+
+- [Myrddin](https://myrlang.org), [SCC](http://simple-cc.org/),
+  [QBE](http://c9x.me/compile).
+
+What fishmonger does GARGLE SUMMER OF COD use?
+
+- We're open to suggestions, but if you are in the USA, we will
+  default to [Pike Place](https://www.pikeplacefish.com/pages/shipping)
+
+Is GARGLE SUMMER OF COD considered an internship, a job, or any form of
+employment?
+
+- No. You're fucking getting paid in fish, for fuck's sake.
+
+Why fish?
+
+- Budget constraints.
+
+Can I chose the types of fish I'm paid in?
+
+- DEBATABLE.
+
+Aw, shucks, why are you doing this?
+
+- YOU CAN'T SHUCK FISH, ONLY OYSTERS.
+
+Where does GARGLE SUMMER OF COD occur?
+
+- Summer. It's in the name. Literacy please.
+
+What can I do to help spread the word about GARGLE SUMMER OF COD?
+
+- Stand on a street corner and preach with a megaphone. The
+  more people we can convince to rant in public about getting
+  paid in fish, the better.
+
+When can I apply for GARGLE SUMMER OF COD?
+
+- There are no deadlines. If you ask early enough, and ship
+  a significant feature this summer, you will get your fish.
+
+Do I have to be a student?
+
+- Nope, I don't care. Ship us code, we ship you cod.
+
+What kind of code do you prefer?
+
+- E-fish-ent code, of course.
+
+Will there be T-Shirts?
+
+- We'll be trying to arrange artwork for shirts. We make no
+  promises on the quality.
+
+You must be really bitter about getting rejected Google Summer of Code.
+
+- That's not a question. But more seriously, Summer of code was always a long
+  shot. We're a tiny organization, we have no alignment with Google’s vision,
+  and no connections with the selection committee. There’s no surprise that we
+  were rejected, and if we were running Summer of Code I’d probably have
+  rejected us too.
+
+  This... program... actually started off as a typo -- but we were amused by the
+  idea of people getting cod, so we decided to run with it. It’s a joke carried
+  through to ridiculousness. There's no bigger commentary.
+
+  We thought it would be funny to be the kind of project that ships fish
+  to people as a ‘thank you’. Getting rejected from Summer of Code was an
+  excuse.
+
+What if I have more questions?
+
+- NO MORE QUESTIONS ARE ALLOWED.
+

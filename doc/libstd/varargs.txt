@@ -3,7 +3,7 @@
         description:  libstd: Varargs
 }
 
-Varargs
+Summary: Varargs
 -------
 
     pkg std =
