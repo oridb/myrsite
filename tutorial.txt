@@ -479,7 +479,7 @@ Similarly, when called with `fixstack(byte[:])`, `@a` is substituted with
 context, so if we defined a `max` function, we would not be able to mix
 arguments:
 
-	generic max = {a : @t::numeric, b : @t::numeric
+	generic max = {a : @t, b : @t :: numeric @t
 		if a > b
 			-> a
 		else
